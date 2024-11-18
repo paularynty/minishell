@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 16:22:20 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/18 12:15:01 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/18 16:23:56 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 //unclosed quotes
 //passing empty line
 
-int lexer(void)
+int	lexer(void)
 {
-
+	return (TRUE);
 }

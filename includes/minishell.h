@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 15:11:50 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/18 11:47:41 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/18 16:19:41 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ typedef struct s_mini
 void	builtins(t_mini *shell, char *line);
 void	builtin_env(char **env);
 void	builtin_exit(t_mini *shell, char *line);
+void	builtin_pwd(t_mini *shell);
+char	**env_clone(char **env);
 
 //setup/setup.c
 int		setup(t_mini *shell, char **env);
@@ -51,6 +53,6 @@ void	init_signals(void);
 void	cleanup(t_mini *shell);
 
 //utils/prompt.c
-void    get_prompt(char *prompt, size_t size);
+void	get_prompt(t_mini *shell, char *prompt, size_t size);
 
 #endif
