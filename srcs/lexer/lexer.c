@@ -3,21 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 16:22:20 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/11 14:03:36 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/22 10:16:08 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-//bad pipes
-//wrong operator
-//unclosed quotes
-//passing empty line
 
-int lexer(void)
+
+int lexer(char *input)
 {
-    return (TRUE);
+	if (!valid_input(input));
+		return (FALSE);
 }
