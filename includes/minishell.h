@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 15:11:50 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/24 12:34:02 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/24 15:29:05 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 //standard headers
+# include <errno.h>
 # include <string.h> //for strerror
 # include <stdlib.h> //for malloc, free
 # include <unistd.h> //write, dup, dup2
@@ -49,13 +50,17 @@ enum e_builtins {
 
 //builtins/builtins.c
 int		builtins(char *line);
-void	builtin_cd(void);
+int		builtin_cd(t_mini *shell, char *line);
 void	builtin_echo(char *line);
-void	builtin_env(char **env);
 void	builtin_exit(t_mini *shell, char *line);
 void	builtin_pwd(t_mini *shell);
-char	**env_clone(char **env);
 void	handle_builtin(int id, t_mini *shell, char *line);
+
+//builtins/env.c
+char	*get_env_var(char **env, char *key);
+int		set_env_var(char *key, char *value);
+char	**env_clone(char **env);
+void	builtin_env(char **env);
 
 //setup/setup.c
 int		setup(t_mini *shell, char **env);

@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 19:07:14 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/24 12:41:24 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/24 13:48:26 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ void	minishell(t_mini *shell)
 					handle_builtin(builtin_id, shell, line);
 				if (shell->exit_flag)
 					break ;
-				rl_on_new_line();
 				add_history(line);
 				free(line);
 				line = NULL;

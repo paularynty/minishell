@@ -6,16 +6,11 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 11:16:04 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/19 13:28:00 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/24 15:34:17 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-// static void	set_prompt_user(char *username)
-// {
-// 	//look for USER in env and save the result in username;
-// }
 
 static void	set_prompt_cwd(t_mini *shell, size_t size)
 {
@@ -24,12 +19,13 @@ static void	set_prompt_cwd(t_mini *shell, size_t size)
 
 void	get_prompt(t_mini *shell, char *prompt, size_t size)
 {
-	//char	*username;
+	char	*username;
+	
 	ft_bzero(prompt, size);
-	//set_prompt_username(username);
-	//if (!username)
-		//username = "unknown";
-	ft_strlcat(prompt, "prynty", size);
+	username = get_env_var(shell->env, "USER");
+	if (!username)
+		username = "unknown";
+	ft_strlcat(prompt, username, size);
 	ft_strlcat(prompt, "@", size);
 	ft_strlcat(prompt, "minishell:", size);
 	set_prompt_cwd(shell, size);

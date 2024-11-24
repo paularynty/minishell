@@ -6,11 +6,44 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 19:11:34 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/18 16:20:14 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/24 15:28:58 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+char	*get_env_var(char **env, char *key)
+{
+	int		i;
+	size_t	key_len;
+	
+	if (!env || !key)
+		return (NULL);
+	i = 0;
+	key_len = ft_strlen(key);
+	while (env[i])
+	{
+		if (ft_strncmp(env[i], key, key_len) == 0 && *(env[i] + key_len) == '=')
+			return (env[i] + key_len + 1);
+		i++;
+	}
+	return (NULL);
+}
+
+int	set_env_var(char *key, char *value)
+{
+	char	*new;
+	size_t	new_len;
+	
+	new_len = ft_strlen(key) + ft_strlen(value) + 2;
+	new = ft_calloc(1, new_len);
+	if (!new)
+		return (FALSE);
+	ft_strlcat(new, key, new_len);
+	ft_strlcat(new, "=", new_len);
+	ft_strlcat(new, value, new_len);
+	return (TRUE);
+}
 
 char	**env_clone(char **env)
 {

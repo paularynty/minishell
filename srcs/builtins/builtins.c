@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 15:06:37 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/24 12:36:43 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/24 13:51:38 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	handle_builtin(int id, t_mini *shell, char *line)
 {
 	if (id == BUILTIN_CD)
-		builtin_cd();
+		builtin_cd(shell, line);
 	if (id == BUILTIN_ECHO)
 		builtin_echo(line);
 	if (id == BUILTIN_ENV)
@@ -40,11 +40,11 @@ int	builtins(char *line)
 		return (BUILTIN_ENV);
 	if (ft_strcmp(line, "exit") == 0)
 		return (BUILTIN_EXIT);
-	// if (ft_strcmp(line, "export") == 0)
-	// 	return (BUILTIN_EXPORT);
+	if (ft_strcmp(line, "export") == 0)
+		return (BUILTIN_EXPORT);
 	if (ft_strcmp(line, "pwd") == 0)
 		return (BUILTIN_PWD);
-	// if (ft_strcmp(line, "unset") == 0)
-	// 	return (BUILTIN_UNSET);
+	if (ft_strcmp(line, "unset") == 0)
+		return (BUILTIN_UNSET);
 	return (BUILTIN_NONE);
 }
