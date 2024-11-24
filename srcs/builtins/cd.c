@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 19:11:24 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/11 15:06:24 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/19 13:29:07 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,3 +21,8 @@
 //1. with empty cd you go to home
 //2. "cd -" goes to OLDPWD
 //3. with path, you go to the cmd path
+
+void	builtin_cd(void)
+{
+	chdir("/");
+}

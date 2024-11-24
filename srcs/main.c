@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 19:07:14 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/18 16:22:40 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/24 12:41:24 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	minishell(t_mini *shell)
 {
 	char	*line;
 	char	prompt[1024];
+	int		builtin_id;
 
 	while (TRUE)
 	{
@@ -33,7 +34,9 @@ void	minishell(t_mini *shell)
 			line = readline(prompt);
 			if (*line)
 			{
-				builtins(shell, line);
+				builtin_id = builtins(line);
+				if (builtin_id) // 0 = BUILTIN_NONE, everything else is builtin
+					handle_builtin(builtin_id, shell, line);
 				if (shell->exit_flag)
 					break ;
 				rl_on_new_line();
@@ -46,7 +49,6 @@ void	minishell(t_mini *shell)
 	free(line);
 }
 
-//set argc, argv to void
 int	main(int argc, char **argv, char **env)
 {
 	t_mini	shell;
