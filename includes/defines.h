@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 14:41:12 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/25 11:03:28 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/25 13:18:40 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@
 # define BLUE "\033[1;94m"
 # define CYAN "\033[1;96m"
 # define MAGENTA "\033[1;95m"
-# define PINK "\e[1m\e[38;5;205m"
+# define PINK "\e[1m\e[38;5;206m"
 # define RESET "\033[0;39m"
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 15:06:37 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/25 10:53:34 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/25 11:20:37 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,17 +34,17 @@ int	builtins(char *line)
 {
 	if (ft_strncmp(line, "cd", 2) == 0)
 		return (BUILTIN_CD);
-	if (ft_strcmp(line, "echo") == 0)
+	if (ft_strncmp(line, "echo", 4) == 0)
 		return (BUILTIN_ECHO);
-	if (ft_strcmp(line, "env") == 0)
+	if (ft_strncmp(line, "env", 3) == 0)
 		return (BUILTIN_ENV);
-	if (ft_strcmp(line, "exit") == 0)
+	if (ft_strncmp(line, "exit", 4) == 0)
 		return (BUILTIN_EXIT);
-	if (ft_strcmp(line, "export") == 0)
+	if (ft_strncmp(line, "export", 6) == 0)
 		return (BUILTIN_EXPORT);
-	if (ft_strcmp(line, "pwd") == 0)
+	if (ft_strncmp(line, "pwd", 3) == 0)
 		return (BUILTIN_PWD);
-	if (ft_strcmp(line, "unset") == 0)
+	if (ft_strncmp(line, "unset", 5) == 0)
 		return (BUILTIN_UNSET);
 	return (BUILTIN_NONE);
 }

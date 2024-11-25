@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 11:16:04 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/25 11:09:31 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/25 13:18:22 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	get_prompt(t_mini *shell, char *prompt, size_t size)
 	username = get_env_var(shell->env, "USER");
 	if (!username)
 		username = "unknown";
+	ft_strlcat(prompt, PINK, size);
 	ft_strlcat(prompt, username, size);
 	ft_strlcat(prompt, "@", size);
 	ft_strlcat(prompt, "minishell:", size);
@@ -32,4 +33,5 @@ void	get_prompt(t_mini *shell, char *prompt, size_t size)
 	ft_strlcat(prompt, "~", size);
 	ft_strlcat(prompt, shell->cwd, size);
 	ft_strlcat(prompt, "$ ", size);
+	ft_strlcat(prompt, RESET, size);
 }

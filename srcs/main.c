@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 19:07:14 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/25 11:11:03 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/25 14:28:33 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,9 @@ void	minishell(t_mini *shell)
 					break ;
 				add_history(line);
 				free(line);
-				line = NULL;
 			}
+			if (line == NULL)
+				break ;
 		}
 	}
 	free(line);

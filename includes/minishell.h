@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 15:11:50 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/25 10:26:08 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/25 13:05:35 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <fcntl.h> //for O_RDONLY etc.
 # include <stdio.h> // for printf
 # include <signal.h> //for signal, SIGINT, SIGQUIT
+# include <limits.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
