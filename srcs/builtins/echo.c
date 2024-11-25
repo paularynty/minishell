@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 19:11:29 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/24 12:17:28 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/25 15:07:31 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,20 @@
 
 //echo needs to take into account expanding
 
-void	builtin_echo(char *line)
+void	builtin_echo(char **cmd)
 {
+	int	i;
 	int	newline;
 
+	i = 1;
 	newline = TRUE;
-	printf("%s", line);
+	if (ft_strncmp(cmd[1], "-n", 2) == 0)
+	{
+		newline = FALSE;
+		i++;
+	}
+	while (cmd[i])
+		printf("%s", cmd[i++]);
 	if (newline)
 		printf("\n");
 }

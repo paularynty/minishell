@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 15:11:50 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/25 13:05:35 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/25 15:02:05 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,16 @@ enum e_builtins {
 };
 
 //builtins/builtins.c
+void	handle_builtin(int id, t_mini *shell, char *line);
 int		builtins(char *line);
-int		builtin_cd(t_mini *shell, char *line);
-void	builtin_echo(char *line);
 void	builtin_exit(t_mini *shell, char *line);
 void	builtin_pwd(t_mini *shell);
-void	handle_builtin(int id, t_mini *shell, char *line);
+
+//builtins/cd.c
+int		builtin_cd(t_mini *shell, char **cmd);
+
+//builtins/echo.c
+void	builtin_echo(char **cmd);
 
 //builtins/env.c
 char	*get_env_var(char **env, char *key);

@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 19:11:24 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/25 14:49:49 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/25 14:58:06 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,16 +108,8 @@ static int	cd_home(t_mini *shell)
 	return (change_dir(home));
 }
 
-int	builtin_cd(t_mini *shell, char *line)
+int	builtin_cd(t_mini *shell, char **cmd)
 {
-	char 	**cmd;
-
-	cmd = ft_split(line, ' ');
-	if (!cmd)
-	{
-		free(cmd);
-		return (FALSE);
-	}
 	if (cmd[2])
 	{
 		error_builtin(CD, NULL, "too many arguments");

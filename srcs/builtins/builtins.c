@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 15:06:37 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/25 11:20:37 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/25 15:00:22 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,15 @@
 
 void	handle_builtin(int id, t_mini *shell, char *line)
 {
+	char	**cmd;
+	
+	cmd = ft_split(line, ' ');
+	if (!cmd)
+		ft_free_array(&cmd);
 	if (id == BUILTIN_CD)
-		builtin_cd(shell, line);
+		builtin_cd(shell, cmd);
 	if (id == BUILTIN_ECHO)
-		builtin_echo(line);
+		builtin_echo(cmd);
 	if (id == BUILTIN_ENV)
 		builtin_env(shell->env);
 	if (id == BUILTIN_EXIT)
