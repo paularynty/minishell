@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 19:11:24 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/24 15:28:43 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/25 11:10:13 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,24 +57,36 @@ static int	change_dir(char *dir)
 {
 	if (chdir(dir) == -1)
 	{
-		error_builtin("cd", dir, NULL);
+		error_builtin(CD, dir, NULL);
 		return (FALSE);
 	}
 	return (TRUE);
 }
 
-// static int	change_to_home(char **env)
-// {
-// 	char	*home_dir;
+static int	cd_oldpwd(t_mini *shell)
+{
+	return (TRUE);
+}
 
-// 	home_dir = env_var_get(env, "HOME");
-// 	if (!home_dir)
-// 	{
-// 		error_builtin("cd", "HOME not set");
-// 		return (1);
-// 	}
-// 	return change_dir(home_dir);
-// }
+static int	cd_home(t_mini *shell)
+{
+	char	*home;
+	char	*old_pwd;
+
+	home = get_env_var(shell->env, "HOME");
+	if (!home)
+	{
+		error_builtin(CD, NULL, "HOME not set");
+		return (FALSE);
+	}
+	old_pwd = getcwd(shell->cwd, sizeof(shell->cwd));
+	if (!old_pwd)
+	{
+		ft_putstr_fd("Getcwd for oldpwd failed\n", 2);
+		return (FALSE);
+	}
+	return (change_dir(home));
+}
 
 int	builtin_cd(t_mini *shell, char *line)
 {
@@ -87,16 +99,23 @@ int	builtin_cd(t_mini *shell, char *line)
 		free(cmd);
 		return (FALSE);
 	}
-	// if (cmd[1] != NULL)
-	// 	return (error_builtin(NULL, "too many arguments"));
-	if (cmd[1] == NULL || cmd[0][0] == '\0')  // if just "cd"
-		return (chdir("/home/prynty/"));
-	if (ft_strcmp(cmd[1], "-") == 0)  // if "cd -"
+	// printf("%s %s %s %s\n", cmd[0], cmd[1], cmd[2], cmd[3]);
+	// if (cmd[2])
+	// {
+	// 	error_builtin(CD, NULL, "too many arguments");
+	// 	return (FALSE);
+	// }
+	if (!cmd[1])  // if just "cd"
+	{
+		if (!cd_home(shell))
+			return (FALSE);
+	}
+	if (ft_strncmp(cmd[1], "-", 1) == 0)  // if "cd -"
 	{
 		old_pwd = get_env_var(shell->env, "OLDPWD");
 		if (!old_pwd)
 		{
-			error_builtin("cd", NULL, "OLDPWD not set");
+			error_builtin(CD, NULL, "OLDPWD not set");
 			return (FALSE);
 		}
 		if (!change_dir(old_pwd))
@@ -108,8 +127,3 @@ int	builtin_cd(t_mini *shell, char *line)
 		return (FALSE);  // update env for PWD, OLDPWD
 	return (TRUE);
 }
-
-// void	builtin_cd(void)
-// {
-// 	chdir("/");
-// }

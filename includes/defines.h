@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 14:41:12 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/11 11:56:29 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/25 11:03:28 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,14 @@
 
 # define TRUE 1
 # define FALSE 0
+
+# define CD "cd"
+# define ECHO "echo"
+# define ENV "env"
+# define EXIT "exit"
+# define EXPORT "export"
+# define PWD "pwd"
+# define UNSET "unset"
 
 //colors
 # define RED "\033[1;91m"

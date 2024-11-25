@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 15:06:37 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/24 13:51:38 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/25 10:53:34 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	handle_builtin(int id, t_mini *shell, char *line)
 
 int	builtins(char *line)
 {
-	if (ft_strcmp(line, "cd") == 0)
+	if (ft_strncmp(line, "cd", 2) == 0)
 		return (BUILTIN_CD);
 	if (ft_strcmp(line, "echo") == 0)
 		return (BUILTIN_ECHO);

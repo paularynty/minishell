@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 19:11:34 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/24 15:28:58 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/25 11:09:11 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ char	*get_env_var(char **env, char *key)
 {
 	int		i;
 	size_t	key_len;
-	
+
 	if (!env || !key)
 		return (NULL);
 	i = 0;
@@ -34,7 +34,7 @@ int	set_env_var(char *key, char *value)
 {
 	char	*new;
 	size_t	new_len;
-	
+
 	new_len = ft_strlen(key) + ft_strlen(value) + 2;
 	new = ft_calloc(1, new_len);
 	if (!new)
