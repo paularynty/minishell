@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 15:11:50 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/25 15:02:05 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/25 15:22:31 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ typedef struct s_mini
 	char	*cwd;
 	char	*heredoc;
 	int		fd[2];
-	int		exit_flag;
+	int		exit_flag; // flag to check if minishell loop should be exited
+	int		exit_code; //exit status to exit the entire program with
 }	t_mini;
 
 enum e_builtins {
@@ -52,7 +53,7 @@ enum e_builtins {
 //builtins/builtins.c
 void	handle_builtin(int id, t_mini *shell, char *line);
 int		builtins(char *line);
-void	builtin_exit(t_mini *shell, char *line);
+void	builtin_exit(t_mini *shell, char **cmd);
 void	builtin_pwd(t_mini *shell);
 
 //builtins/cd.c

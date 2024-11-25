@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 17:10:47 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/18 15:33:40 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/25 15:27:07 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int	setup(t_mini *shell, char **env)
 	shell->heredoc = NULL;
 	shell->fd[0] = STDIN_FILENO;
 	shell->fd[1] = STDOUT_FILENO;
+	shell->exit_code = 0;
 	shell->exit_flag = FALSE;
 	shell->cwd = NULL;
 	return (TRUE);

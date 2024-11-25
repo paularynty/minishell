@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 19:07:14 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/25 14:28:33 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/25 15:26:40 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,6 @@ void	minishell(t_mini *shell)
 				builtin_id = builtins(line);
 				if (builtin_id) // 0 = BUILTIN_NONE, everything else is builtin
 					handle_builtin(builtin_id, shell, line);
-				if (shell->exit_flag)
-					break ;
 				add_history(line);
 				free(line);
 			}
