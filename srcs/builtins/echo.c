@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 19:11:29 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/25 15:07:31 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/26 15:22:59 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ void	builtin_echo(char **cmd)
 
 	i = 1;
 	newline = TRUE;
+	if (!cmd[1])
+		return ;
 	if (ft_strncmp(cmd[1], "-n", 2) == 0)
 	{
 		newline = FALSE;
