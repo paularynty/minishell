@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 15:11:50 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/25 15:22:31 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/27 10:32:32 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,9 @@ int		builtin_cd(t_mini *shell, char **cmd);
 void	builtin_echo(char **cmd);
 
 //builtins/env.c
-char	*get_env_var(char **env, char *key);
-int		set_env_var(char *key, char *value);
+char	*env_get_variable(char **env, char *key);
+int		env_set_variable(char *key, char *value);
+int		env_update_shell_level(t_mini *shell);
 char	**env_clone(char **env);
 void	builtin_env(char **env);
 

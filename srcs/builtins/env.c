@@ -6,13 +6,13 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 19:11:34 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/25 11:09:11 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/27 10:33:02 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char	*get_env_var(char **env, char *key)
+char	*env_get_variable(char **env, char *key)
 {
 	int		i;
 	size_t	key_len;
@@ -30,7 +30,7 @@ char	*get_env_var(char **env, char *key)
 	return (NULL);
 }
 
-int	set_env_var(char *key, char *value)
+int	env_set_variable(char *key, char *value)
 {
 	char	*new;
 	size_t	new_len;
@@ -42,6 +42,32 @@ int	set_env_var(char *key, char *value)
 	ft_strlcat(new, key, new_len);
 	ft_strlcat(new, "=", new_len);
 	ft_strlcat(new, value, new_len);
+	return (TRUE);
+}
+
+int	env_update_shell_level(t_mini *shell)
+{
+	char	*shell_level;
+	int		new_level;
+
+	shell_level = env_get_variable(shell->env, "SHLVL");
+	new_level = ft_atoi(shell_level) + 1;
+	if (new_level >= 1000)
+	{
+		ft_putstr_fd("minishell: warning: shell level (", 2);
+		ft_putnbr_fd(new_level, 2);
+		ft_putstr_fd(") too high, resetting to 1\n", 2);
+		new_level = 1;
+	}
+	shell_level = ft_itoa(new_level);
+	if (!shell_level)
+		return (FALSE);
+	if (!env_set_variable("SHLVL", shell_level))
+	{
+		free(shell_level);
+		return (FALSE);
+	}
+	free(shell_level);
 	return (TRUE);
 }
 

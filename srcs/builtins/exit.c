@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 19:11:39 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/25 15:25:50 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/27 09:54:24 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 //TO DO: 
 //exit with more than one arg should print "minishell: exit: too many arguments"
 //and exit code should be 1
+//if exited with non-numeric argument, should print "minishell: exit: [str] numeric argument required"
+//and exit code should be 2
 
 void	builtin_exit(t_mini *shell, char **cmd)
 {

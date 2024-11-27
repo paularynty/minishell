@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 17:10:47 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/25 15:27:07 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/27 11:32:52 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,7 @@ int	setup(t_mini *shell, char **env)
 	shell->exit_code = 0;
 	shell->exit_flag = FALSE;
 	shell->cwd = NULL;
+	if (!env_update_shell_level(shell))
+		return (FALSE);
 	return (TRUE);
 }

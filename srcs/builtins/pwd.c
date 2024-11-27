@@ -6,9 +6,11 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 19:11:50 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/18 16:11:38 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/27 11:33:25 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+//TO DO: need to update pwd in env as well
 
 #include "../../includes/minishell.h"
 

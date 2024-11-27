@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 19:11:24 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/25 15:13:06 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/27 10:33:56 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static int	cd_oldpwd(t_mini *shell)
 	
 	old_pwd = getcwd(shell->cwd, sizeof(cwd));
 	printf("%s\n", old_pwd);
-	new_pwd = get_env_var(shell->env, "OLDPWD");
+	new_pwd = env_get_variable(shell->env, "OLDPWD");
 	printf("%s\n", new_pwd);
 	if (!old_pwd)
 	{
@@ -82,9 +82,9 @@ static int	cd_oldpwd(t_mini *shell)
 		return (FALSE);
 	}
 	printf("oldpwd should be %s\n", old_pwd);
-	if (!set_env_var("OLDPWD", old_pwd))
+	if (!env_set_variable("OLDPWD", old_pwd))
 		return (FALSE);
-	printf("now oldpwd is %s\n", get_env_var(shell->env, "OLDPWD"));
+	printf("now oldpwd is %s\n", env_get_variable(shell->env, "OLDPWD"));
 	return (change_dir(new_pwd));
 }
 
@@ -93,7 +93,7 @@ static int	cd_home(t_mini *shell)
 	char	*home;
 	char	*old_pwd;
 
-	home = get_env_var(shell->env, "HOME");
+	home = env_get_variable(shell->env, "HOME");
 	if (!home)
 	{
 		error_builtin(CD, NULL, "HOME not set");

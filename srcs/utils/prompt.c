@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 11:16:04 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/25 13:18:22 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/27 10:34:13 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	get_prompt(t_mini *shell, char *prompt, size_t size)
 	char	*username;
 
 	ft_bzero(prompt, size);
-	username = get_env_var(shell->env, "USER");
+	username = env_get_variable(shell->env, "USER");
 	if (!username)
 		username = "unknown";
 	ft_strlcat(prompt, PINK, size);
