@@ -2,3 +2,4 @@ minishell
 *.vscode
 *.o
 a.out
+libft/libft.a

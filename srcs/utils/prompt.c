@@ -6,24 +6,32 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 11:16:04 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/11 12:24:35 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/27 10:34:13 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void    get_prompt(char *prompt, size_t size)
+static void	set_prompt_cwd(t_mini *shell, size_t size)
 {
-	//char	*username;
+	shell->cwd = getcwd(shell->cwd, size);
+}
+
+void	get_prompt(t_mini *shell, char *prompt, size_t size)
+{
+	char	*username;
 
 	ft_bzero(prompt, size);
-	//set_username(username);
-	//if (!username)
-		//username = "unknown";
-	ft_strlcat(prompt, "prynty", size);
+	username = env_get_variable(shell->env, "USER");
+	if (!username)
+		username = "unknown";
+	ft_strlcat(prompt, PINK, size);
+	ft_strlcat(prompt, username, size);
 	ft_strlcat(prompt, "@", size);
 	ft_strlcat(prompt, "minishell:", size);
-	///set_cwd(prompt, size);
-	ft_strlcat(prompt, "~/test/cwd/", size);
+	set_prompt_cwd(shell, size);
+	ft_strlcat(prompt, "~", size);
+	ft_strlcat(prompt, shell->cwd, size);
 	ft_strlcat(prompt, "$ ", size);
+	ft_strlcat(prompt, RESET, size);
 }

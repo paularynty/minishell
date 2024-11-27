@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 19:07:14 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/18 11:53:55 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/25 15:26:40 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,39 +16,41 @@
 //sig_atomic_t = atomic relative to signal handling
 //(we can also just pass around the exit code in the struct, 
 //let's decide on that later)
-__sig_atomic_t g_mrworldwide;
+__sig_atomic_t	g_mrworldwide;
 
 void	minishell(t_mini *shell)
 {
 	char	*line;
 	char	prompt[1024];
-	
+	int		builtin_id;
+
 	while (TRUE)
 	{
 		//update env;
 		//if lexer and parser = gucci, execute;
-		get_prompt(prompt, sizeof(prompt));
+		get_prompt(shell, prompt, sizeof(prompt));
 		if (isatty(STDIN_FILENO))
-			line = readline("minishell: ");
-		if (*line)
 		{
-			builtins(shell, line);
-			if (shell->exit_flag)
+			line = readline(prompt);
+			if (*line)
+			{
+				builtin_id = builtins(line);
+				if (builtin_id) // 0 = BUILTIN_NONE, everything else is builtin
+					handle_builtin(builtin_id, shell, line);
+				add_history(line);
+				free(line);
+			}
+			if (line == NULL)
 				break ;
-			rl_on_new_line();
-			add_history(line);
-			free(line);
-			line = NULL;
 		}
 	}
 	free(line);
 }
 
-//set argc, argv to void
 int	main(int argc, char **argv, char **env)
 {
 	t_mini	shell;
-		
+
 	(void)argc;
 	(void)argv;
 	if (!setup(&shell, env))
