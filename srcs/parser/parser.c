@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 16:22:26 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/22 16:19:16 by sniemela         ###   ########.fr       */
+/*   Updated: 2024/11/27 11:29:43 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	count_pipes(const char *input)
 		i++;
 	}
 	// if (input[i -1] == '|')
-	// 	OPEN_PIPES = 1  we could have a flag for open pipe later, it's optional
+	// 	OPEN_PIPES = 1, we could have a flag for open pipe later, it's optional
 	return (pipes);
 }
 
@@ -85,20 +85,6 @@ char	*ft_strndup(const char *src, size_t n)
 	return (dup);
 }
 
-char	**allocate_cmd_array(const char *input)
-{
-	int	cmd_count;
-	int	pipes;
-	char	**cmd;
-
-	pipes = count_pipes(input);
-	cmd_count = pipes + 1;
-	cmd = (char **)malloc(sizeof(char *)*(cmd_count + 1));
-	if (!cmd)
-		return (NULL);
-	return (cmd);
-}
-
 int	process_input(const char *input, char **cmd, int *j, int *start)
 {
 	int	i;
@@ -119,6 +105,20 @@ int	process_input(const char *input, char **cmd, int *j, int *start)
 		i++;
 	}
 	return (i);
+}
+
+char	**allocate_cmd_array(const char *input)
+{
+	int	cmd_count;
+	int	pipes;
+	char	**cmd;
+
+	pipes = count_pipes(input);
+	cmd_count = pipes + 1;
+	cmd = (char **)malloc(sizeof(char *)*(cmd_count + 1));
+	if (!cmd)
+		return (NULL);
+	return (cmd);
 }
 
 char	**split_by_pipes(const char *input)
