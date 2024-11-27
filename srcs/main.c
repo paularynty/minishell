@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 19:07:14 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/25 15:26:40 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/27 12:42:08 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	if (!setup(&shell, env))
-		return (1); // return (cleanup(&shell, 1));
+		return (cleanup(&shell), 1);
 	init_signals();
 	minishell(&shell);
 	rl_clear_history();

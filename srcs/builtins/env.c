@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 19:11:34 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/27 10:33:02 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/27 15:09:10 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ int	env_update_shell_level(t_mini *shell)
 	int		new_level;
 
 	shell_level = env_get_variable(shell->env, "SHLVL");
+	printf("shell level is %s\n", shell_level);
 	new_level = ft_atoi(shell_level) + 1;
 	if (new_level >= 1000)
 	{
