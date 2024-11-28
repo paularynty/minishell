@@ -6,7 +6,7 @@
 #    By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/27 12:05:04 by prynty            #+#    #+#              #
-#    Updated: 2024/11/12 16:05:00 by prynty           ###   ########.fr        #
+#    Updated: 2024/11/19 14:12:49 by prynty           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,8 +45,11 @@ LIBFT			= $(LIBDIR)/libft.a
 
 SRCS			= $(SRCDIR)/main.c \
 				$(SRCDIR)/builtins/builtins.c \
+				$(SRCDIR)/builtins/cd.c \
+				$(SRCDIR)/builtins/echo.c \
 				$(SRCDIR)/builtins/env.c \
 				$(SRCDIR)/builtins/exit.c \
+				$(SRCDIR)/builtins/pwd.c \
 				$(SRCDIR)/signals/signals.c \
 				$(SRCDIR)/setup/setup.c \
 				$(SRCDIR)/utils/cleanup.c \

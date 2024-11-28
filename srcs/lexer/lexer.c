@@ -12,8 +12,6 @@
 
 #include "../../includes/minishell.h"
 
-
-
 int lexer(char *input)
 {
 	if (!valid_input(input));
