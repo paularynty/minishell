@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 12:31:03 by sniemela          #+#    #+#             */
-/*   Updated: 2024/11/28 13:30:16 by sniemela         ###   ########.fr       */
+/*   Updated: 2024/11/28 16:24:40 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,16 +43,92 @@ static int	count_cmd_args(char *cmd_str)
 	return (args);
 }
 
-static char	**split_cmd_args(char *cmd_str)
+static char	**allocate_args(char *cmd_str)
 {
 	char	**args;
 	int		len;
 	
 	len = count_cmd_args(cmd_str);
-	args = (char **)malloc(sizeof(char *) *(len + 1));
+	args = (char **)malloc(sizeof(char *) * (len + 1));
 	if (!args)
 		return (NULL);
-	// not finished
+	return (args);
+}
+
+int		count_arg_lenght(char *cmd_str, int i)
+{
+	int	len;
+	
+	len = 0;
+	while (cmd_str[i])
+	{
+		if (cmd_str[i] == '"' || cmd_str[i] == '\'')
+		{
+			len += quotes_offset(cmd_str, cmd_str[i])
+			break ;
+		}
+		while (cmd_str[i] != '"' && cmd_str[i] != '\'' && !is_whitespace(cmd[i]))
+		{
+			len++;
+			i++;
+		}
+	}
+	return (len);
+}
+
+char	*extract_arg(char *cmd_str, int *i)
+{
+	char	*arg;
+	int		j;
+	int		len;
+
+	len = count_arg_length(cmd_str, *(i));
+	arg = (char *)malloc(sizeof(char) * (len + 1));
+	if (!arg)
+		return (NULL);
+	j = *i;
+	while (cmd_str[i])
+	{
+		if (cmd_str[i] == '"' || cmd_str[i] == '\'')
+		{
+			j += quotes_offset(cmd_str, cmd_str[i]);
+			if (!ft_strlcat(arg, cmd_str + i, len))
+			{
+				free (arg);
+				return (NULL);
+
+				KESKEN!
+		
+	}
+	return (arg);
+}
+
+static char	**split_cmd_args(char *cmd_str)
+{
+	char	**args;
+	int		i;
+	int		j;
+	
+	args = allocate_args(cmd_str);
+	if (!args)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (cmd_str[i])
+	{
+		while (cmd_str[i] && is_whitespace(cmd_str[i]))
+			i++;
+		if (!cmd_str[i])
+			break ;
+		args[j] = extract_arg(cmd_str, &i);
+		if (!args[j])
+		{
+			ft_free_array(&args);
+			return (NULL);
+		}
+		j++;
+	}
+	args[j] = NULL;
 	return (args);
 }
 

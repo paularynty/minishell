@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 19:07:14 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/27 12:42:08 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/28 14:17:01 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+#include "./parser/parser.h"
 
 //global variable to carry the exit status. mrworldwide for now
 //sig_atomic_t = atomic relative to signal handling
@@ -22,7 +23,8 @@ void	minishell(t_mini *shell)
 {
 	char	*line;
 	char	prompt[1024];
-	int		builtin_id;
+	t_command	*commands;
+	// int		builtin_id;
 
 	while (TRUE)
 	{
@@ -34,11 +36,13 @@ void	minishell(t_mini *shell)
 			line = readline(prompt);
 			if (*line)
 			{
-				builtin_id = builtins(line);
-				if (builtin_id) // 0 = BUILTIN_NONE, everything else is builtin
-					handle_builtin(builtin_id, shell, line);
-				add_history(line);
-				free(line);
+				commands = tokenizer(line);
+				print_list(commands);
+				// builtin_id = builtins(line);
+				// if (builtin_id) // 0 = BUILTIN_NONE, everything else is builtin
+				// 	handle_builtin(builtin_id, shell, line);
+				// add_history(line);
+				// free(line);
 			}
 			if (line == NULL)
 				break ;
