@@ -6,7 +6,7 @@
 #    By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/27 12:05:04 by prynty            #+#    #+#              #
-#    Updated: 2024/12/11 15:38:21 by sniemela         ###   ########.fr        #
+#    Updated: 2024/12/11 15:40:01 by sniemela         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,6 +51,7 @@ SRCS			= $(SRCDIR)/main.c \
 				$(SRCDIR)/builtins/exit.c \
 				$(SRCDIR)/builtins/export.c \
 				$(SRCDIR)/builtins/pwd.c \
+				$(SRCDIR)/execution/execute.c \
 				$(SRCDIR)/errors/errors.c \
 				$(SRCDIR)/signals/signals.c \
 				$(SRCDIR)/setup/setup.c \

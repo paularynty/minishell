@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 15:11:50 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/28 10:40:16 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/28 13:04:11 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 typedef struct s_mini
 {
 	char	**env;
+	char	**cmd;
 	char	*cwd;
 	char	*heredoc;
 	int		fd[2];
@@ -51,7 +52,7 @@ enum e_builtins {
 };
 
 //builtins/builtins.c
-void	handle_builtin(int id, t_mini *shell, char *line);
+void	handle_builtin(int id, t_mini *shell, char **cmd);
 int		builtins(char *line);
 void	builtin_exit(t_mini *shell, char **cmd);
 void	builtin_pwd(t_mini *shell);
@@ -75,6 +76,11 @@ int		builtin_export(t_mini *shell);
 
 //errors/errors.c
 void	error_builtin(char *builtin, char *str, char *error_str);
+void	error_cmd(char *cmd, char **cmd_array);
+
+//execution/execute.c
+void	prep_command(t_mini *shell, char *line);
+void	execute(t_mini *shell);
 
 //setup/setup.c
 int		setup(t_mini *shell, char **env);
