@@ -6,19 +6,15 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 15:06:37 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/27 16:08:47 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/28 13:01:02 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	handle_builtin(int id, t_mini *shell, char *line)
+void	handle_builtin(int id, t_mini *shell, char **cmd)
 {
-	char	**cmd;
 	
-	cmd = ft_split(line, ' ');
-	if (!cmd)
-		ft_free_array(&cmd);
 	if (id == BUILTIN_CD)
 		builtin_cd(shell, cmd);
 	if (id == BUILTIN_ECHO)
