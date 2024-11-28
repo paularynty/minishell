@@ -6,11 +6,18 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 19:07:14 by prynty            #+#    #+#             */
-/*   Updated: 2024/12/11 15:45:37 by sniemela         ###   ########.fr       */
+/*   Updated: 2024/12/11 15:56:00 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+#include "./parser/parser.h"
+
+//global variable to carry the exit status. mrworldwide for now
+//sig_atomic_t = atomic relative to signal handling
+//(we can also just pass around the exit code in the struct, 
+//let's decide on that later)
+sig_atomic_t	g_mrworldwide = 0;
 #include "./parser/parser.h"
 
 //global variable to carry the exit status. mrworldwide for now
