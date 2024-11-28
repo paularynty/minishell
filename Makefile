@@ -6,7 +6,7 @@
 #    By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/27 12:05:04 by prynty            #+#    #+#              #
-#    Updated: 2024/11/19 14:12:49 by prynty           ###   ########.fr        #
+#    Updated: 2024/11/28 10:44:57 by prynty           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,11 +49,14 @@ SRCS			= $(SRCDIR)/main.c \
 				$(SRCDIR)/builtins/echo.c \
 				$(SRCDIR)/builtins/env.c \
 				$(SRCDIR)/builtins/exit.c \
+				$(SRCDIR)/builtins/export.c \
 				$(SRCDIR)/builtins/pwd.c \
+				$(SRCDIR)/errors/errors.c \
 				$(SRCDIR)/signals/signals.c \
 				$(SRCDIR)/setup/setup.c \
 				$(SRCDIR)/utils/cleanup.c \
 				$(SRCDIR)/utils/prompt.c \
+				$(SRCDIR)/utils/utils.c \
 
 OBJS			= $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
