@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 19:11:24 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/27 11:44:36 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/28 10:21:07 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,28 +21,6 @@
 //1. with empty cd you go to home
 //2. "cd -" goes to OLDPWD
 //3. with path, you go to the cmd path
-
-void	error_builtin(char *builtin, char *str, char *error_str)
-{
-	char	buffer[1024];
-
-	ft_strlcpy(buffer, "minishell: ", sizeof(buffer) - 1);
-	ft_strlcat(buffer, builtin, sizeof(buffer) - 1);
-	if (str)
-	{
-		ft_strlcat(buffer, ": ", sizeof(buffer) - 1);
-		ft_strlcat(buffer, str, sizeof(buffer) - 1);
-	}
-	if (!error_str)
-		error_str = strerror(errno);
-	if (error_str && error_str[0] != '\0')
-	{
-		ft_strlcat(buffer, ": ", sizeof(buffer) - 1);
-		ft_strlcat(buffer, error_str, sizeof(buffer) - 1);
-	}
-	ft_strlcat(buffer, "\n", sizeof(buffer));
-	ft_putstr_fd(buffer, STDERR_FILENO);
-}
 
 static int	update_pwd(t_mini *shell)
 {

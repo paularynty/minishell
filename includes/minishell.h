@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 15:11:50 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/27 10:32:32 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/28 10:40:16 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,13 @@ int		env_set_variable(char *key, char *value);
 int		env_update_shell_level(t_mini *shell);
 char	**env_clone(char **env);
 void	builtin_env(char **env);
+
+//builtins/export.c
+int		count_array_elements(char **array);
+int		builtin_export(t_mini *shell);
+
+//errors/errors.c
+void	error_builtin(char *builtin, char *str, char *error_str);
 
 //setup/setup.c
 int		setup(t_mini *shell, char **env);
