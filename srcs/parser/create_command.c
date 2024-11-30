@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 12:31:03 by sniemela          #+#    #+#             */
-/*   Updated: 2024/11/28 16:24:40 by sniemela         ###   ########.fr       */
+/*   Updated: 2024/11/30 15:26:25 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,20 +24,22 @@ static int	count_cmd_args(char *cmd_str)
 {
 	int	i;
 	int	args;
-
+//	int	offset; lets add check later to the code (offset == -1)  to check  whether quotes remained open
+// 	offset = quotes_offset(cmd_str + i,  cmd_str[i]);
+//  if (offset == -1) pyydetaan jossain vaiheessa userilta inputtia kunnes sulkuquote tulee
 	i = 0;
 	args = 0;
 	while (cmd_str[i])
 	{
-		while (cmd_str[i] && is_whitespace(cmd[i]))
+		while (cmd_str[i] && is_whitespace(cmd_str[i]))
 			i++;
 		if (!cmd_str[i])
 			break ;
 		args++;
 		if (cmd_str[i] == '"' || cmd_str[i] == '\'')
-			i += quotes_offset(cmd_str, cmd_str[i]);
-		while (cmd_str[i] && cmd[i] != '"' && cmd[i] != '\''
-			&& !is_whitespace(cmd[i]))
+			i += quotes_offset(cmd_str + i, cmd_str[i]);
+		while (cmd_str[i] && cmd_str[i] != '"' && cmd_str[i] != '\''
+			&& !is_whitespace(cmd_str[i]))
 			i++;
 	}
 	return (args);
@@ -55,51 +57,38 @@ static char	**allocate_args(char *cmd_str)
 	return (args);
 }
 
-int		count_arg_lenght(char *cmd_str, int i)
+static int	count_arg_lenght(char *cmd_str, int i)
 {
 	int	len;
 	
 	len = 0;
-	while (cmd_str[i])
+	while (cmd_str[i]  && is_whitespace(cmd_str[i]))
+		i++;
+	if (cmd_str[i] == '"' || cmd_str[i] == '\'')
 	{
-		if (cmd_str[i] == '"' || cmd_str[i] == '\'')
-		{
-			len += quotes_offset(cmd_str, cmd_str[i])
-			break ;
-		}
-		while (cmd_str[i] != '"' && cmd_str[i] != '\'' && !is_whitespace(cmd[i]))
-		{
-			len++;
-			i++;
-		}
+		len = quotes_offset(cmd_str + i, cmd_str[i]);
+		return (len);
+	}
+	while (cmd_str[i] != '"' && cmd_str[i] != '\'' && !is_whitespace(cmd_str[i]))
+	{
+		len++;
+		i++;
 	}
 	return (len);
 }
 
-char	*extract_arg(char *cmd_str, int *i)
+static char	*extract_arg(char *cmd_str, int *i)
 {
 	char	*arg;
-	int		j;
 	int		len;
 
-	len = count_arg_length(cmd_str, *(i));
-	arg = (char *)malloc(sizeof(char) * (len + 1));
+	len = count_arg_lenght(cmd_str, *i);
+	if (len <= 0)
+		return (NULL);
+	arg = ft_substr(cmd_str, *i, len);
 	if (!arg)
 		return (NULL);
-	j = *i;
-	while (cmd_str[i])
-	{
-		if (cmd_str[i] == '"' || cmd_str[i] == '\'')
-		{
-			j += quotes_offset(cmd_str, cmd_str[i]);
-			if (!ft_strlcat(arg, cmd_str + i, len))
-			{
-				free (arg);
-				return (NULL);
-
-				KESKEN!
-		
-	}
+	*i = *i + len;
 	return (arg);
 }
 
@@ -155,12 +144,31 @@ t_command	*create_command(char *cmd_str)
 	if (!command)
 		return (NULL);
 	args = split_cmd_args(cmd_str);
+	// DEBUGGAUSTA VARTEN:
+	int k = 0;
+	printf("split_cmd_args jalkeen: \n");
+	while (args[k] != NULL)
+	{
+		printf("arg %d: |%s|\n", k+1, args[k]);
+		k++;
+	}
+	printf("ennen tokenize_argsia\n");
+//endif
 	if (!args || !tokenize_args(command, args))
 	{
 		ft_free_array(&args); // check later if in ft_free_array there's a check to avoid double free
 		free(command);
 		return (NULL);
 	}
+	printf("tokenize_argsin jalkeen\n");
+	printf("command->tokens: %p\n", command->tokens);
+    t_token *temp = command->tokens;
+    while (temp)
+    {
+        printf("Token: Type = %d, Value = |%s|\n", temp->type, temp->value);
+        temp = temp->next;
+    }
 	ft_free_array(&args); // ft_free_array is made for 3D array
+	command->next  = NULL;
 	return (command);
 }

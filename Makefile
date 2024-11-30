@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+         #
+#    By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/27 12:05:04 by prynty            #+#    #+#              #
-#    Updated: 2024/11/19 14:12:49 by prynty           ###   ########.fr        #
+#    Updated: 2024/11/30 13:42:42 by sniemela         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,6 +54,13 @@ SRCS			= $(SRCDIR)/main.c \
 				$(SRCDIR)/setup/setup.c \
 				$(SRCDIR)/utils/cleanup.c \
 				$(SRCDIR)/utils/prompt.c \
+				$(SRCDIR)/parser/helper_funcs.c \
+				$(SRCDIR)/parser/create_command.c \
+				$(SRCDIR)/parser/create_tokens.c \
+				$(SRCDIR)/parser/free_cmd_contents.c \
+				$(SRCDIR)/parser/parser.c \
+				$(SRCDIR)/parser/split_by_pipes.c \
+				
 
 OBJS			= $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 

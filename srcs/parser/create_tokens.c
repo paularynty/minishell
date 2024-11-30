@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 12:36:24 by sniemela          #+#    #+#             */
-/*   Updated: 2024/11/28 12:52:27 by sniemela         ###   ########.fr       */
+/*   Updated: 2024/11/30 15:42:48 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,10 @@ static t_token	*create_token(char *arg)
 {
 	t_token	*token;
 
-	token = malloc(sizeof(t_token));
+	token = malloc(sizeof(t_token) + 1);
 	if (!token)
 		return (NULL);
-	token->value = ft_strdup(value);
+	token->value = ft_strdup(arg);
 	if (!token->value)
 	{
 		free(token);

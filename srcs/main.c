@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 19:07:14 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/28 14:17:01 by sniemela         ###   ########.fr       */
+/*   Updated: 2024/11/30 13:51:47 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,12 @@ void	minishell(t_mini *shell)
 		if (isatty(STDIN_FILENO))
 		{
 			line = readline(prompt);
+			printf("1 TSEKKI\n");
 			if (*line)
 			{
+				printf("line on: %s\n", line);
 				commands = tokenizer(line);
+				printf("tokenizer onnistui :)\n");
 				print_list(commands);
 				// builtin_id = builtins(line);
 				// if (builtin_id) // 0 = BUILTIN_NONE, everything else is builtin

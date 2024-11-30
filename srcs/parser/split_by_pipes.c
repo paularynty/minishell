@@ -6,11 +6,12 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 16:11:09 by sniemela          #+#    #+#             */
-/*   Updated: 2024/11/28 12:54:28 by sniemela         ###   ########.fr       */
+/*   Updated: 2024/11/30 13:48:05 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+#include "parser.h"
 
 static int	process_input(const char *input, char **cmd, int *j, int *start)
 {
