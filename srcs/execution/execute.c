@@ -6,13 +6,13 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 12:49:33 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/28 13:07:02 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/30 13:32:23 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	check_access(char *cmd, char **cmd_array)
+void	check_access(t_mini *shell, char *cmd, char **cmd_array)
 {
 	int	is_dir;
 
@@ -22,7 +22,7 @@ void	check_access(char *cmd, char **cmd_array)
 			errno = ENOENT;
 		else
 			errno = 0;
-		error_cmd(cmd, cmd_array);
+		error_cmd(shell, cmd, cmd_array);
 	}
 	is_dir = open(cmd, __O_DIRECTORY);
 	if (is_dir >= 0)
@@ -32,12 +32,12 @@ void	check_access(char *cmd, char **cmd_array)
 			errno = EISDIR;
 		else
 			errno = 0;
-		error_cmd(cmd, cmd_array);
+		error_cmd(shell, cmd, cmd_array);
 	}
 	if (access(cmd, X_OK) == -1)
 	{	
 		errno = EACCES;
-		error_cmd(cmd, cmd_array);
+		error_cmd(shell, cmd, cmd_array);
 	}
 }
 
@@ -92,7 +92,7 @@ static char	*get_cmd_path(t_mini *shell, char *cmd, char **cmd_array)
 		else
 		{
 			errno = ENOENT;
-			error_cmd(cmd, cmd_array);
+			error_cmd(shell, cmd, cmd_array);
 		}
 	}
 	env_path = get_env_path(shell->env);
@@ -109,7 +109,7 @@ void	prep_command(t_mini *shell, char *line)
 	if (!shell->cmd)
 		ft_free_array(&shell->cmd);
 	if (!shell->cmd || !shell->cmd[0])
-		error_cmd(shell->cmd[0], shell->cmd);
+		error_cmd(shell, shell->cmd[0], shell->cmd);
 }
 
 void	execute(t_mini *shell)
@@ -118,9 +118,9 @@ void	execute(t_mini *shell)
 
 	cmd_path = get_cmd_path(shell, shell->cmd[0], shell->cmd);
 	if (!cmd_path)
-		check_access(shell->cmd[0], shell->cmd);
-	check_access(cmd_path, shell->cmd);
+		check_access(shell, shell->cmd[0], shell->cmd);
+	check_access(shell, cmd_path, shell->cmd);
 	execve(cmd_path, shell->cmd, shell->env);
 	free(cmd_path);
-	error_cmd(shell->cmd[0], shell->cmd);
+	error_cmd(shell, shell->cmd[0], shell->cmd);
 }

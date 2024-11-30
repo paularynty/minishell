@@ -6,16 +6,16 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 11:16:04 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/27 10:34:13 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/30 13:30:38 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static void	set_prompt_cwd(t_mini *shell, size_t size)
-{
-	shell->cwd = getcwd(shell->cwd, size);
-}
+// static void	set_prompt_cwd(t_mini *shell, size_t size)
+// {
+// 	shell->cwd = getcwd(shell->cwd, size);
+// }
 
 void	get_prompt(t_mini *shell, char *prompt, size_t size)
 {
@@ -29,7 +29,7 @@ void	get_prompt(t_mini *shell, char *prompt, size_t size)
 	ft_strlcat(prompt, username, size);
 	ft_strlcat(prompt, "@", size);
 	ft_strlcat(prompt, "minishell:", size);
-	set_prompt_cwd(shell, size);
+	update_pwd(shell);
 	ft_strlcat(prompt, "~", size);
 	ft_strlcat(prompt, shell->cwd, size);
 	ft_strlcat(prompt, "$ ", size);

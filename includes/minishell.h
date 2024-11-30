@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 15:11:50 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/28 13:04:11 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/30 13:30:22 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ void	builtin_exit(t_mini *shell, char **cmd);
 void	builtin_pwd(t_mini *shell);
 
 //builtins/cd.c
+int		update_pwd(t_mini *shell);
 int		builtin_cd(t_mini *shell, char **cmd);
 
 //builtins/echo.c
@@ -76,9 +77,10 @@ int		builtin_export(t_mini *shell);
 
 //errors/errors.c
 void	error_builtin(char *builtin, char *str, char *error_str);
-void	error_cmd(char *cmd, char **cmd_array);
+void	error_cmd(t_mini *shell, char *cmd, char **cmd_array);
 
 //execution/execute.c
+void	check_access(t_mini *shell, char *cmd, char **cmd_array);
 void	prep_command(t_mini *shell, char *line);
 void	execute(t_mini *shell);
 

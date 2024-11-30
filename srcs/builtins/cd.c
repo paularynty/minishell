@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 19:11:24 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/28 10:21:07 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/30 13:30:11 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 //2. "cd -" goes to OLDPWD
 //3. with path, you go to the cmd path
 
-static int	update_pwd(t_mini *shell)
+int	update_pwd(t_mini *shell)
 {
 	char	*dir;
 

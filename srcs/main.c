@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 19:07:14 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/28 13:03:01 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/30 13:28:24 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,12 @@ void	minishell(t_mini *shell)
 			if (*line)
 			{
 				prep_command(shell, line);
-				builtin_id = builtins(line);
+				builtin_id = builtins(shell->cmd[0]);
 				if (builtin_id) // 0 = BUILTIN_NONE, everything else is builtin
-					handle_builtin(builtin_id, shell, line);
+					handle_builtin(builtin_id, shell, shell->cmd);
+				else
+					execute(shell);
 				add_history(line);
-				execute(shell);
 				free(line);
 			}
 			if (line == NULL)
