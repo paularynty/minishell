@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 15:11:50 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/30 13:30:22 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/30 16:49:58 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,14 @@
 //own headers
 # include "defines.h"
 # include "../libft/libft.h"
+
+typedef struct s_env
+{
+	char			*key;
+	char			*value;
+	int				flag;
+	struct s_env	*next;
+}	t_env;
 
 typedef struct s_mini
 {
@@ -52,28 +60,38 @@ enum e_builtins {
 };
 
 //builtins/builtins.c
-void	handle_builtin(int id, t_mini *shell, char **cmd);
+void	handle_builtin(int id, t_mini *shell);
 int		builtins(char *line);
-void	builtin_exit(t_mini *shell, char **cmd);
-void	builtin_pwd(t_mini *shell);
 
 //builtins/cd.c
 int		update_pwd(t_mini *shell);
-int		builtin_cd(t_mini *shell, char **cmd);
+int		builtin_cd(t_mini *shell);
 
 //builtins/echo.c
-void	builtin_echo(char **cmd);
+int		builtin_echo(char **cmd);
 
 //builtins/env.c
 char	*env_get_variable(char **env, char *key);
 int		env_set_variable(char *key, char *value);
 int		env_update_shell_level(t_mini *shell);
 char	**env_clone(char **env);
-void	builtin_env(char **env);
+int		builtin_env(char **env);
+
+//builtins/exit.c
+int		builtin_exit(t_mini *shell);
 
 //builtins/export.c
 int		count_array_elements(char **array);
 int		builtin_export(t_mini *shell);
+
+//builtins/pwd.c
+int		builtin_pwd(t_mini *shell);
+
+//builtins/unset.c
+int		builtin_unset(char **cmd);
+
+//environment/create_env.c
+t_env	*create_env_list(char *key, char *value);
 
 //errors/errors.c
 void	error_builtin(char *builtin, char *str, char *error_str);

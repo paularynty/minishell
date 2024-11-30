@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 19:11:24 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/30 13:30:11 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/30 16:37:18 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,26 +86,26 @@ static int	cd_home(t_mini *shell)
 	return (change_dir(home));
 }
 
-int	builtin_cd(t_mini *shell, char **cmd)
+int	builtin_cd(t_mini *shell)
 {
-	if (cmd[2])
+	if (shell->cmd[2])
 	{
 		error_builtin(CD, NULL, "too many arguments");
-		return (FALSE);
+		return (1);
 	}
-	if (!cmd[1]) // if just "cd"
+	if (!shell->cmd[1]) // if just "cd"
 	{
 		if (!cd_home(shell))
-			return (FALSE);
+			return (1);
 	}
-	if (ft_strncmp(cmd[1], "-\0", 2) == 0)  // if "cd -"
+	if (ft_strncmp(shell->cmd[1], "-\0", 2) == 0)  // if "cd -"
 	{
 		if (!cd_oldpwd(shell))
-			return (FALSE);
+			return (1);
 	}
-	else if (!change_dir(cmd[1])) // if it's anything else other than cd or cd -
-			return (FALSE);
+	else if (!change_dir(shell->cmd[1])) // if it's anything else other than cd or cd -
+			return (1);
 	if (!update_pwd(shell)) // update env for PWD, OLDPWD
-		return (FALSE);
-	return (TRUE);
+		return (1);
+	return (0);
 }

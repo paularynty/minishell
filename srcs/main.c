@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 19:07:14 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/30 13:28:24 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/30 16:49:45 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,25 +29,24 @@ void	minishell(t_mini *shell)
 		//update env;
 		//if lexer and parser = gucci, execute;
 		get_prompt(shell, prompt, sizeof(prompt));
-		if (isatty(STDIN_FILENO))
+		line = readline(prompt);
+		if (line == NULL)
+			break ;
+		if (*line)
 		{
-			line = readline(prompt);
-			if (*line)
-			{
-				prep_command(shell, line);
-				builtin_id = builtins(shell->cmd[0]);
-				if (builtin_id) // 0 = BUILTIN_NONE, everything else is builtin
-					handle_builtin(builtin_id, shell, shell->cmd);
-				else
-					execute(shell);
-				add_history(line);
-				free(line);
-			}
-			if (line == NULL)
-				break ;
+			add_history(line);
+			prep_command(shell, line);
+			builtin_id = builtins(shell->cmd[0]);
+			if (builtin_id) // 0 = BUILTIN_NONE, everything else is builtin
+				handle_builtin(builtin_id, shell);
+			else
+				execute(shell);
 		}
+		if (shell->exit_flag)
+			break ;
+		free(line);
+		line = NULL;
 	}
-	free(line);
 }
 
 int	main(int argc, char **argv, char **env)
@@ -62,5 +61,5 @@ int	main(int argc, char **argv, char **env)
 	minishell(&shell);
 	rl_clear_history();
 	cleanup(&shell);
-	exit(g_mrworldwide); //or mini.exit_code, whatever we decide
+	return (shell.exit_code);
 }

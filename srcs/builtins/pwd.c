@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 19:11:50 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/27 11:33:25 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/30 15:58:16 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 #include "../../includes/minishell.h"
 
-void	builtin_pwd(t_mini *shell)
+int	builtin_pwd(t_mini *shell)
 {
 	printf("%s\n", shell->cwd);
+	return (0);
 }

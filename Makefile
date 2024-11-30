@@ -6,7 +6,7 @@
 #    By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/27 12:05:04 by prynty            #+#    #+#              #
-#    Updated: 2024/11/28 13:04:42 by prynty           ###   ########.fr        #
+#    Updated: 2024/11/30 15:29:06 by prynty           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,6 +51,8 @@ SRCS			= $(SRCDIR)/main.c \
 				$(SRCDIR)/builtins/exit.c \
 				$(SRCDIR)/builtins/export.c \
 				$(SRCDIR)/builtins/pwd.c \
+				$(SRCDIR)/builtins/unset.c \
+				$(SRCDIR)/environment/create_env.c \
 				$(SRCDIR)/execution/execute.c \
 				$(SRCDIR)/errors/errors.c \
 				$(SRCDIR)/signals/signals.c \

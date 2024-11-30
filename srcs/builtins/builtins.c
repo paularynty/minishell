@@ -6,46 +6,49 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 15:06:37 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/28 13:01:02 by prynty           ###   ########.fr       */
+/*   Updated: 2024/11/30 16:41:51 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	handle_builtin(int id, t_mini *shell, char **cmd)
+void	handle_builtin(int id, t_mini *shell)
 {
-	
+	int	code;
+
+	code = 0;
 	if (id == BUILTIN_CD)
-		builtin_cd(shell, cmd);
+		code = builtin_cd(shell);
 	if (id == BUILTIN_ECHO)
-		builtin_echo(cmd);
+		code = builtin_echo(shell->cmd);
 	if (id == BUILTIN_ENV)
-		builtin_env(shell->env);
+		code = builtin_env(shell->env);
 	if (id == BUILTIN_EXIT)
-		builtin_exit(shell, cmd);
+		code = builtin_exit(shell);
 	if (id == BUILTIN_EXPORT)
-		builtin_export(shell);
+		code = builtin_export(shell);
 	if (id == BUILTIN_PWD)
-		builtin_pwd(shell); //only one line in this func, so can just move it here later
-	// if (id = BUILTIN_UNSET)
-	// 	builtin_unset();
+		code = builtin_pwd(shell); //only one line in this func, so can just move it here later
+	if (id == BUILTIN_UNSET)
+		code = builtin_unset(shell->cmd);
+	shell->exit_code = code;
 }
 
-int	builtins(char *line)
+int	builtins(char *cmd)
 {
-	if (ft_strncmp(line, "cd", 2) == 0)
+	if (ft_strncmp(cmd, "cd", 2) == 0)
 		return (BUILTIN_CD);
-	if (ft_strncmp(line, "echo", 4) == 0)
+	if (ft_strncmp(cmd, "echo", 4) == 0)
 		return (BUILTIN_ECHO);
-	if (ft_strncmp(line, "env", 3) == 0)
+	if (ft_strncmp(cmd, "env", 3) == 0)
 		return (BUILTIN_ENV);
-	if (ft_strncmp(line, "exit", 4) == 0)
+	if (ft_strncmp(cmd, "exit", 4) == 0)
 		return (BUILTIN_EXIT);
-	if (ft_strncmp(line, "export", 6) == 0)
+	if (ft_strncmp(cmd, "export", 6) == 0)
 		return (BUILTIN_EXPORT);
-	if (ft_strncmp(line, "pwd", 3) == 0)
+	if (ft_strncmp(cmd, "pwd", 3) == 0)
 		return (BUILTIN_PWD);
-	if (ft_strncmp(line, "unset", 5) == 0)
+	if (ft_strncmp(cmd, "unset", 5) == 0)
 		return (BUILTIN_UNSET);
 	return (BUILTIN_NONE);
 }
