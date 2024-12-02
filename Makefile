@@ -6,7 +6,7 @@
 #    By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/27 12:05:04 by prynty            #+#    #+#              #
-#    Updated: 2024/11/30 13:42:42 by sniemela         ###   ########.fr        #
+#    Updated: 2024/12/02 16:56:28 by sniemela         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,7 @@ LIBDIR			= libft
 INCLUDE			= includes
 
 CFLAGS			= -Wall -Wextra -Werror \
-					-I $(INCLUDE)
+					-I $(INCLUDE) -g
 LDFLAGS			= -lreadline
 LIBFT			= $(LIBDIR)/libft.a
 

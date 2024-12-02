@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 12:31:03 by sniemela          #+#    #+#             */
-/*   Updated: 2024/11/30 15:26:25 by sniemela         ###   ########.fr       */
+/*   Updated: 2024/12/02 17:04:42 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,14 +62,14 @@ static int	count_arg_lenght(char *cmd_str, int i)
 	int	len;
 	
 	len = 0;
-	while (cmd_str[i]  && is_whitespace(cmd_str[i]))
+	while (cmd_str[i] && is_whitespace(cmd_str[i]))
 		i++;
 	if (cmd_str[i] == '"' || cmd_str[i] == '\'')
 	{
 		len = quotes_offset(cmd_str + i, cmd_str[i]);
 		return (len);
 	}
-	while (cmd_str[i] != '"' && cmd_str[i] != '\'' && !is_whitespace(cmd_str[i]))
+	while (cmd_str[i] && cmd_str[i] != '"' && cmd_str[i] != '\'' && !is_whitespace(cmd_str[i]))
 	{
 		len++;
 		i++;
@@ -112,7 +112,7 @@ static char	**split_cmd_args(char *cmd_str)
 		args[j] = extract_arg(cmd_str, &i);
 		if (!args[j])
 		{
-			ft_free_array(&args);
+			free_2d_array(args);
 			return (NULL);
 		}
 		j++;
@@ -144,19 +144,19 @@ t_command	*create_command(char *cmd_str)
 	if (!command)
 		return (NULL);
 	args = split_cmd_args(cmd_str);
-	// DEBUGGAUSTA VARTEN:
-	int k = 0;
-	printf("split_cmd_args jalkeen: \n");
-	while (args[k] != NULL)
-	{
-		printf("arg %d: |%s|\n", k+1, args[k]);
-		k++;
-	}
-	printf("ennen tokenize_argsia\n");
-//endif
+// 	// DEBUGGAUSTA VARTEN:
+// 	int k = 0;
+// 	printf("split_cmd_args jalkeen: \n");
+// 	while (args[k] != NULL)
+// 	{
+// 		printf("arg %d: |%s|\n", k+1, args[k]);
+// 		k++;
+// 	}
+// 	printf("ennen tokenize_argsia\n");
+// //endif
 	if (!args || !tokenize_args(command, args))
 	{
-		ft_free_array(&args); // check later if in ft_free_array there's a check to avoid double free
+		free_2d_array(args); // check later if in ft_free_array there's a check to avoid double free
 		free(command);
 		return (NULL);
 	}
@@ -168,7 +168,9 @@ t_command	*create_command(char *cmd_str)
         printf("Token: Type = %d, Value = |%s|\n", temp->type, temp->value);
         temp = temp->next;
     }
-	ft_free_array(&args); // ft_free_array is made for 3D array
+	if (args)
+		free_2d_array(args); // ft_free_array is made for 3D array
 	command->next  = NULL;
 	return (command);
 }
+// echo hello < input | cat hello | wc -l

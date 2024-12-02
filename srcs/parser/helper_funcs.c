@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 12:42:29 by sniemela          #+#    #+#             */
-/*   Updated: 2024/11/30 15:39:18 by sniemela         ###   ########.fr       */
+/*   Updated: 2024/12/02 15:51:24 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,38 +21,57 @@
  ******************************/
 
 #include <stdio.h>
+
 void print_list(t_command *commands)
 {
     t_command *current = commands;
-    int i;
 
     while (current)
     {
         printf("Command:\n");
-        i = 0;
-        if (current->tokens)
+        t_token *token = current->tokens; // Start with the first token
+        int i = 0;
+
+        if (token)
         {
             printf("  Tokens:\n");
-            while (current->tokens[i].value)  // Ensure the value is not NULL
+            while (token)
             {
-                if (current->tokens[i].value)  // Check if value is valid
-                    printf("    [%d]: %s (type: %d)\n", i, current->tokens[i].value, current->tokens[i].type);
+                printf("    [%d]: %s (type: %d)\n", i, token->value, token->type);
+                token = token->next; // Move to the next token
                 i++;
             }
         }
         else
+        {
             printf("  Tokens: NULL\n");
+        }
 
         printf("  Input FD: %d\n", current->input_fd);
         printf("  Output FD: %d\n", current->output_fd);
 
-        current = current->next;
+        current = current->next; // Move to the next command
         if (current)
             printf("  ---- Next Command ----\n");
     }
 }
 
 
+void	free_2d_array(char **array)
+{
+	int	i;
+
+	i = 0;
+	if (!array)
+		return ;
+	while (array[i])
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array);
+	array = NULL;
+}
 
 
 /********************************

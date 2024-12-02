@@ -34,6 +34,7 @@ void	    print_list(t_command *commands);
 void		add_token(t_token **head, t_token *new_token);
 int			count_pipes(const char *input);
 t_command	*create_command(char *cmd_str);
+void		free_2d_array(char **array);
 void		free_commands(t_command *commands);
 void		free_tokens(t_token *tokens);
 char		*ft_strndup(const char *src, size_t n);

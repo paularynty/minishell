@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 12:36:24 by sniemela          #+#    #+#             */
-/*   Updated: 2024/11/30 15:42:48 by sniemela         ###   ########.fr       */
+/*   Updated: 2024/12/02 17:00:52 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ void	add_token(t_token **head, t_token *new_token)
 		while (temp->next)
 			temp = temp->next;
 		temp->next = new_token;
-		// new_token->next = NULL;
 	}
+	
 }
 
 static t_token_type	identify_token_type(char *value)
