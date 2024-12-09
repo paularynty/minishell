@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 15:06:37 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/30 16:41:51 by prynty           ###   ########.fr       */
+/*   Updated: 2024/12/06 10:50:54 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,15 @@ void	handle_builtin(int id, t_mini *shell)
 	if (id == BUILTIN_ECHO)
 		code = builtin_echo(shell->cmd);
 	if (id == BUILTIN_ENV)
-		code = builtin_env(shell->env);
+		code = builtin_env(shell);
 	if (id == BUILTIN_EXIT)
 		code = builtin_exit(shell);
 	if (id == BUILTIN_EXPORT)
 		code = builtin_export(shell);
 	if (id == BUILTIN_PWD)
-		code = builtin_pwd(shell); //only one line in this func, so can just move it here later
+		code = builtin_pwd(shell);
 	if (id == BUILTIN_UNSET)
-		code = builtin_unset(shell->cmd);
+		code = builtin_unset(shell);
 	shell->exit_code = code;
 }
 

@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 19:07:14 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/30 16:49:45 by prynty           ###   ########.fr       */
+/*   Updated: 2024/12/09 12:50:25 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,34 +18,60 @@
 //let's decide on that later)
 __sig_atomic_t	g_mrworldwide;
 
-void	minishell(t_mini *shell)
+static int	add_input(t_mini *shell, char *input)
 {
-	char	*line;
+	char	*temp;
+	
+	if (shell->input)
+	{
+		temp = ft_strjoin(shell->input, temp);
+		if (!temp)
+		{
+			perror("minishell: failed to join input");
+			return (FALSE);
+		}
+		free(shell->input);
+		shell->input = temp;
+	}
+	else
+	{
+		shell->input = ft_strdup(input);
+		if (!shell->input)
+		{
+			perror("minishell: failed to add input");
+			return (FALSE);
+		}
+	}
+	return (TRUE);
+}
+
+static void	minishell(t_mini *shell)
+{
+	char	*input;
 	char	prompt[1024];
-	int		builtin_id;
 
 	while (TRUE)
 	{
 		//update env;
-		//if lexer and parser = gucci, execute;
 		get_prompt(shell, prompt, sizeof(prompt));
-		line = readline(prompt);
-		if (line == NULL)
+		input = readline(prompt);
+		if (input == NULL)
 			break ;
-		if (*line)
+		if (*input)
 		{
-			add_history(line);
-			prep_command(shell, line);
-			builtin_id = builtins(shell->cmd[0]);
-			if (builtin_id) // 0 = BUILTIN_NONE, everything else is builtin
-				handle_builtin(builtin_id, shell);
-			else
-				execute(shell);
+			if (!add_input(shell, input))
+			{
+				free(input);
+				continue ;
+			}
+			// if (lexer && parser)
+			execute(shell, input);
+			add_history(input); //this could be moved somewhere in parsing/exec functions
+			if (shell->exit_flag)
+				break ;
 		}
-		if (shell->exit_flag)
-			break ;
-		free(line);
-		line = NULL;
+		free(input);
+		input = NULL;
 	}
 }
 

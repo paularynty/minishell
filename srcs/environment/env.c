@@ -1,36 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/06 19:11:29 by prynty            #+#    #+#             */
-/*   Updated: 2024/12/05 14:40:44 by prynty           ###   ########.fr       */
+/*   Created: 2024/11/06 19:11:34 by prynty            #+#    #+#             */
+/*   Updated: 2024/12/04 12:37:12 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-//echo needs to take into account expanding
-
-int	builtin_echo(char **cmd)
+// env takes in no args, only prints the env list
+// when running env -i ./minishell and env as command
+// env list should only be PWD, SHLVL and _=/usr/bin/env
+int	builtin_env(t_mini *shell)
 {
 	int	i;
-	int	newline;
 
-	i = 1;
-	newline = TRUE;
-	if (!cmd[1])
-		return (1);
-	if (ft_strncmp(cmd[1], "-n", 2) == 0)
+	i = 0;
+	if (!env_get_variable(shell->env, "PATH"))
 	{
-		newline = FALSE;
+		error_builtin(ENV, NULL, "No such file or directory");
+		return (127);	
+	}
+	while (shell->env && shell->env[i])
+	{
+		if (ft_strchr(shell->env[i], '='))
+			printf("%s\n", shell->env[i]);
 		i++;
 	}
-	while (cmd[i])
-		printf("%s", cmd[i++]);
-	if (newline)
-		printf("\n");
 	return (0);
 }

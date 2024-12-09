@@ -6,7 +6,7 @@
 #    By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/27 12:05:04 by prynty            #+#    #+#              #
-#    Updated: 2024/11/30 15:29:06 by prynty           ###   ########.fr        #
+#    Updated: 2024/12/09 10:43:01 by prynty           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,20 +39,20 @@ INCLUDE			= includes
 
 CFLAGS			= -Wall -Wextra -Werror \
 					-I $(INCLUDE)
-LDFLAGS			= -lreadline
+LDFLAGS			= -lreadline -L ~/.brew/opt/readline/lib -I ~/.brew/opt/readline/include
 LIBFT			= $(LIBDIR)/libft.a
-
 
 SRCS			= $(SRCDIR)/main.c \
 				$(SRCDIR)/builtins/builtins.c \
 				$(SRCDIR)/builtins/cd.c \
 				$(SRCDIR)/builtins/echo.c \
-				$(SRCDIR)/builtins/env.c \
 				$(SRCDIR)/builtins/exit.c \
 				$(SRCDIR)/builtins/export.c \
 				$(SRCDIR)/builtins/pwd.c \
 				$(SRCDIR)/builtins/unset.c \
-				$(SRCDIR)/environment/create_env.c \
+				$(SRCDIR)/environment/env_utils.c \
+				$(SRCDIR)/environment/env.c \
+				$(SRCDIR)/execution/exec_utils.c \
 				$(SRCDIR)/execution/execute.c \
 				$(SRCDIR)/errors/errors.c \
 				$(SRCDIR)/signals/signals.c \

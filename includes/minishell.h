@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 15:11:50 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/30 16:49:58 by prynty           ###   ########.fr       */
+/*   Updated: 2024/12/09 12:17:30 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <limits.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <sys/wait.h>
 
 //own headers
 # include "defines.h"
@@ -42,6 +43,7 @@ typedef struct s_mini
 	char	**env;
 	char	**cmd;
 	char	*cwd;
+	char	*input;
 	char	*heredoc;
 	int		fd[2];
 	int		exit_flag; // flag to check if minishell loop should be exited
@@ -70,13 +72,6 @@ int		builtin_cd(t_mini *shell);
 //builtins/echo.c
 int		builtin_echo(char **cmd);
 
-//builtins/env.c
-char	*env_get_variable(char **env, char *key);
-int		env_set_variable(char *key, char *value);
-int		env_update_shell_level(t_mini *shell);
-char	**env_clone(char **env);
-int		builtin_env(char **env);
-
 //builtins/exit.c
 int		builtin_exit(t_mini *shell);
 
@@ -88,10 +83,19 @@ int		builtin_export(t_mini *shell);
 int		builtin_pwd(t_mini *shell);
 
 //builtins/unset.c
-int		builtin_unset(char **cmd);
+void	env_unset_variable(char **env, char *variable);
+int		builtin_unset(t_mini *shell);
 
 //environment/create_env.c
-t_env	*create_env_list(char *key, char *value);
+char	*env_get_variable(char **env, char *key);
+int		env_set_variable(t_mini *shell, char *key, char *value);
+int		env_update_shlvl(t_mini *shell);
+char	**clone_env(char **env);
+
+//environment/env.c
+int		builtin_env(t_mini *shell);
+// t_env	*clone_env(char **env);
+// t_env	*create_env_node(char *key, char *value);
 
 //errors/errors.c
 void	error_builtin(char *builtin, char *str, char *error_str);
@@ -100,7 +104,10 @@ void	error_cmd(t_mini *shell, char *cmd, char **cmd_array);
 //execution/execute.c
 void	check_access(t_mini *shell, char *cmd, char **cmd_array);
 void	prep_command(t_mini *shell, char *line);
-void	execute(t_mini *shell);
+void	execute(t_mini *shell, char *input);
+
+//execution/exec_utils.c
+int	wait_for_children(t_mini *shell, pid_t pid);
 
 //setup/setup.c
 int		setup(t_mini *shell, char **env);

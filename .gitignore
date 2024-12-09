@@ -4,3 +4,4 @@ minishell
 a.out
 libft/libft.a
 test.*
+readline.supp

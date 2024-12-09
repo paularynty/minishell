@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 19:11:45 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/28 10:44:34 by prynty           ###   ########.fr       */
+/*   Updated: 2024/12/06 11:16:35 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,17 @@
 
 //if just export, you add to pending list, which is different from env
 //you can export multiple vars in a single command
+
+//TO DO:
+//check for valid export
+//when adding new export variable, put it in alphabetical order
+//when calling export [arg], give prompt back if successful
+//and only print export if it's a standalone command
+
+// int	valid_export(char *str)
+// {
+	
+// }
 
 static void	sort_export_table(char **env)
 {
@@ -41,30 +52,70 @@ static void	sort_export_table(char **env)
 	}
 }
 
+int	export_variable(t_mini *shell, char *arg)
+{
+	char	*value;
+
+	// if (!valid_export(arg))
+	// 	return (-1);
+	value = ft_strchr(arg, '=');
+	if (!value)
+	{
+		env_set_variable(shell, arg, "");
+		return (FALSE);
+	}
+	*value++ = '\0';
+	env_unset_variable(shell->env, arg);
+	env_set_variable(shell, arg, value);
+	return (TRUE);
+}
+
+static int	print_export_vars(char **env)
+{
+	int		i;
+	char	*equal_char;
+
+	i = 0;
+	while (env[i])
+	{
+		ft_putstr_fd("declare -x ", STDOUT_FILENO);
+		if (env[i][0] != '\0')
+		{
+			equal_char = ft_strchr(env[i], '=');
+			if (equal_char)
+			{
+				write(STDOUT_FILENO, env[i], (equal_char - env[i]) + 1);
+				printf("\"%s\"\n", equal_char + 1);
+			}
+			else
+				printf("%s\n", env[i]);
+		}
+		i++;
+	}
+	return (TRUE);
+}
+
 int	builtin_export(t_mini *shell)
 {
-	char	*equal_char;
 	char	**temp;
 	int		i;
 
-	i = 0;
-	temp = env_clone(shell->env);
+	i = 1;
+	temp = clone_env(shell->env);
 	if (!temp)
-		return (FALSE);
+		return (-1);
 	sort_export_table(temp);
-	while (temp[i])
+	if (!shell->cmd[1])
+		return (print_export_vars(temp));
+	while (shell->cmd[i])
 	{
-		if (temp[i][0] != '\0')
+		if (!export_variable(shell, shell->cmd[i]))
 		{
-			printf("declare -x ");
-			equal_char = ft_strchr(temp[i], '=');
-			if (equal_char)
-				printf("%s\"%s\"\n", temp[i], equal_char + 1);
-			else
-				printf("%s\n", temp[i]);
+			// error_export(shell->cmd[i]);
+			shell->exit_code = 1;
 		}
 		i++;
 	}
 	ft_free_array(&temp);
-	return (TRUE);
+	return (shell->exit_code);
 }

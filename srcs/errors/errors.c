@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 10:19:59 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/30 13:21:52 by prynty           ###   ########.fr       */
+/*   Updated: 2024/12/05 14:44:45 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,5 +54,4 @@ void	error_cmd(t_mini *shell, char *cmd, char **cmd_array)
 		shell->exit_code = 126;
 	else
 		shell->exit_code = 127;
-
 }

@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 12:49:33 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/30 16:50:13 by prynty           ###   ########.fr       */
+/*   Updated: 2024/12/09 12:39:15 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,15 +112,39 @@ void	prep_command(t_mini *shell, char *line)
 		error_cmd(shell, shell->cmd[0], shell->cmd);
 }
 
-void	execute(t_mini *shell)
+int	exec_fork(t_mini *shell)
 {
 	char		*cmd_path;
+	pid_t		pid;
 
-	cmd_path = get_cmd_path(shell, shell->cmd[0], shell->cmd);
-	if (!cmd_path)
-		check_access(shell, shell->cmd[0], shell->cmd);
-	check_access(shell, cmd_path, shell->cmd);
-	execve(cmd_path, shell->cmd, shell->env);
-	free(cmd_path);
-	error_cmd(shell, shell->cmd[0], shell->cmd);
+	pid = fork();
+	if (pid < 0)
+	{
+		perror("fork failed");
+		return (-1);
+	}
+	if (pid == 0)
+	{
+		cmd_path = get_cmd_path(shell, shell->cmd[0], shell->cmd);
+		if (!cmd_path)
+			check_access(shell, shell->cmd[0], shell->cmd);
+		check_access(shell, cmd_path, shell->cmd);
+		execve(cmd_path, shell->cmd, shell->env);
+		free(cmd_path);
+		error_cmd(shell, shell->cmd[0], shell->cmd);
+	}
+	return (wait_for_children(shell, pid));
+}
+
+void	execute(t_mini *shell, char *input)
+{
+	int	builtin_id;
+
+	prep_command(shell, input);
+	builtin_id = builtins(shell->cmd[0]);
+	if (builtin_id) // 0 = BUILTIN_NONE, everything else is builtin
+		handle_builtin(builtin_id, shell);
+	else
+		exec_fork(shell);
+	ft_free_array(&shell->cmd);
 }

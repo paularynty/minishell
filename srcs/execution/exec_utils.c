@@ -5,19 +5,32 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/28 12:51:39 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/28 12:53:14 by prynty           ###   ########.fr       */
+/*   Created: 2024/12/09 10:39:40 by prynty            #+#    #+#             */
+/*   Updated: 2024/12/09 10:41:10 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// void	close_all(t_mini *shell)
-// {
-// 	if (shell->fd_in >= 0)
-// 		close(shell->fd_in);
-// 	if (shell->fd_out >= 0)
-// 		close(shell->fd_out);
-// 	close(shell->pipe_fd[0]);
-// 	close(shell->pipe_fd[1]);
-// }
+int	wait_for_children(t_mini *shell, pid_t pid)
+{
+	int	status;
+	int	retval;
+	int	wait_count;
+
+	wait_count = 2;
+	while (wait_count > 0)
+	{
+		retval = waitpid(-1, &status, 0);
+		if (retval == -1)
+		{
+			shell->exit_code = 1;
+			perror("waitpid failed");
+			break ;
+		}
+		wait_count--;
+		if (retval == pid && WIFEXITED(status))
+			shell->exit_code = WEXITSTATUS(status);
+	}
+	return (shell->exit_code);
+}
