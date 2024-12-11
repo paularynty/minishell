@@ -6,15 +6,19 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 15:09:39 by prynty            #+#    #+#             */
-/*   Updated: 2024/12/04 14:09:23 by prynty           ###   ########.fr       */
+/*   Updated: 2024/12/11 12:46:25 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
-//program segfaults with ctrl+d
+void	signal_heredoc(int signal)
+{
+	close(STDIN_FILENO);
+	g_mrworldwide = signal;
+}
 
-static void	signal_ctrl_c(int signal)
+void	signal_ctrl_c(int signal)
 {
 	if (signal == SIGINT)
 	{

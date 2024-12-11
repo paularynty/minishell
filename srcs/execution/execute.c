@@ -6,40 +6,11 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 12:49:33 by prynty            #+#    #+#             */
-/*   Updated: 2024/12/09 12:39:15 by prynty           ###   ########.fr       */
+/*   Updated: 2024/12/11 12:42:26 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-void	check_access(t_mini *shell, char *cmd, char **cmd_array)
-{
-	int	is_dir;
-
-	if (access(cmd, F_OK) == -1)
-	{
-		if (ft_strchr(cmd, '/'))
-			errno = ENOENT;
-		else
-			errno = 0;
-		error_cmd(shell, cmd, cmd_array);
-	}
-	is_dir = open(cmd, __O_DIRECTORY);
-	if (is_dir >= 0)
-	{
-		close(is_dir);
-		if (cmd[ft_strlen(cmd) - 1] == '/')
-			errno = EISDIR;
-		else
-			errno = 0;
-		error_cmd(shell, cmd, cmd_array);
-	}
-	if (access(cmd, X_OK) == -1)
-	{	
-		errno = EACCES;
-		error_cmd(shell, cmd, cmd_array);
-	}
-}
 
 static char	**get_env_path(char **env)
 {
@@ -80,7 +51,7 @@ static char	*get_full_path(char **env_path, char *cmd)
 	return (NULL);
 }
 
-static char	*get_cmd_path(t_mini *shell, char *cmd, char **cmd_array)
+static char	*get_cmd_path(t_mini *shell, char *cmd)
 {
 	char	*cmd_path;
 	char	**env_path;
@@ -92,7 +63,7 @@ static char	*get_cmd_path(t_mini *shell, char *cmd, char **cmd_array)
 		else
 		{
 			errno = ENOENT;
-			error_cmd(shell, cmd, cmd_array);
+			error_cmd(shell, cmd);
 		}
 	}
 	env_path = get_env_path(shell->env);
@@ -103,13 +74,12 @@ static char	*get_cmd_path(t_mini *shell, char *cmd, char **cmd_array)
 	return (cmd_path);
 }
 
-void	prep_command(t_mini *shell, char *line)
+static int	prep_command(t_mini *shell, char *line)
 {
 	shell->cmd = ft_split(line, ' ');
-	if (!shell->cmd)
-		ft_free_array(&shell->cmd);
 	if (!shell->cmd || !shell->cmd[0])
-		error_cmd(shell, shell->cmd[0], shell->cmd);
+		return (error_cmd(shell, shell->cmd[0]));
+	return (0);
 }
 
 int	exec_fork(t_mini *shell)
@@ -125,13 +95,13 @@ int	exec_fork(t_mini *shell)
 	}
 	if (pid == 0)
 	{
-		cmd_path = get_cmd_path(shell, shell->cmd[0], shell->cmd);
+		cmd_path = get_cmd_path(shell, shell->cmd[0]);
 		if (!cmd_path)
 			check_access(shell, shell->cmd[0], shell->cmd);
 		check_access(shell, cmd_path, shell->cmd);
 		execve(cmd_path, shell->cmd, shell->env);
 		free(cmd_path);
-		error_cmd(shell, shell->cmd[0], shell->cmd);
+		exit(error_cmd(shell, shell->cmd[0]));
 	}
 	return (wait_for_children(shell, pid));
 }

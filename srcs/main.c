@@ -6,44 +6,13 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 19:07:14 by prynty            #+#    #+#             */
-/*   Updated: 2024/12/09 12:50:25 by prynty           ###   ########.fr       */
+/*   Updated: 2024/12/11 12:44:12 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-//global variable to carry the exit status. mrworldwide for now
-//sig_atomic_t = atomic relative to signal handling
-//(we can also just pass around the exit code in the struct, 
-//let's decide on that later)
-__sig_atomic_t	g_mrworldwide;
-
-static int	add_input(t_mini *shell, char *input)
-{
-	char	*temp;
-	
-	if (shell->input)
-	{
-		temp = ft_strjoin(shell->input, temp);
-		if (!temp)
-		{
-			perror("minishell: failed to join input");
-			return (FALSE);
-		}
-		free(shell->input);
-		shell->input = temp;
-	}
-	else
-	{
-		shell->input = ft_strdup(input);
-		if (!shell->input)
-		{
-			perror("minishell: failed to add input");
-			return (FALSE);
-		}
-	}
-	return (TRUE);
-}
+sig_atomic_t	g_mrworldwide = 0;
 
 static void	minishell(t_mini *shell)
 {
@@ -52,18 +21,12 @@ static void	minishell(t_mini *shell)
 
 	while (TRUE)
 	{
-		//update env;
 		get_prompt(shell, prompt, sizeof(prompt));
 		input = readline(prompt);
 		if (input == NULL)
 			break ;
 		if (*input)
 		{
-			if (!add_input(shell, input))
-			{
-				free(input);
-				continue ;
-			}
 			// if (lexer && parser)
 			execute(shell, input);
 			add_history(input); //this could be moved somewhere in parsing/exec functions

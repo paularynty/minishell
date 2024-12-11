@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 10:19:59 by prynty            #+#    #+#             */
-/*   Updated: 2024/12/05 14:44:45 by prynty           ###   ########.fr       */
+/*   Updated: 2024/12/11 12:41:03 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	error_builtin(char *builtin, char *str, char *error_str)
 	ft_putstr_fd(buffer, STDERR_FILENO);
 }
 
-void	error_cmd(t_mini *shell, char *cmd, char **cmd_array)
+int	error_cmd(t_mini *shell, char *cmd)
 {
 	int	exitcode;
 
@@ -47,11 +47,9 @@ void	error_cmd(t_mini *shell, char *cmd, char **cmd_array)
 		ft_putstr_fd(cmd, 2);
 		ft_putendl_fd(": command not found", 2);
 	}
-	if (cmd_array)
-		ft_free_array(&cmd_array);
-	// close_all(shell);
 	if (exitcode == EACCES || exitcode == EISDIR)
 		shell->exit_code = 126;
 	else
 		shell->exit_code = 127;
+	return(shell->exit_code);
 }

@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 13:36:33 by prynty            #+#    #+#             */
-/*   Updated: 2024/12/06 12:38:43 by prynty           ###   ########.fr       */
+/*   Updated: 2024/12/11 12:38:22 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ char	*env_get_variable(char **env, char *key)
 
 	if (!env || !key)
 		return (NULL);
-	i = 0;
 	key_len = ft_strlen(key);
+	i = 0;
 	while (env[i])
 	{
 		if (ft_strncmp(env[i], key, key_len) == 0 && *(env[i] + key_len) == '=')

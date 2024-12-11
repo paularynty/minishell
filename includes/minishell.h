@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 15:11:50 by prynty            #+#    #+#             */
-/*   Updated: 2024/12/09 12:17:30 by prynty           ###   ########.fr       */
+/*   Updated: 2024/12/11 12:41:32 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,21 @@
 # include <stdio.h> // for printf
 # include <signal.h> //for signal, SIGINT, SIGQUIT
 # include <limits.h>
+# include <stdbool.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
 
 //own headers
 # include "defines.h"
 # include "../libft/libft.h"
+
+//global variable to carry the exit status. mrworldwide for now
+//sig_atomic_t = atomic relative to signal handling
+//(we can also just pass around the exit code in the struct, 
+//let's decide on that later)
+extern int	g_mrworldwide;
 
 typedef struct s_env
 {
@@ -94,25 +102,24 @@ char	**clone_env(char **env);
 
 //environment/env.c
 int		builtin_env(t_mini *shell);
-// t_env	*clone_env(char **env);
-// t_env	*create_env_node(char *key, char *value);
 
 //errors/errors.c
 void	error_builtin(char *builtin, char *str, char *error_str);
-void	error_cmd(t_mini *shell, char *cmd, char **cmd_array);
+int		error_cmd(t_mini *shell, char *cmd);
 
 //execution/execute.c
-void	check_access(t_mini *shell, char *cmd, char **cmd_array);
-void	prep_command(t_mini *shell, char *line);
 void	execute(t_mini *shell, char *input);
 
 //execution/exec_utils.c
-int	wait_for_children(t_mini *shell, pid_t pid);
+int		check_access(t_mini *shell, char *cmd, char **cmd_array);
+int		wait_for_children(t_mini *shell, pid_t pid);
 
 //setup/setup.c
 int		setup(t_mini *shell, char **env);
 
-//signals/signals.c
+//signals/signals.cvoid	signal_heredoc(int signal)
+void	signal_heredoc(int signal);
+void	signal_ctrl_c(int signal);
 void	init_signals(void);
 
 //utils/cleanup.c
