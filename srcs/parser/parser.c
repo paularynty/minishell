@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 16:22:26 by prynty            #+#    #+#             */
-/*   Updated: 2024/12/02 16:44:09 by sniemela         ###   ########.fr       */
+/*   Updated: 2024/12/11 12:10:52 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ static void	add_command(t_command **head, t_command *new_cmd)
 t_command	*tokenizer(const char *input)
 {
 	char		**cmds;
-	t_command	*commands; // is there a need to init as NULL?
-	t_command	*current_cmd; // is there a need to init as NULL?
+	t_command	*commands;
+	t_command	*current_cmd;
 	int			i;
 
 	i = 0;
@@ -52,29 +52,16 @@ t_command	*tokenizer(const char *input)
 	cmds = split_by_pipes(input);
 	if (!cmds)
 		return (NULL);
-// // DEBUGGAUSTA VARTEN:
-// 	int k = 0;
-// 	printf("split by pipes j'lkeen: \n");
-// 	while (cmds[k] != NULL)
-// 	{
-// 		printf("cmd %d: |%s|\n", k+1, cmds[k]);
-// 		k++;
-// 	}
-// //endif
 	while (cmds[i] != NULL)
 	{
-//		printf("ennen create_command\n");
 		current_cmd = create_command(cmds[i]);
-//		printf("create_commandin jalkeen\n");
 		if (!current_cmd)
 		{
-//			printf("current_commandin  luominen  epaonnistu\n");
 			free_2d_array(cmds);
 			free_commands(commands);
 			return (NULL);
 		}
 		add_command(&commands, current_cmd); // adds another cmd to the linked list
-//		printf("add commandin luominen onnistu\n");
 		i++;
 	}
 	free_2d_array(cmds);
