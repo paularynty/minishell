@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/06 19:11:34 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/27 15:15:29 by prynty           ###   ########.fr       */
+/*   Created: 2024/11/30 13:36:33 by prynty            #+#    #+#             */
+/*   Updated: 2024/12/11 12:38:22 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ char	*env_get_variable(char **env, char *key)
 
 	if (!env || !key)
 		return (NULL);
-	i = 0;
 	key_len = ft_strlen(key);
+	i = 0;
 	while (env[i])
 	{
 		if (ft_strncmp(env[i], key, key_len) == 0 && *(env[i] + key_len) == '=')
@@ -30,10 +30,49 @@ char	*env_get_variable(char **env, char *key)
 	return (NULL);
 }
 
-int	env_set_variable(char *key, char *value)
+static int	env_add_variable(t_mini *shell, char *variable)
+{
+	char	**new;
+	int		i;
+
+	i = 0;
+	while (shell->env && shell->env[i])
+		i++;
+	new = ft_calloc(1, (i + 2) * sizeof(char *));
+	if (!new)
+		return (0);
+	ft_memcpy(new, shell->env, i * sizeof(char *));
+	new[i] = variable;
+	free(shell->env);
+	shell->env = new;
+	return (1);
+}
+
+static int	env_find_index(char **env, char *key)
+{
+	int		i;
+	char	*index;
+
+	i = 0;
+	index = env_get_variable(env, key);
+	if (index)
+		index = index - ft_strlen(key) - 1;
+	while (env[i])
+	{
+		if (index && env[i] == index)
+			return (i);
+		else if (!index && env[i][0] == '\0')
+			return (i);
+		i++;
+	}
+	return (-1);
+}
+
+int	env_set_variable(t_mini *shell, char *key, char *value)
 {
 	char	*new;
 	size_t	new_len;
+	int		index;
 
 	new_len = ft_strlen(key) + ft_strlen(value) + 2;
 	new = ft_calloc(1, new_len);
@@ -42,37 +81,48 @@ int	env_set_variable(char *key, char *value)
 	ft_strlcat(new, key, new_len);
 	ft_strlcat(new, "=", new_len);
 	ft_strlcat(new, value, new_len);
+	index = env_find_index(shell->env, key);
+	if (index == -1)
+	{
+		if (!env_add_variable(shell, new))
+		{
+			free(new);
+			return (FALSE);
+		}
+		return (TRUE);
+	}
+	free(shell->env[index]);
+	shell->env[index] = new;
 	return (TRUE);
 }
 
-int	env_update_shell_level(t_mini *shell)
+int	env_update_shlvl(t_mini *shell)
 {
-	char	*shell_level;
-	int		new_level;
+	char	*shlvl;
+	int		temp;
 
-	shell_level = env_get_variable(shell->env, "SHLVL");
-	printf("shell level is %s\n", shell_level);
-	new_level = ft_atoi(shell_level) + 1;
-	if (new_level >= 1000)
+	shlvl = env_get_variable(shell->env, "SHLVL");
+	temp = ft_atoi(shlvl) + 1;
+	if (temp >= 1000)
 	{
 		ft_putstr_fd("minishell: warning: shell level (", STDERR_FILENO);
-		ft_putnbr_fd(new_level, STDERR_FILENO);
+		ft_putnbr_fd(temp, STDERR_FILENO);
 		ft_putstr_fd(") too high, resetting to 1\n", STDERR_FILENO);
-		new_level = 1;
+		temp = 1;
 	}
-	shell_level = ft_itoa(new_level);
-	if (!shell_level)
+	shlvl = ft_itoa(temp);
+	if (!shlvl)
 		return (FALSE);
-	if (!env_set_variable("SHLVL", shell_level))
+	if (!env_set_variable(shell, "SHLVL", shlvl))
 	{
-		free(shell_level);
+		free(shlvl);
 		return (FALSE);
 	}
-	free(shell_level);
+	free(shlvl);
 	return (TRUE);
 }
 
-char	**env_clone(char **env)
+char	**clone_env(char **env)
 {
 	int		i;
 	char	**clone;
@@ -95,20 +145,4 @@ char	**env_clone(char **env)
 		i++;
 	}
 	return (clone);
-}
-
-//env takes in no args, only prints the env list
-//when running env -i ./minishell and env as command
-//env list should only be PWD, SHLVL and _=/usr/bin/env
-void	builtin_env(char **env)
-{
-	int	i;
-
-	i = 0;
-	while (env && env[i])
-	{
-		if (ft_strchr(env[i], '='))
-			printf("%s\n", env[i]);
-		i++;
-	}
 }

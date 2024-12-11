@@ -6,45 +6,36 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 19:07:14 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/27 12:42:08 by prynty           ###   ########.fr       */
+/*   Updated: 2024/12/11 12:44:12 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-//global variable to carry the exit status. mrworldwide for now
-//sig_atomic_t = atomic relative to signal handling
-//(we can also just pass around the exit code in the struct, 
-//let's decide on that later)
-__sig_atomic_t	g_mrworldwide;
+sig_atomic_t	g_mrworldwide = 0;
 
-void	minishell(t_mini *shell)
+static void	minishell(t_mini *shell)
 {
-	char	*line;
+	char	*input;
 	char	prompt[1024];
-	int		builtin_id;
 
 	while (TRUE)
 	{
-		//update env;
-		//if lexer and parser = gucci, execute;
 		get_prompt(shell, prompt, sizeof(prompt));
-		if (isatty(STDIN_FILENO))
+		input = readline(prompt);
+		if (input == NULL)
+			break ;
+		if (*input)
 		{
-			line = readline(prompt);
-			if (*line)
-			{
-				builtin_id = builtins(line);
-				if (builtin_id) // 0 = BUILTIN_NONE, everything else is builtin
-					handle_builtin(builtin_id, shell, line);
-				add_history(line);
-				free(line);
-			}
-			if (line == NULL)
+			// if (lexer && parser)
+			execute(shell, input);
+			add_history(input); //this could be moved somewhere in parsing/exec functions
+			if (shell->exit_flag)
 				break ;
 		}
+		free(input);
+		input = NULL;
 	}
-	free(line);
 }
 
 int	main(int argc, char **argv, char **env)
@@ -59,5 +50,5 @@ int	main(int argc, char **argv, char **env)
 	minishell(&shell);
 	rl_clear_history();
 	cleanup(&shell);
-	exit(g_mrworldwide); //or mini.exit_code, whatever we decide
+	return (shell.exit_code);
 }

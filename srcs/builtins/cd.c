@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 19:11:24 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/27 11:44:36 by prynty           ###   ########.fr       */
+/*   Updated: 2024/12/06 15:36:29 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,29 +22,7 @@
 //2. "cd -" goes to OLDPWD
 //3. with path, you go to the cmd path
 
-void	error_builtin(char *builtin, char *str, char *error_str)
-{
-	char	buffer[1024];
-
-	ft_strlcpy(buffer, "minishell: ", sizeof(buffer) - 1);
-	ft_strlcat(buffer, builtin, sizeof(buffer) - 1);
-	if (str)
-	{
-		ft_strlcat(buffer, ": ", sizeof(buffer) - 1);
-		ft_strlcat(buffer, str, sizeof(buffer) - 1);
-	}
-	if (!error_str)
-		error_str = strerror(errno);
-	if (error_str && error_str[0] != '\0')
-	{
-		ft_strlcat(buffer, ": ", sizeof(buffer) - 1);
-		ft_strlcat(buffer, error_str, sizeof(buffer) - 1);
-	}
-	ft_strlcat(buffer, "\n", sizeof(buffer));
-	ft_putstr_fd(buffer, STDERR_FILENO);
-}
-
-static int	update_pwd(t_mini *shell)
+int	update_pwd(t_mini *shell)
 {
 	char	*dir;
 
@@ -73,25 +51,25 @@ static int	cd_oldpwd(t_mini *shell)
 	char	cwd[4096]; //PATH_MAX, doesn't work for me for some reason so hardcoding it
 	
 	old_pwd = getcwd(shell->cwd, sizeof(cwd));
-	printf("%s\n", old_pwd);
 	new_pwd = env_get_variable(shell->env, "OLDPWD");
-	printf("%s\n", new_pwd);
 	if (!old_pwd)
 	{
 		error_builtin(CD, NULL, "OLDPWD not set");
 		return (FALSE);
 	}
-	printf("oldpwd should be %s\n", old_pwd);
-	if (!env_set_variable("OLDPWD", old_pwd))
+	printf("%s\n", new_pwd);
+	if (!change_dir(new_pwd))
 		return (FALSE);
-	printf("now oldpwd is %s\n", env_get_variable(shell->env, "OLDPWD"));
-	return (change_dir(new_pwd));
+	if (!env_set_variable(shell, "OLDPWD", old_pwd))
+		return (FALSE);
+	return (TRUE);
 }
 
 static int	cd_home(t_mini *shell)
 {
 	char	*home;
 	char	*old_pwd;
+	char	*cwd[4096];
 
 	home = env_get_variable(shell->env, "HOME");
 	if (!home)
@@ -99,7 +77,7 @@ static int	cd_home(t_mini *shell)
 		error_builtin(CD, NULL, "HOME not set");
 		return (FALSE);
 	}
-	old_pwd = getcwd(shell->cwd, sizeof(shell->cwd));
+	old_pwd = getcwd(shell->cwd, sizeof(cwd));
 	if (!old_pwd)
 	{
 		ft_putstr_fd("Getcwd for oldpwd failed\n", 2);
@@ -108,26 +86,26 @@ static int	cd_home(t_mini *shell)
 	return (change_dir(home));
 }
 
-int	builtin_cd(t_mini *shell, char **cmd)
+int	builtin_cd(t_mini *shell)
 {
-	if (cmd[2])
+	if (shell->cmd[2])
 	{
 		error_builtin(CD, NULL, "too many arguments");
-		return (FALSE);
+		return (1);
 	}
-	if (!cmd[1]) // if just "cd"
+	if (!shell->cmd[1]) // if just "cd"
 	{
 		if (!cd_home(shell))
-			return (FALSE);
+			return (1);
 	}
-	if (ft_strncmp(cmd[1], "-\0", 2) == 0)  // if "cd -"
+	else if (ft_strncmp(shell->cmd[1], "-\0", 2) == 0)  // if "cd -"
 	{
 		if (!cd_oldpwd(shell))
-			return (FALSE);
+			return (1);
 	}
-	else if (!change_dir(cmd[1])) // if it's anything else other than cd or cd -
-			return (FALSE);
+	else if (!change_dir(shell->cmd[1])) // if it's anything else other than cd or cd -
+			return (1);
 	if (!update_pwd(shell)) // update env for PWD, OLDPWD
-		return (FALSE);
-	return (TRUE);
+		return (1);
+	return (0);
 }

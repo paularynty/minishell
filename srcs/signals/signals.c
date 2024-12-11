@@ -6,15 +6,19 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 15:09:39 by prynty            #+#    #+#             */
-/*   Updated: 2024/11/27 14:10:54 by prynty           ###   ########.fr       */
+/*   Updated: 2024/12/11 12:46:25 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "minishell.h"
 
-//this doesn't work, program segfaults with ctrl+d
+void	signal_heredoc(int signal)
+{
+	close(STDIN_FILENO);
+	g_mrworldwide = signal;
+}
 
-static void	signal_ctrl_c(int signal)
+void	signal_ctrl_c(int signal)
 {
 	if (signal == SIGINT)
 	{
@@ -22,11 +26,6 @@ static void	signal_ctrl_c(int signal)
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
-	}
-	if (signal == SIGQUIT)
-	{
-		ft_putstr_fd("Quit\n", STDERR_FILENO);
-		exit(1);
 	}
 }
 

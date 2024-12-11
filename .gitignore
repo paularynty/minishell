@@ -3,3 +3,5 @@ minishell
 *.o
 a.out
 libft/libft.a
+test.*
+readline.supp
