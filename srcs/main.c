@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 19:07:14 by prynty            #+#    #+#             */
-/*   Updated: 2024/12/02 16:34:56 by sniemela         ###   ########.fr       */
+/*   Updated: 2024/12/11 13:23:10 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void	minishell(t_mini *shell)
 	char	*line;
 	char	prompt[1024];
 	t_command	*commands;
-	// int		builtin_id;
 
 	while (TRUE)
 	{
@@ -42,10 +41,6 @@ void	minishell(t_mini *shell)
 				printf("tokenizer onnistui :)\n");
 				print_list(commands);
 				free_commands(commands);
-				// builtin_id = builtins(line);
-				// if (builtin_id) // 0 = BUILTIN_NONE, everything else is builtin
-				// 	handle_builtin(builtin_id, shell, line);
-				// add_history(line);
 				free(line);
 			}
 			if (line == NULL)
