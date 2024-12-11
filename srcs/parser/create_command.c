@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 12:31:03 by sniemela          #+#    #+#             */
-/*   Updated: 2024/12/11 15:55:42 by sniemela         ###   ########.fr       */
+/*   Updated: 2024/12/11 16:00:05 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,33 +144,19 @@ t_command	*create_command(char *cmd_str)
 	if (!command)
 		return (NULL);
 	args = split_cmd_args(cmd_str);
-// 	// DEBUGGAUSTA VARTEN:
-// 	int k = 0;
-// 	printf("split_cmd_args jalkeen: \n");
-// 	while (args[k] != NULL)
-// 	{
-// 		printf("arg %d: |%s|\n", k+1, args[k]);
-// 		k++;
-// 	}
-// 	printf("ennen tokenize_argsia\n");
-// //endif
 	if (!args || !tokenize_args(command, args))
 	{
 		free_2d_array(args); // check later if in ft_free_array there's a check to avoid double free
 		free(command);
 		return (NULL);
 	}
-	printf("tokenize_argsin jalkeen\n");
-	printf("command->tokens: %p\n", command->tokens);
     t_token *temp = command->tokens;
     while (temp)
     {
-        printf("Token: Type = %d, Value = |%s|\n", temp->type, temp->value);
         temp = temp->next;
     }
 	if (args)
-		free_2d_array(args); // ft_free_array is made for 3D array
+		free_2d_array(args);
 	command->next  = NULL;
 	return (command);
 }
-// echo hello < input | cat hello | wc -l

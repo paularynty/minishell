@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 19:07:14 by prynty            #+#    #+#             */
-/*   Updated: 2024/12/11 15:56:00 by sniemela         ###   ########.fr       */
+/*   Updated: 2024/12/11 15:58:57 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,6 @@
 //(we can also just pass around the exit code in the struct, 
 //let's decide on that later)
 sig_atomic_t	g_mrworldwide = 0;
-#include "./parser/parser.h"
-
-//global variable to carry the exit status. mrworldwide for now
-//sig_atomic_t = atomic relative to signal handling
-//(we can also just pass around the exit code in the struct, 
-//let's decide on that later)
-__sig_atomic_t	g_mrworldwide;
 
 void	minishell(t_mini *shell)
 {
@@ -43,10 +36,6 @@ void	minishell(t_mini *shell)
 			printf("1 TSEKKI\n");
 			if (*line)
 			{
-				prep_command(shell, line);
-				builtin_id = builtins(line);
-				if (builtin_id) // 0 = BUILTIN_NONE, everything else is builtin
-					handle_builtin(builtin_id, shell, line);
 				add_history(line);
 				execute(shell);
 				printf("line on: %s\n", line);
