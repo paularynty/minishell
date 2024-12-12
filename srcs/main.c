@@ -1,16 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/06 19:07:14 by prynty            #+#    #+#             */
-/*   Updated: 2024/12/11 12:44:12 by prynty           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include "../includes/minishell.h"
+#include "minishell.h"
 
 sig_atomic_t	g_mrworldwide = 0;
 
@@ -27,7 +15,6 @@ static void	minishell(t_mini *shell)
 			break ;
 		if (*input)
 		{
-			// if (lexer && parser)
 			execute(shell, input);
 			add_history(input); //this could be moved somewhere in parsing/exec functions
 			if (shell->exit_flag)

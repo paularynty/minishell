@@ -6,7 +6,7 @@
 #    By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/27 12:05:04 by prynty            #+#    #+#              #
-#    Updated: 2024/12/11 12:40:32 by prynty           ###   ########.fr        #
+#    Updated: 2024/12/12 11:36:13 by prynty           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,6 +55,14 @@ SRCS			= $(SRCDIR)/main.c \
 				$(SRCDIR)/execution/exec_utils.c \
 				$(SRCDIR)/execution/execute.c \
 				$(SRCDIR)/errors/errors.c \
+				$(SRCDIR)/lexer/lexer.c \
+				$(SRCDIR)/lexer/valid_input.c \
+				$(SRCDIR)/parser/helper_funcs.c \
+				$(SRCDIR)/parser/create_command.c \
+				$(SRCDIR)/parser/create_tokens.c \
+				$(SRCDIR)/parser/free_cmd_contents.c \
+				$(SRCDIR)/parser/parser.c \
+				$(SRCDIR)/parser/split_by_pipes.c \
 				$(SRCDIR)/signals/signals.c \
 				$(SRCDIR)/setup/setup.c \
 				$(SRCDIR)/utils/cleanup.c \

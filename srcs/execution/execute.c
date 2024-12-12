@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   execute.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/28 12:49:33 by prynty            #+#    #+#             */
-/*   Updated: 2024/12/11 12:42:26 by prynty           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../includes/minishell.h"
 
 static char	**get_env_path(char **env)
@@ -97,8 +85,8 @@ int	exec_fork(t_mini *shell)
 	{
 		cmd_path = get_cmd_path(shell, shell->cmd[0]);
 		if (!cmd_path)
-			check_access(shell, shell->cmd[0], shell->cmd);
-		check_access(shell, cmd_path, shell->cmd);
+			check_access(shell, shell->cmd[0]);
+		check_access(shell, cmd_path);
 		execve(cmd_path, shell->cmd, shell->env);
 		free(cmd_path);
 		exit(error_cmd(shell, shell->cmd[0]));
