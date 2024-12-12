@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/09 15:11:50 by prynty            #+#    #+#             */
-/*   Updated: 2024/12/11 12:41:32 by prynty           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -30,6 +18,7 @@
 
 //own headers
 # include "defines.h"
+# include "parser.h"
 # include "../libft/libft.h"
 
 //global variable to carry the exit status. mrworldwide for now
@@ -53,7 +42,7 @@ typedef struct s_mini
 	char	*cwd;
 	char	*input;
 	char	*heredoc;
-	int		fd[2];
+	int		pipe_fd[2];
 	int		exit_flag; // flag to check if minishell loop should be exited
 	int		exit_code; //exit status to exit the entire program with
 }	t_mini;
@@ -111,7 +100,7 @@ int		error_cmd(t_mini *shell, char *cmd);
 void	execute(t_mini *shell, char *input);
 
 //execution/exec_utils.c
-int		check_access(t_mini *shell, char *cmd, char **cmd_array);
+int		check_access(t_mini *shell, char *cmd);
 int		wait_for_children(t_mini *shell, pid_t pid);
 
 //setup/setup.c

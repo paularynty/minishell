@@ -1,17 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   create_tokens.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/28 12:36:24 by sniemela          #+#    #+#             */
-/*   Updated: 2024/11/28 12:52:27 by sniemela         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include "../../includes/minishell.h"
-#include "parser.h"
+#include "minishell.h"
 
 void	add_token(t_token **head, t_token *new_token)
 {
@@ -25,8 +12,8 @@ void	add_token(t_token **head, t_token *new_token)
 		while (temp->next)
 			temp = temp->next;
 		temp->next = new_token;
-		// new_token->next = NULL;
 	}
+	
 }
 
 static t_token_type	identify_token_type(char *value)
@@ -46,10 +33,10 @@ static t_token	*create_token(char *arg)
 {
 	t_token	*token;
 
-	token = malloc(sizeof(t_token));
+	token = malloc(sizeof(t_token) + 1);
 	if (!token)
 		return (NULL);
-	token->value = ft_strdup(value);
+	token->value = ft_strdup(arg);
 	if (!token->value)
 	{
 		free(token);

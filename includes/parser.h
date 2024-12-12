@@ -1,6 +1,8 @@
 #ifndef PARSER_H
 # define PARSER_H
 
+# include "minishell.h"
+
 // Token types (no need for AND/OR)
 typedef enum e_token_type
 {
@@ -29,10 +31,24 @@ typedef struct	s_command
 	struct s_command	*next; // Next command (if part of a chain, separated by pipes)
 } t_command;
 
+//lexer/lexer.c
+int 		valid_input(char *input);
+int			expand_input(t_mini *minish);
+int 		lexer(t_mini *minish);
 
+//lexer/valid_input.c
+int 		iswhitespace(const char *str);
+int			matching_quotes(const char *str);
+int 		valid_redirection(const char *input);
+int			valid_pipes(const char *input);
+int			closed_pipes(const char *input);
+
+//parser
+void	    print_list(t_command *commands);
 void		add_token(t_token **head, t_token *new_token);
 int			count_pipes(const char *input);
 t_command	*create_command(char *cmd_str);
+void		free_2d_array(char **array);
 void		free_commands(t_command *commands);
 void		free_tokens(t_token *tokens);
 char		*ft_strndup(const char *src, size_t n);
@@ -40,4 +56,5 @@ int			quotes_offset(const char *input, char quote);
 char		**split_by_pipes(const char *input);
 int			tokenize_args(t_command *command, char **args);
 t_command	*tokenizer(const char *input);
+
 #endif
