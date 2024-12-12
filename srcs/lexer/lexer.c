@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 16:22:20 by prynty            #+#    #+#             */
-/*   Updated: 2024/12/11 13:13:21 by sniemela         ###   ########.fr       */
+/*   Updated: 2024/12/12 11:30:22 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,22 @@ int valid_input(char *input)
 		return (FALSE);
 	if (!closed_pipes(input))
 		return (FALSE);
+}
+
+
+int	expand_input(t_mini *minish)
+{
+	char	*exp_input;
+	int		len;
+	int		i;
+
+	while (input[i])
+	{
+		if (input[i] == '$')
+		{
+			exp_input = get_var(input + i + 1);
+		}
+	}
 }
 
 int lexer(t_mini *minish)
