@@ -15,10 +15,11 @@ static void	minishell(t_mini *shell)
 			break ;
 		if (*input)
 		{
-			execute(shell, input);
+			if (lexer(shell, input))
+				execute(shell, shell->input);
 			add_history(input); //this could be moved somewhere in parsing/exec functions
-			if (shell->exit_flag)
-				break ;
+		//	if (shell->exit_flag)
+		//	 	break ;
 		}
 		free(input);
 		input = NULL;

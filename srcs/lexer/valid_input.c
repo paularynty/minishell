@@ -49,7 +49,7 @@ int valid_redirection(const char *input)
 	{
 		if (input[i] == '>' || input[i] == '<')
 		{
-			redir == input[i];
+			redir = input[i];
 			i++;
 			if ((redir == '>' && input[i] == '>') || (redir == '<' && input[i] == '<'))
 				i++;
