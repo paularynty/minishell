@@ -3,13 +3,13 @@
 
 # include "minishell.h"
 
-typedef struct s_mini	t_mini;
+typedef struct s_mini t_mini;
 
 // Token types (no need for AND/OR)
 typedef enum e_token_type
 {
 	CMD,            // Command name
-	ARG,            // Argument
+	FILENAME,       // Filename
 	REDIRECT_IN,    // Input redirection ("<")
 	REDIRECT_OUT,   // Output redirection (">")
 	REDIRECT_APPEND, // Append redirection (">>")
@@ -35,8 +35,8 @@ typedef struct	s_command
 
 //lexer/lexer.c
 int 		valid_input(char *input);
-// int			expand_input(t_mini *shell);
-int 		lexer(t_mini *shell);
+char		*expand_input(t_mini *minish, char *input);
+int 		lexer(t_mini *minish, char *line);
 
 //lexer/valid_input.c
 int 		iswhitespace(const char *str);

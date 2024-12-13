@@ -19,8 +19,8 @@ static void	minishell(t_mini *shell)
 			commands = tokenizer(input);
 			execute(shell, commands);
 			add_history(input); //this could be moved somewhere in parsing/exec functions
-			if (shell->exit_flag)
-				break ;
+		//	if (shell->exit_flag)
+		//	 	break ;
 		}
 		free(input);
 		input = NULL;
