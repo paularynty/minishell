@@ -3,6 +3,8 @@
 
 # include "minishell.h"
 
+typedef struct s_mini	t_mini;
+
 // Token types (no need for AND/OR)
 typedef enum e_token_type
 {
@@ -33,8 +35,8 @@ typedef struct	s_command
 
 //lexer/lexer.c
 int 		valid_input(char *input);
-int			expand_input(t_mini *minish);
-int 		lexer(t_mini *minish);
+// int			expand_input(t_mini *shell);
+int 		lexer(t_mini *shell);
 
 //lexer/valid_input.c
 int 		iswhitespace(const char *str);

@@ -4,8 +4,9 @@ sig_atomic_t	g_mrworldwide = 0;
 
 static void	minishell(t_mini *shell)
 {
-	char	*input;
-	char	prompt[1024];
+	char		*input;
+	char		prompt[1024];
+	t_command	*commands;
 
 	while (TRUE)
 	{
@@ -15,7 +16,8 @@ static void	minishell(t_mini *shell)
 			break ;
 		if (*input)
 		{
-			execute(shell, input);
+			commands = tokenizer(input);
+			execute(shell, commands);
 			add_history(input); //this could be moved somewhere in parsing/exec functions
 			if (shell->exit_flag)
 				break ;

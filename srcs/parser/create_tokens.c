@@ -18,13 +18,13 @@ void	add_token(t_token **head, t_token *new_token)
 
 static t_token_type	identify_token_type(char *value)
 {
-	if (strcmp(value, "<") == 0)
+	if (ft_strcmp(value, "<") == 0)
 		return (REDIRECT_IN);
-	if (strcmp(value, ">") == 0)
+	if (ft_strcmp(value, ">") == 0)
 		return (REDIRECT_OUT);
-	if (strcmp(value, ">>") == 0)
+	if (ft_strcmp(value, ">>") == 0)
 		return (REDIRECT_APPEND);
-	if (strcmp(value, "<<") == 0)
+	if (ft_strcmp(value, "<<") == 0)
 		return (HEREDOC);
 	return (CMD);
 }

@@ -10,36 +10,36 @@ void	close_all(t_mini *shell, t_command *command)
 	close(shell->pipe_fd[1]);
 }
 
-void	open_file(t_mini *shell, t_command *command)
-{
-	if (first_or_second == FIRST)
-	{
-		if (open(command->input_fd, O_RDONLY) == -1)
-			exit_error(shell, command->input_fd);
-	}
-	if (first_or_second == SECOND)
-	{
-		if (open(command->output_fd, O_CREAT | O_WRONLY | O_TRUNC, 0644) == -1)
-			exit_error(shell, command->output_fd);
-	}
-}
+// void	open_file(t_mini *shell, t_command *command)
+// {
+// 	if (first_or_second == FIRST)
+// 	{
+// 		if (open(command->input_fd, O_RDONLY) == -1)
+// 			exit_error(shell, command->input_fd);
+// 	}
+// 	if (first_or_second == SECOND)
+// 	{
+// 		if (open(command->output_fd, O_CREAT | O_WRONLY | O_TRUNC, 0644) == -1)
+// 			exit_error(shell, command->output_fd);
+// 	}
+// }
 
-void	dup_close(t_mini *shell, t_command *command)
-{
-	if (first_or_second == FIRST)
-	{
-		if (dup2(command->input_fd, STDIN_FILENO) == -1
-			|| dup2(shell->pipe_fd[1], STDOUT_FILENO) == -1)
-			exit_error(shell, "dup2 failed on first child");
-	}
-	else if (first_or_second == SECOND)
-	{
-		if (dup2(shell->pipe_fd[0], STDIN_FILENO) == -1
-			|| dup2(command->output_fd, STDOUT_FILENO) == -1)
-			exit_error(shell, "dup2 failed on second child");
-	}
-	close_all(shell, command);
-}
+// void	dup_close(t_mini *shell, t_command *command)
+// {
+// 	if (first_or_second == FIRST)
+// 	{
+// 		if (dup2(command->input_fd, STDIN_FILENO) == -1
+// 			|| dup2(shell->pipe_fd[1], STDOUT_FILENO) == -1)
+// 			exit_error(shell, "dup2 failed on first child");
+// 	}
+// 	else if (first_or_second == SECOND)
+// 	{
+// 		if (dup2(shell->pipe_fd[0], STDIN_FILENO) == -1
+// 			|| dup2(command->output_fd, STDOUT_FILENO) == -1)
+// 			exit_error(shell, "dup2 failed on second child");
+// 	}
+// 	close_all(shell, command);
+// }
 
 int	wait_for_children(t_mini *shell, pid_t pid)
 {

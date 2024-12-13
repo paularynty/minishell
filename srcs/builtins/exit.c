@@ -12,6 +12,8 @@
 //TO DO:
 //handle "-" and "+"
 //does the shell actually exit when too many args???
+//if exit code given is larger than LONG_MAX, give error numeric arg required
+//reset exit code after 255,
 
 int	builtin_exit(t_mini *shell)
 {
