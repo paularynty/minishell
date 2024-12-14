@@ -16,13 +16,14 @@ static void	minishell(t_mini *shell)
 			break ;
 		if (*input)
 		{
-			commands = tokenizer(input);
-			execute(shell, commands);
 			add_history(input); //this could be moved somewhere in parsing/exec functions
-		//	if (shell->exit_flag)
-		//	 	break ;
+			if (lexer(shell, input))
+				commands = tokenizer(shell->input);
+			execute(shell, commands);
+			if (shell->exit_flag)
+				break ;
 		}
-		free(input);
+		// free(input);
 		input = NULL;
 	}
 }

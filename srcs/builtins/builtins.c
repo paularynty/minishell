@@ -24,19 +24,19 @@ void	handle_builtin(int id, t_mini *shell)
 
 int	builtins(char *cmd)
 {
-	if (ft_strncmp(cmd, "cd", 2) == 0)
+	if (ft_strcmp(cmd, "cd") == 0)
 		return (BUILTIN_CD);
-	if (ft_strncmp(cmd, "echo", 4) == 0)
+	if (ft_strcmp(cmd, "echo") == 0)
 		return (BUILTIN_ECHO);
-	if (ft_strncmp(cmd, "env", 3) == 0)
+	if (ft_strcmp(cmd, "env") == 0)
 		return (BUILTIN_ENV);
-	if (ft_strncmp(cmd, "exit", 4) == 0)
+	if (ft_strcmp(cmd, "exit") == 0)
 		return (BUILTIN_EXIT);
-	if (ft_strncmp(cmd, "export", 6) == 0)
+	if (ft_strcmp(cmd, "export") == 0)
 		return (BUILTIN_EXPORT);
-	if (ft_strncmp(cmd, "pwd", 3) == 0)
+	if (ft_strcmp(cmd, "pwd") == 0)
 		return (BUILTIN_PWD);
-	if (ft_strncmp(cmd, "unset", 5) == 0)
+	if (ft_strcmp(cmd, "unset") == 0)
 		return (BUILTIN_UNSET);
 	return (BUILTIN_NONE);
 }

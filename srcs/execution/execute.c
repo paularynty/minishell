@@ -62,14 +62,6 @@ static char	*get_cmd_path(t_mini *shell, char *cmd)
 	return (cmd_path);
 }
 
-// static int	prep_command(t_mini *shell, char *line)
-// {
-// 	shell->cmd = ft_split(line, ' ');
-// 	if (!shell->cmd || !shell->cmd[0])
-// 		return (error_cmd(shell, shell->cmd[0]));
-// 	return (0);
-// }
-
 static int count_cmd_args(t_token *tokens)
 {
     int count;
@@ -132,7 +124,8 @@ int	exec_fork(t_mini *shell)
 		check_access(shell, cmd_path);
 		execve(cmd_path, shell->cmd, shell->env);
 		free(cmd_path);
-		exit(error_cmd(shell, shell->cmd[0]));
+		error_cmd(shell, shell->cmd[0]);
+		return (shell->exit_code);
 	}
 	return (wait_for_children(shell, pid));
 }

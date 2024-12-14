@@ -102,7 +102,7 @@ char	*expand_exitcode(t_mini *minish, char *input, int *i)
 	value = ft_itoa(minish->exit_code);
 	if (!value)
 		return (NULL);
-	new_input = replace_segment(input, *i, *i + 1, value);
+	new_input = replace_segment(input, *i, *i + 2, value);
 	free(input);
 	if (!new_input)
 		return (NULL);

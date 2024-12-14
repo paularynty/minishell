@@ -1,10 +1,5 @@
 #include "../../includes/minishell.h"
 
-// static void	set_prompt_cwd(t_mini *shell, size_t size)
-// {
-// 	shell->cwd = getcwd(shell->cwd, size);
-// }
-
 void	get_prompt(t_mini *shell, char *prompt, size_t size)
 {
 	char	*username;
