@@ -97,7 +97,7 @@ void	error_builtin(char *builtin, char *str, char *error_str);
 int		error_cmd(t_mini *shell, char *cmd);
 
 //execution/execute.c
-void	execute(t_mini *shell, char *input);
+void	execute(t_mini *shell, t_command *commands);
 
 //execution/exec_utils.c
 int		check_access(t_mini *shell, char *cmd);

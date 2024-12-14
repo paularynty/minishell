@@ -10,8 +10,6 @@ int	setup(t_mini *shell, char **env)
 	shell->cwd = NULL;
 	shell->input = NULL;
 	shell->heredoc = NULL;
-	// shell->fd[0] = STDIN_FILENO;
-	// shell->fd[1] = STDOUT_FILENO;
 	shell->exit_flag = FALSE;
 	shell->exit_code = 0;
 	shell->env = clone_env(env);

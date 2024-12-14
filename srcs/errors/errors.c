@@ -39,5 +39,5 @@ int	error_cmd(t_mini *shell, char *cmd)
 		shell->exit_code = 126;
 	else
 		shell->exit_code = 127;
-	return(shell->exit_code);
+	return (shell->exit_code);
 }

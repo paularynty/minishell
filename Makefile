@@ -25,8 +25,7 @@ OBJDIR			= objs
 LIBDIR			= libft
 INCLUDE			= includes
 
-CFLAGS			= -Wall -Wextra -Werror \
-					-I $(INCLUDE)
+CFLAGS			= -Wall -Wextra -Werror -I $(INCLUDE)
 LDFLAGS			= -lreadline -L ~/.brew/opt/readline/lib -I ~/.brew/opt/readline/include
 LIBFT			= $(LIBDIR)/libft.a
 

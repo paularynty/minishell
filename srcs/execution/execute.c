@@ -62,12 +62,47 @@ static char	*get_cmd_path(t_mini *shell, char *cmd)
 	return (cmd_path);
 }
 
-static int	prep_command(t_mini *shell, char *line)
+static int count_cmd_args(t_token *tokens)
 {
-	shell->cmd = ft_split(line, ' ');
-	if (!shell->cmd || !shell->cmd[0])
-		return (error_cmd(shell, shell->cmd[0]));
-	return (0);
+    int count;
+
+	count = 0;
+    while (tokens)
+    {
+        if (tokens->type == CMD)
+            count++;
+        tokens = tokens->next;
+    }
+    return (count);
+}
+
+static char	**prep_command(t_mini *shell, t_command *command)
+{
+	t_token	*token;
+	int		count;
+	int		i;
+
+	if (!command || !command->tokens)
+		return (NULL);
+	count = count_cmd_args(command->tokens);
+	shell->cmd = (char **)malloc(sizeof(char *) * (count + 1));
+	if (!shell->cmd)
+		return (NULL);
+	i = 0;
+	token = command->tokens;
+	while (token)
+	{
+		if (token->type == CMD)
+		{
+			shell->cmd[i] = strdup(token->value);
+			if (!shell->cmd[i])
+				ft_free_array(&shell->cmd);
+			i++;
+		}
+		token = token->next;
+	}
+	shell->cmd[i] = NULL;
+	return (shell->cmd);
 }
 
 int	exec_fork(t_mini *shell)
@@ -89,16 +124,17 @@ int	exec_fork(t_mini *shell)
 		check_access(shell, cmd_path);
 		execve(cmd_path, shell->cmd, shell->env);
 		free(cmd_path);
-		exit(error_cmd(shell, shell->cmd[0]));
+		error_cmd(shell, shell->cmd[0]);
+		return (shell->exit_code);
 	}
 	return (wait_for_children(shell, pid));
 }
 
-void	execute(t_mini *shell, char *input)
+void	execute(t_mini *shell, t_command *command)
 {
 	int	builtin_id;
 
-	prep_command(shell, input);
+	shell->cmd = prep_command(shell, command);
 	builtin_id = builtins(shell->cmd[0]);
 	if (builtin_id) // 0 = BUILTIN_NONE, everything else is builtin
 		handle_builtin(builtin_id, shell);
