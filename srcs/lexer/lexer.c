@@ -118,17 +118,23 @@ char	*expand_input(t_mini *minish, char *input)
 	i = 0;
 	while (input[i])
 	{
-		if (input[i] == '$')
+		if (input[i] == '$' && input[i + 1] != '$' && !whitespace(input[i + 1]))
 		{
 			if (input[i + 1] == '?')
 				input = expand_exitcode(minish, input, &i);
-			else if (input[i + 1] != '$' && input[i + 1] != '"' && input[i + 1] != '\'')
+			else if (input[i + 1] == '"' || input[i + 1] == '\'')
+			{
+				input = replace_segment(input, i, i + 1, NULL);
+				if (input[i + 1] == '"')
+					i++;
+				else
+					i += quotes_offset(input + i + 1, input[i + 1]);
+			}
+			else
 				input = expand_variable(minish, input, &i);
 			if (!input)
 				return (NULL);
 		}
-		else if (input[i] == '"' || input[i] == '\'')
-			i += quotes_offset(input + i, input[i]);
 		else
 			i++;
 	}
@@ -141,6 +147,7 @@ int lexer(t_mini *minish, char *line)
 		return (FALSE);
 //	printf("\nafted valid_input: %s\n", line);
 	minish->input = expand_input(minish, line);
+	printf("IM OUT\n");
 	if (!minish->input) // if there was a malloc fail
 		printf("\nWE DON'T HAVE AN INPUT\n");
 	return (TRUE);
