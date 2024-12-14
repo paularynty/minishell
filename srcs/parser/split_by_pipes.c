@@ -13,7 +13,7 @@ static int	process_input(const char *input, char **cmd, int *j, int *start)
 		{
 			cmd[*j] = ft_strndup(input + *start, i - *start);
 			if (!cmd[*j])
-				return (0); // we free in the calling function
+				return (0);
 			(*j)++;
 			*start = i + 1;
 		}

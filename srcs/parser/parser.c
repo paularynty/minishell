@@ -5,25 +5,15 @@ static void	add_command(t_command **head, t_command *new_cmd)
 	t_command	*temp;
 
 	temp = NULL;
-	// printf("Adding command: %p\n", new_cmd);
-	// printf("command->next before traversal: %p\n", new_cmd->next);
 	if (!*head)
-	{
-		printf("New head command: %p\n", new_cmd);
 		*head = new_cmd;
-	}
 	else
 	{
 		temp = *head;
 		while (temp->next)
-		{
-			printf("Traversing command: %p\n", temp);
 			temp = temp->next;
-		}
-		printf("Appending to command: %p\n", temp);
 		temp->next = new_cmd;
 	}
-	printf("command->next after adding: %p\n", new_cmd->next);
 }
 
 t_command	*tokenizer(const char *input)

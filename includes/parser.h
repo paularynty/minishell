@@ -13,7 +13,8 @@ typedef enum e_token_type
 	REDIRECT_IN,    // Input redirection ("<")
 	REDIRECT_OUT,   // Output redirection (">")
 	REDIRECT_APPEND, // Append redirection (">>")
-	HEREDOC // ("<<")
+	HEREDOC, // ("<<")
+	DELIMETER // EOF after heredoc
 } t_token_type;
 
 // Token structure

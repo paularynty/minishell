@@ -11,9 +11,7 @@ static int	count_cmd_args(char *cmd_str)
 {
 	int	i;
 	int	args;
-//	int	offset; lets add check later to the code (offset == -1)  to check  whether quotes remained open
-// 	offset = quotes_offset(cmd_str + i,  cmd_str[i]);
-//  if (offset == -1) pyydetaan jossain vaiheessa userilta inputtia kunnes sulkuquote tulee
+
 	i = 0;
 	args = 0;
 	while (cmd_str[i])
