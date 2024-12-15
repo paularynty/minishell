@@ -13,7 +13,8 @@ typedef enum e_token_type
 	REDIRECT_IN,    // Input redirection ("<")
 	REDIRECT_OUT,   // Output redirection (">")
 	REDIRECT_APPEND, // Append redirection (">>")
-	HEREDOC // ("<<")
+	HEREDOC, // ("<<")
+	DELIMETER // EOF after heredoc
 } t_token_type;
 
 // Token structure
@@ -39,7 +40,8 @@ char		*expand_input(t_mini *minish, char *input);
 int 		lexer(t_mini *minish, char *line);
 
 //lexer/valid_input.c
-int 		iswhitespace(const char *str);
+int 		str_is_whitespace(const char *str);
+int			char_is_whitespace(char c);
 int			matching_quotes(const char *str);
 int 		valid_redirection(const char *input);
 int			valid_pipes(const char *input);
@@ -55,6 +57,7 @@ void		free_commands(t_command *commands);
 void		free_tokens(t_token *tokens);
 char		*ft_strndup(const char *src, size_t n);
 int			quotes_offset(const char *input, char quote);
+char		*prod_quoted_arg(char *str, int *i, int len);
 char		**split_by_pipes(const char *input);
 int			tokenize_args(t_command *command, char **args);
 t_command	*tokenizer(const char *input);
