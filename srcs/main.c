@@ -12,7 +12,7 @@ static void	minishell(t_mini *shell)
 	{
 		get_prompt(shell, prompt, sizeof(prompt));
 		input = readline(prompt);
-		if (input == NULL)
+		if (input == NULL) // when exiting with Ctrl+D, readline returns NULL
 			break ;
 		if (*input)
 		{

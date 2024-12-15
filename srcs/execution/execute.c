@@ -105,6 +105,11 @@ static char	**prep_command(t_mini *shell, t_command *command)
 	return (shell->cmd);
 }
 
+//when running child process, after forking
+//reset signals (SIGINT, SIGQUIT = SIG_DFL)
+//when running in child + SIGQUIT, has to write msg Quit (core dumped)
+//make another signal handler for multiple pipes situations
+//when returning back to main loop, reset signals
 int	exec_fork(t_mini *shell)
 {
 	char		*cmd_path;
@@ -125,7 +130,7 @@ int	exec_fork(t_mini *shell)
 		execve(cmd_path, shell->cmd, shell->env);
 		free(cmd_path);
 		error_cmd(shell, shell->cmd[0]);
-		return (shell->exit_code);
+		exit(shell->exit_code);
 	}
 	return (wait_for_children(shell, pid));
 }
