@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-int	char_is_whitespace(char c)
+static int	is_whitespace(char c)
 {
 	if (c != 32 && (c < 9 || c > 13))
 		return (FALSE);
@@ -11,12 +11,14 @@ static int	count_cmd_args(char *cmd_str)
 {
 	int	i;
 	int	args;
-
+//	int	offset; lets add check later to the code (offset == -1)  to check  whether quotes remained open
+// 	offset = quotes_offset(cmd_str + i,  cmd_str[i]);
+//  if (offset == -1) pyydetaan jossain vaiheessa userilta inputtia kunnes sulkuquote tulee
 	i = 0;
 	args = 0;
 	while (cmd_str[i])
 	{
-		while (cmd_str[i] && char_is_whitespace(cmd_str[i]))
+		while (cmd_str[i] && is_whitespace(cmd_str[i]))
 			i++;
 		if (!cmd_str[i])
 			break ;
@@ -24,7 +26,7 @@ static int	count_cmd_args(char *cmd_str)
 		if (cmd_str[i] == '"' || cmd_str[i] == '\'')
 			i += quotes_offset(cmd_str + i, cmd_str[i]);
 		while (cmd_str[i] && cmd_str[i] != '"' && cmd_str[i] != '\''
-			&& !char_is_whitespace(cmd_str[i]))
+			&& !is_whitespace(cmd_str[i]))
 			i++;
 	}
 	return (args);
@@ -42,78 +44,38 @@ static char	**allocate_args(char *cmd_str)
 	return (args);
 }
 
-static int	count_arg_lenght(char *cmd_str, int i, bool *quotes)
+static int	count_arg_lenght(char *cmd_str, int i)
 {
 	int	len;
 	
 	len = 0;
-	while (cmd_str[i] && char_is_whitespace(cmd_str[i]))
+	while (cmd_str[i] && is_whitespace(cmd_str[i]))
 		i++;
-	while (cmd_str[i])
+	if (cmd_str[i] == '"' || cmd_str[i] == '\'')
 	{
-		if (cmd_str[i] == '"' || cmd_str[i] == '\'')
-		{
-			len += quotes_offset(cmd_str + i, cmd_str[i]) - 2;
-			*quotes = true;
-			return (len);
-		}
-		while (cmd_str[i] && cmd_str[i] != '"' && cmd_str[i] != '\'' && !char_is_whitespace(cmd_str[i]))
-		{
-			len++;
-			i++;
-		}
+		len = quotes_offset(cmd_str + i, cmd_str[i]);
+		return (len);
+	}
+	while (cmd_str[i] && cmd_str[i] != '"' && cmd_str[i] != '\'' && !is_whitespace(cmd_str[i]))
+	{
+		len++;
+		i++;
 	}
 	return (len);
 }
-
-char	*prod_quoted_arg(char *str, int *i, int len)
-{
-	char	*arg;
-	int		j;
-	int		k;
-
-	k = 0;
-	arg = (char *)malloc(sizeof(char) * len + 1);
-	if (!arg)
-		return (NULL);
-	while (str[*i] && !char_is_whitespace(str[*i]))
-	{
-		if (str[*i] == '"' || str[*i] == '\'')
-		{
-			j = *i;
-			(*i)++;
-			while (str[*i] && str[*i] != str[j] && !char_is_whitespace(str[*i]))
-				arg[k++] = str[(*i)++];
-		}
-		else
-			arg[k++] = str[(*i)++];
-		(*i)++;
-	}
-	arg[k] = '\0';
-	return (arg);
-}
-
 
 static char	*extract_arg(char *cmd_str, int *i)
 {
 	char	*arg;
 	int		len;
-	bool	quotes;
 
-	quotes = false;
-	len = count_arg_lenght(cmd_str, *i, &quotes);
+	len = count_arg_lenght(cmd_str, *i);
 	if (len <= 0)
 		return (NULL);
-	if (quotes)
-		arg = prod_quoted_arg(cmd_str, i, len);
-	else
-		arg = ft_substr(cmd_str, *i, len);
-//	printf("cmd[%d] after ft_substr: %s\n", *i, arg);
+	arg = ft_substr(cmd_str, *i, len);
 	if (!arg)
 		return (NULL);
-	if (!quotes)
-		*i = *i + len;
-//	printf("index after creating arg: %d\n", *i);
+	*i = *i + len;
 	return (arg);
 }
 
@@ -130,7 +92,7 @@ static char	**split_cmd_args(char *cmd_str)
 	j = 0;
 	while (cmd_str[i])
 	{
-		while (cmd_str[i] && char_is_whitespace(cmd_str[i]))
+		while (cmd_str[i] && is_whitespace(cmd_str[i]))
 			i++;
 		if (!cmd_str[i])
 			break ;

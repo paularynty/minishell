@@ -29,7 +29,7 @@ static t_token_type	identify_token_type(char *value)
 	return (CMD);
 }
 
-static t_token	*create_token(char *arg, char *prev)
+static t_token	*create_token(char *arg)
 {
 	t_token	*token;
 
@@ -40,20 +40,9 @@ static t_token	*create_token(char *arg, char *prev)
 	if (!token->value)
 	{
 		free(token);
-		return (NULL); // (malloc failure)
+		return (NULL); // printf descriptive error message (strerror)
 	}
-	if (prev && *prev && (ft_strcmp(prev, ">") == 0
-		|| ft_strcmp(prev, ">>") == 0 || ft_strcmp(prev, "<") == 0
-		|| ft_strcmp(prev, "<<") == 0))
-
-	{
-		if (ft_strcmp(prev, "<<") != 0)
-			token->type = FILENAME;
-		else
-			token->type = DELIMETER;
-	}
-	else
-		token->type = identify_token_type(token->value);
+	token->type = identify_token_type(token->value);
 	token->next = NULL;
 	return (token);
 }
@@ -66,10 +55,7 @@ int		tokenize_args(t_command *command, char **args)
 	i = 0;
 	while (args[i])
 	{
-		if (i > 0)
-			new_token = create_token(args[i], args[i - 1]);
-		else
-			new_token = create_token(args[i], NULL);
+		new_token = create_token(args[i]);
 		if (!new_token)
 			return (FALSE);
 		// if (new_token->type == HEREDOC) we will see about this later...

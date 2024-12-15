@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int 	str_is_whitespace(const char *str)
+int iswhitespace(const char *str)
 {
 	while (*str)
 	{
@@ -110,7 +110,7 @@ int	closed_pipes(const char *input)
 			i += quotes_offset(input + i, input[i]);
 		if (input[i] == '|')
 		{
-			if (str_is_whitespace(input + i + 1))
+			if (iswhitespace(input + i + 1))
 			{
 				ft_putstr_fd("minishell: unmatched '|' marks.\n", 2);
 				return (FALSE);

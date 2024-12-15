@@ -5,22 +5,19 @@ static int	process_input(const char *input, char **cmd, int *j, int *start)
 	int	i;
 
 	i = 0;
-	while (input && input[i])
+	while (input[i])
 	{
 		if (input[i] == '\'' || input[i] == '"')
 			i += quotes_offset(input + i, input[i]);
 		else if (input[i] == '|')
 		{
-			if (*start >= i)
-				return (0);
 			cmd[*j] = ft_strndup(input + *start, i - *start);
 			if (!cmd[*j])
-				return (0);
+				return (0); // we free in the calling function
 			(*j)++;
 			*start = i + 1;
 		}
-		else
-			i++;
+		i++;
 	}
 	return (i);
 }
