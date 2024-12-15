@@ -5,6 +5,8 @@
 // without taking into account pipes. Upon occuring, we send correct error message, update add_history and return matching exit code.
 // Add exit_code / error message handling later.
 
+
+// 	ADD A CHECK FOR BACKSLASH, DON'T NEED TO HANDLE (= SYNTAX ERROR)
 int valid_input(char *input)
 {
 	if (str_is_whitespace(input))
