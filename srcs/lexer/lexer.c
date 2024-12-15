@@ -7,7 +7,7 @@
 
 int valid_input(char *input)
 {
-	if (iswhitespace(input))
+	if (str_is_whitespace(input))
 		return (FALSE); // handle whitespace separately? To an exit_function which frees any allocated memory, in bash history is added, rl_on_newline()
 	if (!matching_quotes(input))
 		return (FALSE);
@@ -53,16 +53,25 @@ char	*replace_segment(char *input, int start, int end, char *replacement)
 	int		new_len;
 
 	input_len = ft_strlen(input);
+	printf("After strlen in replace_segment input_len: %d\n", input_len);
 	repl_len = ft_strlen(replacement);
+	printf("After strlen in replace_segment repl_len: %d\n", repl_len);
 	new_len = input_len - (end - start) + repl_len;
 	new_input = (char *)malloc(sizeof(char)* new_len + 1);
+	printf("After malloc in replace_segment input: %s\n", input);
 	if (!new_input)
 		return (NULL);
 	if (ft_strlcpy(new_input, input, start + 1) == 0)
 		return (NULL);
+	printf("After 1st strlcpy in replace_segment input: %s\n", input);
+	printf("After 1st strlcpy in replace_segment new_input: %s\n", new_input);
 	if (replacement)
 		ft_strlcpy(new_input + start, replacement, start + repl_len + 1);
+	printf("After 2nd strlcpy in replace_segment input: %s\n", input);
+	printf("After 2nd strlcpy in replace_segment new_input: %s\n", new_input);
 	ft_strlcpy(new_input + start + repl_len, input + end, new_len + 1);
+	printf("After 3rd strlcpy in replace_segment input: %s\n", input);
+	printf("After 3rd strlcpy in replace_segment new_input: %s\n", new_input);
 	return (new_input);
 }
 
@@ -124,17 +133,22 @@ char	*expand_input(t_mini *minish, char *input)
 				input = expand_exitcode(minish, input, &i);
 			else if (input[i + 1] == '"' || input[i + 1] == '\'')
 			{
+//				printf("We have quotes, input before replace segment: %s\n", input);
 				input = replace_segment(input, i, i + 1, NULL);
+//				printf("Input after replace segment: %s\n", input);
 				if (input[i + 1] == '"')
 					i++;
 				else
 					i += quotes_offset(input + i + 1, input[i + 1]);
+//			printf("Input's index after i increase: %s\n", (input + i));
 			}
 			else
 				input = expand_variable(minish, input, &i);
 			if (!input)
 				return (NULL);
 		}
+		else if (input[i] == '\'')
+			i += quotes_offset(input + i, input[i]);
 		else
 			i++;
 	}

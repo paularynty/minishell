@@ -74,9 +74,7 @@ int	quotes_offset(const char *input, char quote)
 	while (input[offset] && input[offset] != quote)
 		offset++;
 	offset++;
-	// if (input[offset] == '\0')
-	//	return (-1); 	we will handle open quotes later, it's optional
-	return (offset); // check logic for open quotes later
+	return (offset);
 }
 
 /********************************
@@ -91,16 +89,15 @@ int	count_pipes(const char *input)
 
 	pipes = 0;
 	i = 0;
-	while (input[i])
+	while (input && input[i])
 	{
 		if (input[i] == '\'' || input[i] == '"')
-			i += quotes_offset(input, input[i]); // we move index until quotes are closed
+			i += quotes_offset(input + i, input[i]); // we move index until quotes are closed
 		else if (input[i] == '|')
 			pipes++;
-		i++;
+		else
+			i++;
 	}
-	// if (input[i -1] == '|')
-	// 		return (-1) 	we handle open pipe later, it's optional
 	return (pipes);
 }
 

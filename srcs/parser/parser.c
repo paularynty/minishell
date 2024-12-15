@@ -26,11 +26,13 @@ t_command	*tokenizer(const char *input)
 	i = 0;
 	commands = NULL;
 	current_cmd = NULL;
+	printf("input before split_by_pipes: %s\n", input);
 	cmds = split_by_pipes(input);
 	if (!cmds)
 		return (NULL);
 	while (cmds[i] != NULL)
 	{
+		printf("command nro %d = %s\n", i, cmds[i]);
 		current_cmd = create_command(cmds[i]);
 		if (!current_cmd)
 		{
