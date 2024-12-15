@@ -55,25 +55,25 @@ char	*replace_segment(char *input, int start, int end, char *replacement)
 	int		new_len;
 
 	input_len = ft_strlen(input);
-	printf("After strlen in replace_segment input_len: %d\n", input_len);
+	// printf("After strlen in replace_segment input_len: %d\n", input_len);
 	repl_len = ft_strlen(replacement);
-	printf("After strlen in replace_segment repl_len: %d\n", repl_len);
+	// printf("After strlen in replace_segment repl_len: %d\n", repl_len);
 	new_len = input_len - (end - start) + repl_len;
 	new_input = (char *)malloc(sizeof(char)* new_len + 1);
-	printf("After malloc in replace_segment input: %s\n", input);
+	// printf("After malloc in replace_segment input: %s\n", input);
 	if (!new_input)
 		return (NULL);
 	if (ft_strlcpy(new_input, input, start + 1) == 0)
 		return (NULL);
-	printf("After 1st strlcpy in replace_segment input: %s\n", input);
-	printf("After 1st strlcpy in replace_segment new_input: %s\n", new_input);
+	// printf("After 1st strlcpy in replace_segment input: %s\n", input);
+	// printf("After 1st strlcpy in replace_segment new_input: %s\n", new_input);
 	if (replacement)
 		ft_strlcpy(new_input + start, replacement, start + repl_len + 1);
-	printf("After 2nd strlcpy in replace_segment input: %s\n", input);
-	printf("After 2nd strlcpy in replace_segment new_input: %s\n", new_input);
+	// printf("After 2nd strlcpy in replace_segment input: %s\n", input);
+	// printf("After 2nd strlcpy in replace_segment new_input: %s\n", new_input);
 	ft_strlcpy(new_input + start + repl_len, input + end, new_len + 1);
-	printf("After 3rd strlcpy in replace_segment input: %s\n", input);
-	printf("After 3rd strlcpy in replace_segment new_input: %s\n", new_input);
+	// printf("After 3rd strlcpy in replace_segment input: %s\n", input);
+	// printf("After 3rd strlcpy in replace_segment new_input: %s\n", new_input);
 	return (new_input);
 }
 
