@@ -1,4 +1,4 @@
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 //if you create with export something, it goes to env
 //if you say export var XXX, it goes to pending list

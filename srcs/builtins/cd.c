@@ -1,4 +1,4 @@
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 //in cd, if you use getcwd, it takes in absolute or relative path
 //you can give the path to getcwd

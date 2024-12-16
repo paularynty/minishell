@@ -1,5 +1,5 @@
-#include "../includes/minishell.h"
-
+#include "minishell.h"
+ 
 //initialize and setup program variables.
 //env_clone function to clone the env 
 //so if unset is called in a nested minishell instance, it doesn't change/corrupt the original env variables

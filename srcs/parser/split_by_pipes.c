@@ -1,4 +1,4 @@
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 static int	process_input(const char *input, char **cmd, int *j, int *start)
 {

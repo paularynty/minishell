@@ -1,4 +1,4 @@
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 // env takes in no args, only prints the env list
 // when running env -i ./minishell and env as command

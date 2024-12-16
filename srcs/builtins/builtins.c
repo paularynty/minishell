@@ -1,4 +1,4 @@
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 void	handle_builtin(int id, t_mini *shell)
 {
