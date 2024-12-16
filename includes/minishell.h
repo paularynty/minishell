@@ -21,6 +21,13 @@
 # include "parser.h"
 # include "../libft/libft.h"
 
+# define DEBUG
+#ifdef DEBUG 
+# define debug_print(...) fprintf(stderr, __VA_ARGS__)
+#else
+# define debug_print(...) ((void)0)
+#endif
+
 //global variable to carry the exit status. mrworldwide for now
 //sig_atomic_t = atomic relative to signal handling
 //(we can also just pass around the exit code in the struct, 
