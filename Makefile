@@ -42,10 +42,14 @@ SRCS			= $(SRCDIR)/main.c \
 				$(SRCDIR)/execution/exec_utils.c \
 				$(SRCDIR)/execution/execute.c \
 				$(SRCDIR)/errors/errors.c \
+				$(SRCDIR)/lexer/expansion.c \
 				$(SRCDIR)/lexer/lexer.c \
 				$(SRCDIR)/lexer/valid_input.c \
+				$(SRCDIR)/lexer/valid_input2.c \
 				$(SRCDIR)/parser/helper_funcs.c \
 				$(SRCDIR)/parser/create_command.c \
+				$(SRCDIR)/parser/create_command_args.c \
+				$(SRCDIR)/parser/create_quoted_arg.c \
 				$(SRCDIR)/parser/create_tokens.c \
 				$(SRCDIR)/parser/free_cmd_contents.c \
 				$(SRCDIR)/parser/parser.c \

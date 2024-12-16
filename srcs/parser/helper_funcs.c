@@ -1,4 +1,4 @@
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 /********************************
  * 
@@ -126,4 +126,11 @@ char	*ft_strndup(const char *src, size_t n)
 	}
 	dup[i] = '\0';
 	return (dup);
+}
+
+int	char_is_whitespace(char c)
+{
+	if (c != 32 && (c < 9 || c > 13))
+		return (FALSE);
+	return (TRUE);
 }

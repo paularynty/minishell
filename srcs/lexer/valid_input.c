@@ -20,7 +20,7 @@ int	matching_quotes(const char *str)
 	doubleq = 0;
 	while (*str)
     {
-		if (*str == 39 && doubleq % 2 == 0) // didn't accept ''', so used ASCII val. doubleq quotes aren't open, so increase singles.
+		if (*str == '\'' && doubleq % 2 == 0) // double quotes aren't open, so increase singles.
 			single++;
 		else if (*str == '"' && single % 2 == 0) // single quotes aren't open, so we increase doubleqs.
 			doubleq++;
