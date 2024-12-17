@@ -1,4 +1,4 @@
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 static void	add_command(t_command **head, t_command *new_cmd)
 {
@@ -26,13 +26,12 @@ t_command	*tokenizer(const char *input)
 	i = 0;
 	commands = NULL;
 	current_cmd = NULL;
-	printf("input before split_by_pipes: %s\n", input);
 	cmds = split_by_pipes(input);
 	if (!cmds)
 		return (NULL);
 	while (cmds[i] != NULL)
 	{
-		printf("command nro %d = %s\n", i, cmds[i]);
+		// printf("command nro %d = %s\n", i, cmds[i]);
 		current_cmd = create_command(cmds[i]);
 		if (!current_cmd)
 		{
@@ -41,6 +40,7 @@ t_command	*tokenizer(const char *input)
 			return (NULL);
 		}
 		add_command(&commands, current_cmd); // adds another cmd to the linked list
+		// printf("Command added\n");
 		i++;
 	}
 	free_2d_array(cmds);

@@ -1,4 +1,4 @@
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 static int	process_input(const char *input, char **cmd, int *j, int *start)
 {
@@ -18,6 +18,7 @@ static int	process_input(const char *input, char **cmd, int *j, int *start)
 				return (0);
 			(*j)++;
 			*start = i + 1;
+			i++;
 		}
 		else
 			i++;
@@ -32,6 +33,7 @@ static char	**allocate_cmd_array(const char *input)
 	char	**cmd;
 
 	pipes = count_pipes(input);
+	// printf("pipes: %d\n", pipes);
 	cmd_count = pipes + 1;
 	cmd = (char **)malloc(sizeof(char *)*(cmd_count + 1));
 	if (!cmd)
@@ -46,12 +48,15 @@ char	**split_by_pipes(const char *input)
 	int	start;
 	int	end;
 
+	// printf("input: %s\n", input);
 	cmd = allocate_cmd_array(input);
+	// printf("After allocate_cmd_array\n");
 	if (!cmd)
 		return (NULL);
 	j = 0;
 	start = 0;
 	end = process_input(input, cmd, &j, &start);
+	// printf("After process input\n");
 	if (!end || (start < end && !(cmd[j++] = ft_strndup(input + start, end - start))))
 	{
 		while (j > 0)

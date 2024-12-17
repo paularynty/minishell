@@ -91,10 +91,14 @@ int	count_pipes(const char *input)
 	i = 0;
 	while (input && input[i])
 	{
+		// printf("Inspecting input %s in letter %c\n", input, input[i]);
 		if (input[i] == '\'' || input[i] == '"')
 			i += quotes_offset(input + i, input[i]); // we move index until quotes are closed
 		else if (input[i] == '|')
+		{
 			pipes++;
+			i++;
+		}
 		else
 			i++;
 	}

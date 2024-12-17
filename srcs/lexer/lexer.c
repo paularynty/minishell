@@ -62,9 +62,22 @@ char	*add_missing_spaces(char *input)
 		{
 			if (input[i] == '\'' || input[i] == '"')
 				i += quotes_offset(input + i, input[i]);
-			if (ft_strchr("><", input[i]))
+			if (ft_strchr("><", input[i]) && i > 0)
 			{
 				spaced = add_space(input, i);
+				// printf("spaced input: %s\n", spaced);
+				free(input);
+				if (!spaced)
+					return (NULL);
+				input = spaced;
+				i += 2;
+				if (input[i] == input[i - 1])
+					i++;
+			}
+			else if ((input[i - 1] == '<' || input[i - 1] == '>') && !ft_strchr("><", input[i]))
+			{
+				spaced = add_space(input, i);
+				// printf("spaced input: %s\n", spaced);
 				free(input);
 				if (!spaced)
 					return (NULL);
@@ -97,6 +110,6 @@ int 	lexer(t_mini *minish, char *line)
 		printf("\nWE DON'T HAVE AN INPUT\n");
 		return (FALSE);
 	}
-	printf("IM OUT\n");
+	printf("expanded and spaced input: %s\n", minish->input);
 	return (TRUE);
 }

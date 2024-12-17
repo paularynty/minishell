@@ -23,6 +23,7 @@ t_command	*create_command(char *cmd_str)
 	if (!command)
 		return (NULL);
 	args = split_cmd_args(cmd_str);
+	// printf("After split_cmd_args\n");
 	if (!args || !tokenize_args(command, args))
 	{
 		free_2d_array(args); // check later if in ft_free_array there's a check to avoid double free

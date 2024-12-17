@@ -19,6 +19,8 @@ static void	minishell(t_mini *shell)
 			add_history(input); //this could be moved somewhere in parsing/exec functions
 			if (lexer(shell, input))
 				commands = tokenizer(shell->input);
+			print_list(commands);
+			printf("Before execution\n");
 			execute(shell, commands);
 			if (shell->exit_flag)
 				break ;
