@@ -1,14 +1,14 @@
 #include "minishell.h"
 
-void	close_all(t_mini *shell, t_command *command)
-{
-	if (command->input_fd >= 0)
-		close(command->input_fd);
-	if (command->output_fd >= 0)
-		close(command->output_fd);
-	close(shell->pipe_fd[0]);
-	close(shell->pipe_fd[1]);
-}
+// void	close_all(t_mini *shell, t_command *command)
+// {
+// 	if (command->input_fd >= 0)
+// 		close(command->input_fd);
+// 	if (command->output_fd >= 0)
+// 		close(command->output_fd);
+// 	close(shell->pipe_fd[0]);
+// 	close(shell->pipe_fd[1]);
+// }
 
 // void	open_file(t_mini *shell, t_command *command)
 // {

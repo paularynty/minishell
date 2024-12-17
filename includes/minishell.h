@@ -34,13 +34,13 @@
 //let's decide on that later)
 extern int	g_mrworldwide;
 
-typedef struct s_env
-{
-	char			*key;
-	char			*value;
-	int				flag;
-	struct s_env	*next;
-}	t_env;
+// typedef struct s_env
+// {
+// 	char			*key;
+// 	char			*value;
+// 	int				flag;
+// 	struct s_env	*next;
+// }	t_env;
 
 typedef struct s_mini
 {
@@ -49,7 +49,6 @@ typedef struct s_mini
 	char	*cwd;
 	char	*input;
 	char	*heredoc;
-	int		pipe_fd[2];
 	int		exit_flag; // flag to check if minishell loop should be exited
 	int		exit_code; //exit status to exit the entire program with
 }	t_mini;
