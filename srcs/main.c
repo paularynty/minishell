@@ -24,7 +24,7 @@ static void	minishell(t_mini *shell)
 				free(input);
 				continue ;
 			}
-			print_list(commands);
+		//	print_list(commands);
 			printf("Before execution\n");
 			execute(shell, commands);
 			if (shell->exit_flag)
