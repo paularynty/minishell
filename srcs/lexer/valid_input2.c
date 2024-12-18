@@ -11,7 +11,7 @@ int	backslash(const char *input)
 			i += quotes_offset(input + i, input[i]);
 		if (input[i] == '\\')
 		{
-			ft_putstr_fd("minishell: syntax error near unexpected token `\'", 2);
+			ft_putstr_fd("minishell: syntax error near unexpected token `\\'\n", 2);
 			return (TRUE);
 		}
 		i++;

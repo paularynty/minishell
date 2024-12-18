@@ -16,9 +16,9 @@ int 	valid_input(char *input)
 		return (FALSE);
 	if (!valid_redirection(input))
 		return (FALSE);
-	if (!valid_pipes(input))
-		return (FALSE);
 	if (!closed_pipes(input))
+		return (FALSE);
+	if (!valid_pipes(input))
 		return (FALSE);
 	return (TRUE);
 }

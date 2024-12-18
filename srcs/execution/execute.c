@@ -100,6 +100,7 @@ static char	**prep_command(t_mini *shell, t_command *command)
 			i++;
 		}
 		token = token->next;
+		printf("token loop\n");
 	}
 	shell->cmd[i] = NULL;
 	return (shell->cmd);
@@ -123,6 +124,7 @@ int	exec_fork(t_mini *shell)
 			check_access(shell, shell->cmd[0]);
 		check_access(shell, cmd_path);
 		execve(cmd_path, shell->cmd, shell->env);
+		printf("AFTER EXECVE\n");
 		free(cmd_path);
 		error_cmd(shell, shell->cmd[0]);
 		return (shell->exit_code);
@@ -134,7 +136,13 @@ void	execute(t_mini *shell, t_command *command)
 {
 	int	builtin_id;
 
+	int i = 0;
 	shell->cmd = prep_command(shell, command);
+	while (shell->cmd[i])
+	{
+		printf("%s\n", shell->cmd[i]);
+		i++;
+	}
 	builtin_id = builtins(shell->cmd[0]);
 	if (builtin_id) // 0 = BUILTIN_NONE, everything else is builtin
 		handle_builtin(builtin_id, shell);

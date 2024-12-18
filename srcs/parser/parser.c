@@ -22,17 +22,19 @@ t_command	*tokenizer(const char *input)
 	t_command	*commands;
 	t_command	*current_cmd;
 	int			i;
+	int			pipes;
 
 	i = 0;
 	commands = NULL;
 	current_cmd = NULL;
-	cmds = split_by_pipes(input);
+	cmds = split_by_pipes(input, &pipes);
 	if (!cmds)
 		return (NULL);
 	while (cmds[i] != NULL)
 	{
-		// printf("command nro %d = %s\n", i, cmds[i]);
-		current_cmd = create_command(cmds[i]);
+		current_cmd = create_command(cmds[i], pipes, i);
+		// printf("cmd_i %d\n", current_cmd->cmd_i);
+		// printf("cmd_count %d\n", current_cmd->cmd_count);
 		if (!current_cmd)
 		{
 			free_2d_array(cmds);

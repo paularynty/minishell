@@ -1,4 +1,4 @@
-#include "../includes/minishell.h"
+#include "minishell.h"
 
 //initialize and setup program variables.
 //env_clone function to clone the env 

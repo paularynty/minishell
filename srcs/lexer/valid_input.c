@@ -82,7 +82,7 @@ int	valid_pipes(const char *input)
 			pipes++;
 			i++;
 		}
-		if (pipes == 3)
+		if (pipes >= 2 && pipes <= 3)
 		{
 			ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
 			return (FALSE);

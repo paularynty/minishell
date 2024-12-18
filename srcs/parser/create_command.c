@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-static t_command	*init_command(void)
+static t_command	*init_command(int pipes, int i)
 {
 	t_command	*cmd;
 
@@ -10,16 +10,18 @@ static t_command	*init_command(void)
 	cmd->tokens = NULL;
 	cmd->input_fd = -1;
 	cmd->output_fd = -1;
+	cmd->cmd_count = pipes + 1;
+	cmd->cmd_i = i;
 	cmd->next = NULL;
 	return (cmd);
 }
 
-t_command	*create_command(char *cmd_str)
+t_command	*create_command(char *cmd_str, int pipes, int i)
 {
 	t_command	*command;
 	char		**args;
 
-	command = init_command();
+	command = init_command(pipes, i);
 	if (!command)
 		return (NULL);
 	args = split_cmd_args(cmd_str);

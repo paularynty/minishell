@@ -31,6 +31,8 @@ typedef struct	s_command
 	t_token	*tokens;    // Linked list of tokens for the command
 	int		input_fd;       // Input redirection file descriptor
 	int		output_fd;      // Output redirection file descriptor
+	int		cmd_i;
+	int		cmd_count;
 	struct s_command	*next; // Next command (if part of a chain, separated by pipes)
 } t_command;
 
@@ -68,7 +70,7 @@ char		*ft_strndup(const char *src, size_t n);
 int			quotes_offset(const char *input, char quote);
 
 //parser/create_command.c
-t_command	*create_command(char *cmd_str);
+t_command	*create_command(char *cmd_str, int pipes, int i);
 
 //parser/create_tokens.c
 void		add_token(t_token **head, t_token *new_token);
@@ -81,7 +83,7 @@ char		**split_cmd_args(char *cmd_str);
 char		*create_quoted_arg(char *str, int *i, int len);
 
 //parser/split_by_pipes.c
-char		**split_by_pipes(const char *input);
+char	**split_by_pipes(const char *input, int *pipes);
 
 //parser/parser.c
 t_command	*tokenizer(const char *input);
