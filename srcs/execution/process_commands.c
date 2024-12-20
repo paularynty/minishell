@@ -71,7 +71,7 @@ void	handle_child_process(t_command *cmd, t_mini *shell, int pipe_fd[][2], int c
 	if (dup2(cmd->input_fd, STDOUT_FILENO) == -1)
 		// I'm way too confused at this point, at least close fd's here and also in parent, return correct error and exit process?
 	// close_all_pipes or close_unused_pipes? CONFUSION STRIKES AGAIN
-	shell->cmd = prep_command() // it's now static, no time to modify I leave in 5 minutes
+	shell->cmd = prep_command(); // it's now static, no time to modify I leave in 5 minutes
 	if (!shell->cmd || !(cmd_path = get_cmd_path(shell, shell->cmd[0])))
 	{
 		// error handlingia tulille
