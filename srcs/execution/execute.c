@@ -18,7 +18,7 @@ static char	**prep_command(t_mini *shell, t_command *command)
 	{
 		if (token->type == CMD)
 		{
-			shell->cmd[i] = strdup(token->value);
+			shell->cmd[i] = ft_strdup(token->value);
 			if (!shell->cmd[i])
 				ft_free_array(&shell->cmd);
 			i++;
@@ -30,31 +30,27 @@ static char	**prep_command(t_mini *shell, t_command *command)
 	return (shell->cmd);
 }
 
-static int	exec_parent(t_mini *shell, int builtin_id)
+static int	exec_parent(t_mini *shell, int is_builtin)
 {
-	handle_builtin(builtin_id, shell);
+	handle_builtin(is_builtin, shell);
 	return (TRUE);
 }
 
 //TO DO: up until a pipe, only the first token can be CMD
 //the next ones after that (excl. redires etc.) are ARG
 //so that executor works as it should
-void	execute(t_mini *shell, t_command *command)
+int	execute(t_mini *shell, t_command *command)
 {
-	int		builtin_id;
+	int		is_builtin;
 	int		i;
 
 	i = 0;
 	shell->cmd = prep_command(shell, command);
-	builtin_id = builtins(shell->cmd[0]);
-	debug_print("%d\n", shell->cmd_count);
-	while (i < shell->cmd_count)
-	{
-		if (shell->cmd_count == 1)
-			exec_parent(shell, builtin_id);
-		else
-			exec_child(shell, command);
-		i++;
-	}
+	is_builtin = builtins(shell->cmd[0]);
+	if (shell->cmd_count == 1 && is_builtin)
+		exec_parent(shell, is_builtin);
+	else
+		exec_child(shell, command);
 	ft_free_array(&shell->cmd);
+	return (shell->exit_code);
 }

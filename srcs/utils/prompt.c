@@ -1,5 +1,4 @@
-#include "../../includes/minishell.h"
-
+#include "minishell.h"
 void	get_prompt(t_mini *shell, char *prompt, size_t size)
 {
 	char	*username;

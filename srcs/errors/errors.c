@@ -1,5 +1,4 @@
-#include "../../includes/minishell.h"
-
+#include "minishell.h"
 void	error_builtin(char *builtin, char *str, char *error_str)
 {
 	char	buffer[1024];

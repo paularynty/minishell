@@ -1,4 +1,4 @@
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 //if just export, you add to pending list, which is different from env
 //you can export multiple vars in a single command

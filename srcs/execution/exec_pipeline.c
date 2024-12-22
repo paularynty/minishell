@@ -160,29 +160,44 @@ void	close_unused_fds(t_mini *shell, int i)
 // 	}
 // }
 
+static void	exec_forked_builtin(t_mini *shell, int is_builtin)
+{
+	handle_builtin(is_builtin, shell); //rework this to take in account failed builtin exec
+	cleanup_success(shell);
+}
+
 /* Executes command in child process. 
 Upon successful execve() call, exits with EXIT_SUCCESS (0). 
 Otherwise cleans everything and exits with predetermined exit code.*/
-static void	exec_forked_cmd(t_mini *shell)
+static void	exec_forked_cmd(t_mini *shell, t_command *command, int i)
 {
 	char	*cmd_path;
 
 	cmd_path = get_cmd_path(shell, shell->cmd[0]);
 	if (!cmd_path)
 		check_access(shell, shell->cmd[0]);
-	signal_reset();
 	check_access(shell, cmd_path);
-	execve(cmd_path, shell->cmd, shell->env); //rework for if execve returns -1
-	free(cmd_path);
-	error_cmd(shell, shell->cmd[0]);
+	signal_reset();
+	debug_print("Current input_fd: %d\n", command->input_fd);
+	debug_print("Current output_fd: %d\n", command->input_fd);
+	debug_print("Current read pipe fd: %d\n", shell->pipes[i][0]);
+	debug_print("Current write pipe fd: %d\n", shell->pipes[i][1]);
+	if (execve(cmd_path, shell->cmd, shell->env) == -1)
+	{
+		free(cmd_path);
+		error_cmd(shell, shell->cmd[0]);
+	}
 	exit(EXIT_SUCCESS);
 }
 
 static int	fork_and_execute(t_mini *shell, t_command *command, int i)
 {
+	int	is_builtin;
+
+	is_builtin = builtins(shell->cmd[0]);
 	signal_reset();
 	shell->pids[i] = fork();
-	if (shell->pids[i] < 0)
+	if (shell->pids[i] == -1)
 	{
 		perror("fork failed");
 		return (-1);
@@ -190,15 +205,16 @@ static int	fork_and_execute(t_mini *shell, t_command *command, int i)
 	else if (shell->pids[i] == 0)
 	{
 		close_unused_fds(shell, i);
-		//resolve fds;
+		// if (!resolve_fds(command))
+		// 	debug_print("failed to dup input\n");
 		if (!dup_input(shell, command, i))
 			debug_print("failed to dup input\n");
 		if (!dup_output(shell, command, i))
-			debug_print("failed to dup input\n");
-		//check if builtin in piped cmd, if so exec forked builtin, else exec forked cmd;
-		// if (builtins(shell->cmd[0]))
-		// 	exec_forked_builtin();
-		exec_forked_cmd(shell);
+			debug_print("failed to dup output\n");
+		if (builtins(shell->cmd[0])) //check for builtin cmd in pipe
+			exec_forked_builtin(shell, is_builtin);
+		else
+			exec_forked_cmd(shell, command, i);
 	}
 	return (TRUE);
 }
@@ -218,6 +234,7 @@ int	create_pipes(t_mini *shell)
 		}
 		i++;
 	}
+	// debug_print("Pipes piped: %d\n", shell->pipes[i][0]);
 	return (TRUE);
 }
 
@@ -237,30 +254,19 @@ static int	allocate_pipes(t_mini *shell)
 		shell->pipes[i] = ft_calloc(2, sizeof(int)); //2 for fd[0] and fd[1] for each pipe array element
 		if (!shell->pipes[i])
 		{
-			shell->abort = 1;
 			free_pipes(shell, i);
+			shell->abort = 1;
 			return (FALSE);
 		}
 		i++;
-	}
-	if (!create_pipes(shell))
-	{
-		free(shell->pids);
-		close_all_pipes(shell, i); //modify to suit 2d pipe array better
-		// close all open fds, free everything, and determine exit code
-		return (FALSE);
 	}
 	return (TRUE);
 }
 
 /* Creates and allocates PID array (one PID for each shell->cmd_count).
 Creates pipes, and executes pipeline.*/
-static int	init_pipeline(t_mini *shell, t_command *command)
+static int	init_pipeline(t_mini *shell)
 {
-	// int		pipe_fd[2];
-	// pid_t	*pids;
-	int	i;
-
 	shell->pids = ft_calloc(shell->cmd_count, sizeof(pid_t));
 	if (!shell->pids)
 	{
@@ -273,7 +279,23 @@ static int	init_pipeline(t_mini *shell, t_command *command)
 		if (!allocate_pipes(shell))
 			return (FALSE);
 	}
+	return (TRUE);
+}
+
+int	exec_child(t_mini *shell, t_command *command)
+{
+	int	i;
+
 	i = 0;
+	if (!init_pipeline(shell))
+		return (FALSE);
+	if (!create_pipes(shell))
+	{
+		free(shell->pids);
+		close_all_pipes(shell, i); //modify to suit 2d pipe array better
+		// close all open fds, free everything, and determine exit code
+		return (FALSE);
+	}
 	while (i < shell->cmd_count)
 	{
 		if (fork_and_execute(shell, command, i) == -1)
@@ -281,38 +303,9 @@ static int	init_pipeline(t_mini *shell, t_command *command)
 		signal_child();
 		close_all_pipes(shell, i);
 		i++;
+		command = command->next;
 	}
-	// execute_pipeline(shell, command, pipe_fd, pids);
-	// close_all_pipes(pipe_fd);
-	// shell->exit_code = wait_for_children(shell, pids); //<- needs to be modified to take in pids, cmd, and shell
-	// free(pids);
+	wait_for_children(shell);
+	free(shell->pids); // will be moved to separate cleaner function for successful/failed executions
 	return (shell->exit_code);
-}
-
-int	exec_child(t_mini *shell, t_command *command)
-{
-	// char		*cmd_path;
-	// pid_t		pid;
-
-	init_pipeline(shell, command);
-	// pid = fork();
-	// if (pid < 0)
-	// {
-	// 	perror("fork failed");
-	// 	return (-1);
-	// }
-	// if (pid == 0)
-	// {
-	// 	cmd_path = get_cmd_path(shell, shell->cmd[0]);
-	// 	if (!cmd_path)
-	// 		check_access(shell, shell->cmd[0]);
-	// 	check_access(shell, cmd_path);
-	// 	execve(cmd_path, shell->cmd, shell->env);
-	// 	check_print("AFTER EXECVE\n");
-	// 	free(cmd_path);
-	// 	error_cmd(shell, shell->cmd[0]);
-	// 	return (shell->exit_code);
-	// }
-	// return (wait_for_children(shell, pid));
-	return (0);
 }

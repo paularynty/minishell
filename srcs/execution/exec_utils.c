@@ -1,9 +1,9 @@
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 /*	Loops over shell->cmd_count and waits for all child processes 
 	matching pid[i] to die.
 	Upon unsuccessful waitpid() call, errno is assigned to shell->exit_code.*/
-void	wait_for_children(t_mini *shell, pid_t *pids)
+void	wait_for_children(t_mini *shell)
 {
 	int		status;
 	int		i;
@@ -11,7 +11,7 @@ void	wait_for_children(t_mini *shell, pid_t *pids)
 	i = 0;
 	while (i < shell->cmd_count)
 	{
-		if (waitpid(pids[i], &status, 0) == -1)
+		if (waitpid(shell->pids[i], &status, 0) == -1)
 		{
 			perror("waitpid failed");
 			shell->exit_code = errno;

@@ -1,9 +1,8 @@
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 //if you create with export something, it goes to env
 //if you say export var XXX, it goes to pending list
 //in unset you need to keep track to remove both from env and pending list
-
 void	env_unset_variable(char **env, char *variable)
 {
 	int		i;

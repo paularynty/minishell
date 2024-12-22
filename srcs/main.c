@@ -27,7 +27,7 @@ static void	minishell(t_mini *shell)
 			//	print_list(commands);
 			check_print("Before execution\n");
 			execute(shell, commands);
-			if (shell->exit_flag)
+			if (shell->exit_flag || shell->abort)
 				break ;
 		}
 		// free(input);
@@ -38,7 +38,7 @@ static void	minishell(t_mini *shell)
 
 int	main(int argc, char **argv, char **env)
 {
-	t_mini	shell;
+	t_mini		shell;
 
 	(void)argc;
 	(void)argv;

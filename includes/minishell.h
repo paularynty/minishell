@@ -114,17 +114,18 @@ void	error_builtin(char *builtin, char *str, char *error_str);
 int		error_cmd(t_mini *shell, char *cmd);
 
 //execution/execute.c
-void	execute(t_mini *shell, t_command *commands);
+int		execute(t_mini *shell, t_command *commands);
 
 //execution/exec_dup_close.c
+int		resolve_fds(t_command *command);
 int		dup_input(t_mini *shell, t_command *command, int i);
 int		dup_output(t_mini *shell, t_command *command, int i);
-int		dup2_and_close(int old_fd, int new_fd);
+int		dup2_close(int old_fd, int new_fd);
 
 //execution/exec_utils.c
 int 	count_cmd_args_for_exec(t_token *tokens);
 int		check_access(t_mini *shell, char *cmd);
-void	wait_for_children(t_mini *shell, pid_t *pids);
+void	wait_for_children(t_mini *shell);
 
 //execution/exec_path.c
 char	**get_env_path(char **env);
@@ -150,6 +151,7 @@ void	signal_reset(void);
 void	signal_init(void);
 
 //utils/cleanup.c
+void	cleanup_success(t_mini *shell);
 void	cleanup(t_mini *shell);
 
 //utils/prompt.c

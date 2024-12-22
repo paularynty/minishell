@@ -1,9 +1,10 @@
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 void	handle_builtin(int id, t_mini *shell)
 {
 	int	code;
 
+	signal_reset();
 	code = 0;
 	if (id == BUILTIN_CD)
 		code = builtin_cd(shell);

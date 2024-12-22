@@ -1,4 +1,4 @@
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 // exit without args:
 // prints “exit\n” with exit code 0

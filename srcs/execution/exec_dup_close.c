@@ -31,14 +31,52 @@
 // 	close_all(shell, command);
 // }
 
+int	resolve_fds(t_command *command)
+{
+	int	input_fd;
+	int	output_fd;
+
+	input_fd = -1;
+	output_fd = -1;
+	// if (process_redirections(command, &input_fd, &output_fd))
+	// 	return (1);
+	if (input_fd != -1)
+		command->input_fd = input_fd;
+	else
+		command->input_fd = STDIN_FILENO;
+	if (output_fd != -1)
+		command->output_fd = output_fd;
+	else
+		command->output_fd = STDOUT_FILENO;
+	return (TRUE);
+}
+
+// int	dup2_close_parent(t_mini *shell, int old_fd, int new_fd)
+// {
+// 	if (old_fd < 0)
+// 	{
+// 		ft_putendl_fd("Invalid file descriptor", 2);
+// 		reset_fds(shell);
+// 		return (1);
+// 	}
+// 	if (dup2(old_fd, new_fd) == -1)
+// 	{
+// 		close(old_fd);
+// 		reset_fds(shell);
+// 		return (1);
+// 	}
+// 	close(old_fd);
+// 	return (0);
+// }
+
 int	dup_input(t_mini *shell, t_command *command, int i)
 {
 	if (command->input_fd != STDIN_FILENO)
 	{
-		if (dup2_and_close(command->input_fd, STDIN_FILENO))
+		if (!dup2_close(command->input_fd, STDIN_FILENO))
 		{
 			perror("dup2 failed for input redirection");
-			//exit code = 1;
+			shell->exit_code = 1;
 			return (FALSE);
 		}
 		if (i > 0)
@@ -46,10 +84,10 @@ int	dup_input(t_mini *shell, t_command *command, int i)
 	}
 	else if (i > 0)
 	{
-		if (dup2_and_close(shell->pipes[i - 1][0], STDIN_FILENO) == -1)
+		if (!dup2_close(shell->pipes[i - 1][0], STDIN_FILENO))
 		{
 			perror("dup2 failed for pipe input");
-			//exit code = 1;
+			shell->exit_code = 1;
 			return (FALSE);
 		}
 	}
@@ -58,15 +96,14 @@ int	dup_input(t_mini *shell, t_command *command, int i)
 
 // Duplicates output to fd if there is a redirection or to write end of pipe
 // Redirection takes precedence over pipe
-
 int	dup_output(t_mini *shell, t_command *command, int i)
 {
 	if (command->output_fd != STDOUT_FILENO)
 	{
-		if (dup2_and_close(command->output_fd, STDOUT_FILENO))
+		if (!dup2_close(command->output_fd, STDOUT_FILENO))
 		{
 			perror("dup2 failed for output redirection");
-			//exit code = 1;
+			shell->exit_code = 1;
 			return (FALSE);
 		}
 		if (i < shell->cmd_count - 1)
@@ -74,10 +111,10 @@ int	dup_output(t_mini *shell, t_command *command, int i)
 	}
 	else if (i < shell->cmd_count - 1)
 	{
-		if (dup2_and_close(shell->pipes[i][1], STDOUT_FILENO))
+		if (!dup2_close(shell->pipes[i][1], STDOUT_FILENO))
 		{
-			perror("dup2 for output to pipe");
-			//exit code = 1;
+			perror("dup2 failed for pipe output");
+			shell->exit_code = 1;
 			return (FALSE);
 		}
 	}
@@ -85,7 +122,7 @@ int	dup_output(t_mini *shell, t_command *command, int i)
 }
 
 /*Duplicates old_fd to new_fd and closes old_fd.*/
-int	dup2_and_close(int old_fd, int new_fd)
+int	dup2_close(int old_fd, int new_fd)
 {
 	if (old_fd < 0)
 	{
