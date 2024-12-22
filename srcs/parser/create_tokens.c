@@ -18,11 +18,11 @@ void	add_token(t_token **head, t_token *new_token)
 static t_token_type	identify_token_type(char *value)
 {
 	if (ft_strcmp(value, "<") == 0)
-		return (REDIRECT_IN);
+		return (REDIR_IN);
 	if (ft_strcmp(value, ">") == 0)
-		return (REDIRECT_OUT);
+		return (REDIR_OUT);
 	if (ft_strcmp(value, ">>") == 0)
-		return (REDIRECT_APPEND);
+		return (REDIR_APPEND);
 	if (ft_strcmp(value, "<<") == 0)
 		return (HEREDOC);
 	return (CMD);

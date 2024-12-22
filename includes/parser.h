@@ -10,9 +10,9 @@ typedef enum e_token_type
 {
 	CMD,            // Command name
 	FILENAME,       // Filename
-	REDIRECT_IN,    // Input redirection ("<")
-	REDIRECT_OUT,   // Output redirection (">")
-	REDIRECT_APPEND,// Append redirection (">>")
+	REDIR_IN,    // Input redirection ("<")
+	REDIR_OUT,   // Output redirection (">")
+	REDIR_APPEND,// Append redirection (">>")
 	HEREDOC, 		// ("<<")
 	DELIMITER 		// EOF after heredoc
 } t_token_type;
@@ -21,7 +21,7 @@ typedef enum e_token_type
 typedef struct s_token
 {
 	t_token_type	type;  // Type of the token (CMD, ARG, etc.)
-	char	*value;// Token value (e.g., "echo", "file.txt")
+	char			*value;// Token value (e.g., "echo", "file.txt")
 	struct s_token	*next;
 } t_token;
 

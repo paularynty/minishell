@@ -8,10 +8,10 @@ static t_command	*init_command(int pipes, int i)
 	if (!cmd)
 		return (NULL);
 	cmd->tokens = NULL;
-	// cmd->input_fd = -1;
-	// cmd->output_fd = -1;
-	cmd->input_fd = STDIN_FILENO;
-	cmd->output_fd = STDOUT_FILENO;
+	cmd->input_fd = -1;
+	cmd->output_fd = -1;
+	// cmd->input_fd = STDIN_FILENO;
+	// cmd->output_fd = STDOUT_FILENO;
 	cmd->cmd_count = pipes + 1;
 	cmd->cmd_i = i;
 	cmd->next = NULL;

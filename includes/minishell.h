@@ -21,7 +21,7 @@
 # include "parser.h"
 # include "../libft/libft.h"
 
-# define DEBUG
+//# define DEBUG
 #ifdef DEBUG 
 # define debug_print(...) fprintf(stderr, __VA_ARGS__)
 #else
@@ -110,6 +110,7 @@ char	**clone_env(char **env);
 int		builtin_env(t_mini *shell);
 
 //errors/errors.c
+void	error_file(t_mini *shell, char *file, char *error_str, int ex);
 void	error_builtin(char *builtin, char *str, char *error_str);
 int		error_cmd(t_mini *shell, char *cmd);
 
@@ -117,7 +118,7 @@ int		error_cmd(t_mini *shell, char *cmd);
 int		execute(t_mini *shell, t_command *commands);
 
 //execution/exec_dup_close.c
-int		resolve_fds(t_command *command);
+int		resolve_fds(t_mini *shell, t_command *command);
 int		dup_input(t_mini *shell, t_command *command, int i);
 int		dup_output(t_mini *shell, t_command *command, int i);
 int		dup2_close(int old_fd, int new_fd);
@@ -135,10 +136,16 @@ char	*get_cmd_path(t_mini *shell, char *cmd);
 //execution/exec_pipeline.c
 int		exec_child(t_mini *shell, t_command *command);
 
-//execution/exec_redirect.c
-// int		handle_heredoc(t_mini *shell, t_command *command);
-// int		handle_input(t_command *cmd, int *error);
-// int		handle_output(t_command *cmd, int *error);
+//redirect/file_handler.c
+int		open_infile(t_mini *shell, char *infile);
+int		open_outfile(t_mini *shell, char *outfile);
+int		open_append_file(t_mini *shell, char *outfile);
+int		open_heredoc(t_mini *shell, char *heredoc_file);
+
+//redirect/redirect.c
+int		process_redir(t_mini *shell, t_command *cmd, int *input_fd, int *output_fd);
+int		resolve_input_fd(t_mini *shell, t_command *command, int *input_fd);
+int		resolve_output_fd(t_mini *shell, t_command *command, int *output_fd);
 
 //setup/setup.c
 int		setup(t_mini *shell, char **env);

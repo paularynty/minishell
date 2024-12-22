@@ -31,15 +31,15 @@
 // 	close_all(shell, command);
 // }
 
-int	resolve_fds(t_command *command)
+int	resolve_fds(t_mini *shell, t_command *command)
 {
 	int	input_fd;
 	int	output_fd;
 
 	input_fd = -1;
 	output_fd = -1;
-	// if (process_redirections(command, &input_fd, &output_fd))
-	// 	return (1);
+	if (process_redir(shell, command, &input_fd, &output_fd))
+		return (FALSE);
 	if (input_fd != -1)
 		command->input_fd = input_fd;
 	else

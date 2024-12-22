@@ -31,9 +31,22 @@
 
 void	cleanup_success(t_mini *shell)
 {
-	free(shell->pids);
-	shell->pids = NULL;
-	exit(EXIT_SUCCESS);
+	int	i;
+
+	i = shell->cmd_count - 2;
+	if (shell->pids)
+	{
+		free(shell->pids);
+		shell->pids = NULL;
+	}
+	if (shell->cmd_count > 1 && shell->pipes)
+	{
+		if (shell->pipes[i][0] != -1)
+		{
+			if (shell->pipes[i][0] > 0)
+				close(shell->pipes[i][0]);
+		}
+	}
 }
 
 void	cleanup(t_mini *shell)

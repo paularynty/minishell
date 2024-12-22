@@ -163,23 +163,24 @@ void	close_unused_fds(t_mini *shell, int i)
 static void	exec_forked_builtin(t_mini *shell, int is_builtin)
 {
 	handle_builtin(is_builtin, shell); //rework this to take in account failed builtin exec
-	cleanup_success(shell);
+	// cleanup_success(shell);
+	exit(EXIT_SUCCESS);
 }
 
 /* Executes command in child process. 
 Upon successful execve() call, exits with EXIT_SUCCESS (0). 
 Otherwise cleans everything and exits with predetermined exit code.*/
-static void	exec_forked_cmd(t_mini *shell, t_command *command, int i)
+static void	exec_forked_cmd(t_mini *shell)
 {
 	char	*cmd_path;
-
+	
 	cmd_path = get_cmd_path(shell, shell->cmd[0]);
 	if (!cmd_path)
 		check_access(shell, shell->cmd[0]);
 	check_access(shell, cmd_path);
 	signal_reset();
 	debug_print("Current input_fd: %d\n", command->input_fd);
-	debug_print("Current output_fd: %d\n", command->input_fd);
+	debug_print("Current output_fd: %d\n", command->output_fd);
 	debug_print("Current read pipe fd: %d\n", shell->pipes[i][0]);
 	debug_print("Current write pipe fd: %d\n", shell->pipes[i][1]);
 	if (execve(cmd_path, shell->cmd, shell->env) == -1)
@@ -187,6 +188,7 @@ static void	exec_forked_cmd(t_mini *shell, t_command *command, int i)
 		free(cmd_path);
 		error_cmd(shell, shell->cmd[0]);
 	}
+	debug_print("We go here after execve returns\n");
 	exit(EXIT_SUCCESS);
 }
 
@@ -205,8 +207,8 @@ static int	fork_and_execute(t_mini *shell, t_command *command, int i)
 	else if (shell->pids[i] == 0)
 	{
 		close_unused_fds(shell, i);
-		// if (!resolve_fds(command))
-		// 	debug_print("failed to dup input\n");
+		if (!resolve_fds(shell, command))
+			debug_print("failed to dup input\n");
 		if (!dup_input(shell, command, i))
 			debug_print("failed to dup input\n");
 		if (!dup_output(shell, command, i))
@@ -214,7 +216,7 @@ static int	fork_and_execute(t_mini *shell, t_command *command, int i)
 		if (builtins(shell->cmd[0])) //check for builtin cmd in pipe
 			exec_forked_builtin(shell, is_builtin);
 		else
-			exec_forked_cmd(shell, command, i);
+			exec_forked_cmd(shell);
 	}
 	return (TRUE);
 }
@@ -234,7 +236,6 @@ int	create_pipes(t_mini *shell)
 		}
 		i++;
 	}
-	// debug_print("Pipes piped: %d\n", shell->pipes[i][0]);
 	return (TRUE);
 }
 
@@ -306,6 +307,6 @@ int	exec_child(t_mini *shell, t_command *command)
 		command = command->next;
 	}
 	wait_for_children(shell);
-	free(shell->pids); // will be moved to separate cleaner function for successful/failed executions
+	cleanup_success(shell);
 	return (shell->exit_code);
 }
