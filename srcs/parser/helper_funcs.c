@@ -17,7 +17,6 @@ void print_list(t_command *commands)
         check_print("Command:\n");
         t_token *token = current->tokens; // Start with the first token
         int i = 0;
-
         if (token)
         {
             check_print("  Tokens:\n");
@@ -30,12 +29,10 @@ void print_list(t_command *commands)
         }
         else
         {
-            check_print("  Tokens: NULL\n");
+			check_print("  Tokens: NULL\n");
         }
-
         check_print("  Input FD: %d\n", current->input_fd);
         check_print("  Output FD: %d\n", current->output_fd);
-
         current = current->next; // Move to the next command
         if (current)
             check_print("  ---- Next Command ----\n");
@@ -68,7 +65,7 @@ int	quotes_offset(const char *input, char quote)
 {
 	int	offset;
 
-	offset = 1; // we already have quotes opened, so we start with 1 instead of 1
+	offset = 1; // we already have quotes opened, so we start with 1 instead of 0
 	while (input[offset] && input[offset] != quote)
 		offset++;
 	offset++;

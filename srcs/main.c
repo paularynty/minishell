@@ -24,7 +24,7 @@ static void	minishell(t_mini *shell)
 				free(input);
 				continue ;
 			}
-			//	print_list(commands);
+			print_list(commands);
 			check_print("Before execution\n");
 			execute(shell, commands);
 			if (shell->exit_flag || shell->abort)
@@ -34,6 +34,7 @@ static void	minishell(t_mini *shell)
 		shell->cmd_count = 0; //resetting here as otherwise they will increment infinitely
 		input = NULL;
 	}
+	clean_commands(commands);
 }
 
 int	main(int argc, char **argv, char **env)

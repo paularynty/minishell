@@ -170,7 +170,8 @@ static void	exec_forked_builtin(t_mini *shell, int is_builtin)
 /* Executes command in child process. 
 Upon successful execve() call, exits with EXIT_SUCCESS (0). 
 Otherwise cleans everything and exits with predetermined exit code.*/
-static void	exec_forked_cmd(t_mini *shell)
+static void	exec_forked_cmd(t_mini *shell, t_command *command, int i)
+// static void	exec_forked_cmd(t_mini *shell)
 {
 	char	*cmd_path;
 	
@@ -188,8 +189,6 @@ static void	exec_forked_cmd(t_mini *shell)
 		free(cmd_path);
 		error_cmd(shell, shell->cmd[0]);
 	}
-	debug_print("We go here after execve returns\n");
-	exit(EXIT_SUCCESS);
 }
 
 static int	fork_and_execute(t_mini *shell, t_command *command, int i)
@@ -198,6 +197,7 @@ static int	fork_and_execute(t_mini *shell, t_command *command, int i)
 
 	is_builtin = builtins(shell->cmd[0]);
 	signal_reset();
+	// debug_print("Forking process %d (fd_in: %d, pipe_out: %d)\n", i, fd_in, pipefd[1]);
 	shell->pids[i] = fork();
 	if (shell->pids[i] == -1)
 	{
@@ -206,9 +206,10 @@ static int	fork_and_execute(t_mini *shell, t_command *command, int i)
 	}
 	else if (shell->pids[i] == 0)
 	{
+		debug_print("Child process %d created (PID: %d)\n", i, getpid());
 		close_unused_fds(shell, i);
 		if (!resolve_fds(shell, command))
-			debug_print("failed to dup input\n");
+			debug_print("failed to resolve fds\n");
 		if (!dup_input(shell, command, i))
 			debug_print("failed to dup input\n");
 		if (!dup_output(shell, command, i))
@@ -216,7 +217,7 @@ static int	fork_and_execute(t_mini *shell, t_command *command, int i)
 		if (builtins(shell->cmd[0])) //check for builtin cmd in pipe
 			exec_forked_builtin(shell, is_builtin);
 		else
-			exec_forked_cmd(shell);
+			exec_forked_cmd(shell, command, i);
 	}
 	return (TRUE);
 }

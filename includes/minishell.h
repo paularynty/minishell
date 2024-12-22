@@ -21,14 +21,14 @@
 # include "parser.h"
 # include "../libft/libft.h"
 
-//# define DEBUG
+# define DEBUG
 #ifdef DEBUG 
 # define debug_print(...) fprintf(stderr, __VA_ARGS__)
 #else
 # define debug_print(...) ((void)0)
 #endif
 
-//# define CHECK
+# define CHECK
 #ifdef CHECK
 # define check_print(...) printf( __VA_ARGS__)
 #else
@@ -158,6 +158,7 @@ void	signal_reset(void);
 void	signal_init(void);
 
 //utils/cleanup.c
+void	clean_commands(t_command *command);
 void	cleanup_success(t_mini *shell);
 void	cleanup(t_mini *shell);
 

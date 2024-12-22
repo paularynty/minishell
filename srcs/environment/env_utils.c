@@ -127,7 +127,7 @@ char	**clone_env(char **env)
 		if (!clone[i])
 		{
 			ft_free_array(&clone);
-			return (FALSE);
+			return (NULL);
 		}
 		i++;
 	}

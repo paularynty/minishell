@@ -1,33 +1,33 @@
 #include "minishell.h"
-// static void	free_tokens(t_token *tokens) 
-// {
-// 	t_token *temp;
+static void	clean_tokens(t_token *tokens) 
+{
+	t_token *temp;
 	
-// 	while (tokens)
-// 	{
-// 		temp = tokens;
-// 		tokens = tokens->next;
-// 		free(temp->value);
-// 		free(temp);
-// 		temp = NULL;
-//     }
-// }
+	while (tokens)
+	{
+		temp = tokens;
+		tokens = tokens->next;
+		free(temp->value);
+		free(temp);
+		temp = NULL;
+    }
+}
 
-// static void	clean_commands(t_command *command) 
-// {
-// 	t_command	*temp;
+void	clean_commands(t_command *command) 
+{
+	t_command	*temp;
 	
-// 	while (command)
-// 	{
-// 		free_tokens(command->tokens);
-// 		command->tokens = NULL;
-// 		command->next = NULL;
-// 		temp = command;
-// 		command = command->next;
-// 		free(temp);
-// 		temp = NULL;
-//     }
-// }
+	while (command)
+	{
+		clean_tokens(command->tokens);
+		command->tokens = NULL;
+		command->next = NULL;
+		temp = command;
+		command = command->next;
+		free(temp);
+		temp = NULL;
+    }
+}
 
 void	cleanup_success(t_mini *shell)
 {

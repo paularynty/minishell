@@ -38,7 +38,7 @@ int	resolve_fds(t_mini *shell, t_command *command)
 
 	input_fd = -1;
 	output_fd = -1;
-	if (process_redir(shell, command, &input_fd, &output_fd))
+	if (!process_redir(shell, command, &input_fd, &output_fd))
 		return (FALSE);
 	if (input_fd != -1)
 		command->input_fd = input_fd;
@@ -50,24 +50,6 @@ int	resolve_fds(t_mini *shell, t_command *command)
 		command->output_fd = STDOUT_FILENO;
 	return (TRUE);
 }
-
-// int	dup2_close_parent(t_mini *shell, int old_fd, int new_fd)
-// {
-// 	if (old_fd < 0)
-// 	{
-// 		ft_putendl_fd("Invalid file descriptor", 2);
-// 		reset_fds(shell);
-// 		return (1);
-// 	}
-// 	if (dup2(old_fd, new_fd) == -1)
-// 	{
-// 		close(old_fd);
-// 		reset_fds(shell);
-// 		return (1);
-// 	}
-// 	close(old_fd);
-// 	return (0);
-// }
 
 int	dup_input(t_mini *shell, t_command *command, int i)
 {
