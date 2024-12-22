@@ -39,8 +39,11 @@ SRCS			= $(SRCDIR)/main.c \
 				$(SRCDIR)/builtins/unset.c \
 				$(SRCDIR)/environment/env_utils.c \
 				$(SRCDIR)/environment/env.c \
-				$(SRCDIR)/execution/exec_utils.c \
 				$(SRCDIR)/execution/execute.c \
+				$(SRCDIR)/execution/exec_dup_close.c \
+				$(SRCDIR)/execution/exec_path.c \
+				$(SRCDIR)/execution/exec_pipeline.c \
+				$(SRCDIR)/execution/exec_utils.c \
 				$(SRCDIR)/errors/errors.c \
 				$(SRCDIR)/lexer/expansion.c \
 				$(SRCDIR)/lexer/lexer.c \

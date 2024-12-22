@@ -12,9 +12,9 @@ typedef enum e_token_type
 	FILENAME,       // Filename
 	REDIRECT_IN,    // Input redirection ("<")
 	REDIRECT_OUT,   // Output redirection (">")
-	REDIRECT_APPEND, // Append redirection (">>")
-	HEREDOC, // ("<<")
-	DELIMETER // EOF after heredoc
+	REDIRECT_APPEND,// Append redirection (">>")
+	HEREDOC, 		// ("<<")
+	DELIMITER 		// EOF after heredoc
 } t_token_type;
 
 // Token structure
@@ -37,15 +37,15 @@ typedef struct	s_command
 } t_command;
 
 //lexer/expansion.c
-char		*expand_exitcode(t_mini *minish, char *input, int *i);
-char		*expand_input(t_mini *minish, char *input);
-char		*expand_variable(t_mini *minish, char *input, int *i);
-char		*get_variable(t_mini *minish, char *key, int key_len);
+char		*expand_exitcode(t_mini *shell, char *input, int *i);
+char		*expand_input(t_mini *shell, char *input);
+char		*expand_variable(t_mini *shell, char *input, int *i);
+char		*get_variable(t_mini *shell, char *key, int key_len);
 char		*replace_segment(char *input, int start, int end, char *replacement);
 
 //lexer/lexer.c
 int 		valid_input(char *input);
-int 		lexer(t_mini *minish, char *line);
+int 		lexer(t_mini *shell, char *line);
 
 //lexer/valid_input.c
 int			closed_pipes(const char *input);
@@ -66,7 +66,6 @@ void	    print_list(t_command *commands);
 //parser/free_cmd_contents.c
 void		free_commands(t_command *commands);
 void		free_tokens(t_token *tokens);
-char		*ft_strndup(const char *src, size_t n);
 int			quotes_offset(const char *input, char quote);
 
 //parser/create_command.c
@@ -83,9 +82,9 @@ char		**split_cmd_args(char *cmd_str);
 char		*create_quoted_arg(char *str, int *i, int len);
 
 //parser/split_by_pipes.c
-char	**split_by_pipes(const char *input, int *pipes);
+char		**split_by_pipes(const char *input, int *pipes);
 
 //parser/parser.c
-t_command	*tokenizer(const char *input);
+t_command	*tokenizer(t_mini *shell, const char *input);
 
 #endif

@@ -5,7 +5,6 @@
 // without taking into account pipes. Upon occuring, we send correct error message, update add_history and return matching exit code.
 // Add exit_code / error message handling later.
 
-
 int 	valid_input(char *input)
 {
 	if (str_is_whitespace(input))
@@ -22,6 +21,7 @@ int 	valid_input(char *input)
 		return (FALSE);
 	return (TRUE);
 }
+
 char	*add_space(char *input, int end)
 {
 	char	*new_input;
@@ -93,23 +93,23 @@ char	*add_missing_spaces(char *input)
 	return (input);
 }
 
-int 	lexer(t_mini *minish, char *line)
+int 	lexer(t_mini *shell, char *line)
 {
 	if (!valid_input(line))
 		return (FALSE);
-//	printf("\nafted valid_input: %s\n", line);
-	minish->input = expand_input(minish, line);
-	if (!minish->input) // if there was a malloc fail
+//	check_print("\nafted valid_input: %s\n", line);
+	shell->input = expand_input(shell, line);
+	if (!shell->input) // if there was a malloc fail
 	{
-		printf("\nWE DON'T HAVE AN INPUT\n");
+		check_print("\nWE DON'T HAVE AN INPUT\n");
 		return (FALSE);
 	}
-	minish->input = add_missing_spaces(minish->input);
-	if (!minish->input) // if there was a malloc fail
+	shell->input = add_missing_spaces(shell->input);
+	if (!shell->input) // if there was a malloc fail
 	{
-		printf("\nWE DON'T HAVE AN INPUT\n");
+		check_print("\nWE DON'T HAVE AN INPUT\n");
 		return (FALSE);
 	}
-	printf("expanded and spaced input: %s\n", minish->input);
+	check_print("expanded and spaced input: %s\n", shell->input);
 	return (TRUE);
 }

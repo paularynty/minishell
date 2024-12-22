@@ -35,7 +35,7 @@ static char	**allocate_args(char *cmd_str)
 	return (args);
 }
 
-static int	count_arg_lenght(char *cmd_str, int i, bool *quotes)
+static int	count_arg_length(char *cmd_str, int i, bool *quotes)
 {
 	int	len;
 	
@@ -65,20 +65,20 @@ static char	*extract_arg(char *cmd_str, int *i)
 	bool	quotes;
 
 	quotes = false;
-	len = count_arg_lenght(cmd_str, *i, &quotes);
-	// printf("arg len: %d\n", len);
+	len = count_arg_length(cmd_str, *i, &quotes);
+	// check_print("arg len: %d\n", len);
 	if (len <= 0)
 		return (NULL);
 	if (quotes)
 		arg = create_quoted_arg(cmd_str, i, len);
 	else
 		arg = ft_substr(cmd_str, *i, len);
-	// printf("cmd[%d] after ft_substr: %s\n", *i, arg);
+	// check_print("cmd[%d] after ft_substr: %s\n", *i, arg);
 	if (!arg)
 		return (NULL);
 	if (!quotes)
 		*i = *i + len;
-	// printf("index after creating arg: %d\n", *i);
+	// check_print("index after creating arg: %d\n", *i);
 	return (arg);
 }
 
@@ -99,9 +99,9 @@ char	**split_cmd_args(char *cmd_str)
 			i++;
 		if (!cmd_str[i])
 			break ;
-		// printf("before extract_arg\n");
+		// check_print("before extract_arg\n");
 		args[j] = extract_arg(cmd_str, &i);
-		// printf("Argument %d: %s\n", j, args[j]);
+		// check_print("Argument %d: %s\n", j, args[j]);
 		if (!args[j])
 		{
 			free_2d_array(args);

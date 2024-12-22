@@ -1,58 +1,39 @@
 #include "../../includes/minishell.h"
 
-void	close_all(t_mini *shell, t_command *command)
-{
-	if (command->input_fd >= 0)
-		close(command->input_fd);
-	if (command->output_fd >= 0)
-		close(command->output_fd);
-	close(shell->pipe_fd[0]);
-	close(shell->pipe_fd[1]);
-}
-
-// void	open_file(t_mini *shell, t_command *command)
-// {
-// 	if (first_or_second == FIRST)
-// 	{
-// 		if (open(command->input_fd, O_RDONLY) == -1)
-// 			exit_error(shell, command->input_fd);
-// 	}
-// 	if (first_or_second == SECOND)
-// 	{
-// 		if (open(command->output_fd, O_CREAT | O_WRONLY | O_TRUNC, 0644) == -1)
-// 			exit_error(shell, command->output_fd);
-// 	}
-// }
-
-// void	dup_close(t_mini *shell, t_command *command)
-// {
-// 	if (first_or_second == FIRST)
-// 	{
-// 		if (dup2(command->input_fd, STDIN_FILENO) == -1
-// 			|| dup2(shell->pipe_fd[1], STDOUT_FILENO) == -1)
-// 			exit_error(shell, "dup2 failed on first child");
-// 	}
-// 	else if (first_or_second == SECOND)
-// 	{
-// 		if (dup2(shell->pipe_fd[0], STDIN_FILENO) == -1
-// 			|| dup2(command->output_fd, STDOUT_FILENO) == -1)
-// 			exit_error(shell, "dup2 failed on second child");
-// 	}
-// 	close_all(shell, command);
-// }
-
-int	wait_for_children(t_mini *shell, pid_t pid)
+/*	Loops over shell->cmd_count and waits for all child processes 
+	matching pid[i] to die.
+	Upon unsuccessful waitpid() call, errno is assigned to shell->exit_code.*/
+void	wait_for_children(t_mini *shell, pid_t *pids)
 {
 	int		status;
+	int		i;
 
-	if (waitpid(pid, &status, 0) == -1)
+	i = 0;
+	while (i < shell->cmd_count)
 	{
-		shell->exit_code = 1;
-		perror("waitpid failed");
+		if (waitpid(pids[i], &status, 0) == -1)
+		{
+			perror("waitpid failed");
+			shell->exit_code = errno;
+		}
+		if (WIFEXITED(status))
+			shell->exit_code = WEXITSTATUS(status);
+		i++;
 	}
-	else if (WIFEXITED(status))
-		shell->exit_code = WEXITSTATUS(status);
-	return (shell->exit_code);
+}
+
+int count_cmd_args_for_exec(t_token *tokens)
+{
+    int count;
+
+	count = 0;
+    while (tokens)
+    {
+        if (tokens->type == CMD)
+            count++;
+        tokens = tokens->next;
+    }
+    return (count);
 }
 
 bool	is_dir(char *path)

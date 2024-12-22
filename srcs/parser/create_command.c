@@ -19,24 +19,25 @@ static t_command	*init_command(int pipes, int i)
 t_command	*create_command(char *cmd_str, int pipes, int i)
 {
 	t_command	*command;
+	t_token		*temp;
 	char		**args;
 
 	command = init_command(pipes, i);
 	if (!command)
 		return (NULL);
 	args = split_cmd_args(cmd_str);
-	// printf("After split_cmd_args\n");
+	// check_print("After split_cmd_args\n");
 	if (!args || !tokenize_args(command, args))
 	{
 		free_2d_array(args); // check later if in ft_free_array there's a check to avoid double free
 		free(command);
 		return (NULL);
 	}
-    t_token *temp = command->tokens;
+	temp = command->tokens;
     while (temp)
-    {
+	{
         temp = temp->next;
-    }
+	}
 	if (args)
 		free_2d_array(args);
 	command->next  = NULL;

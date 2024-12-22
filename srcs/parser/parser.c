@@ -16,7 +16,7 @@ static void	add_command(t_command **head, t_command *new_cmd)
 	}
 }
 
-t_command	*tokenizer(const char *input)
+t_command	*tokenizer(t_mini *shell, const char *input)
 {
 	char		**cmds;
 	t_command	*commands;
@@ -33,8 +33,8 @@ t_command	*tokenizer(const char *input)
 	while (cmds[i] != NULL)
 	{
 		current_cmd = create_command(cmds[i], pipes, i);
-		// printf("cmd_i %d\n", current_cmd->cmd_i);
-		// printf("cmd_count %d\n", current_cmd->cmd_count);
+		// check_print("cmd_i %d\n", current_cmd->cmd_i);
+		// check_print("cmd_count %d\n", current_cmd->cmd_count);
 		if (!current_cmd)
 		{
 			free_2d_array(cmds);
@@ -42,7 +42,8 @@ t_command	*tokenizer(const char *input)
 			return (NULL);
 		}
 		add_command(&commands, current_cmd); // adds another cmd to the linked list
-		// printf("Command added\n");
+		check_print("Command added\n");
+		shell->cmd_count++;
 		i++;
 	}
 	free_2d_array(cmds);

@@ -8,12 +8,19 @@ int	setup(t_mini *shell, char **env)
 {
 	shell->cmd = NULL;
 	shell->cwd = NULL;
+	shell->cmd_count = 0;
 	shell->input = NULL;
 	shell->heredoc = NULL;
+	shell->pipes = NULL;
+	shell->pids = NULL;
 	shell->exit_flag = FALSE;
 	shell->exit_code = 0;
+	shell->abort = 0;
 	shell->env = clone_env(env);
+	if (!shell->env)
+		return (FALSE);
 	if (!env_update_shlvl(shell))
 		return (FALSE);
+	signal_init();
 	return (TRUE);
 }

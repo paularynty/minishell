@@ -13,7 +13,6 @@ void	add_token(t_token **head, t_token *new_token)
 			temp = temp->next;
 		temp->next = new_token;
 	}
-	
 }
 
 static t_token_type	identify_token_type(char *value)
@@ -50,7 +49,7 @@ static t_token	*create_token(char *arg, char *prev)
 		if (ft_strcmp(prev, "<<") != 0)
 			token->type = FILENAME;
 		else
-			token->type = DELIMETER;
+			token->type = DELIMITER;
 	}
 	else
 		token->type = identify_token_type(token->value);
