@@ -43,6 +43,7 @@ SRCS			= $(SRCDIR)/main.c \
 				$(SRCDIR)/execution/exec_dup_close.c \
 				$(SRCDIR)/execution/exec_path.c \
 				$(SRCDIR)/execution/exec_pipeline.c \
+				$(SRCDIR)/execution/exec_std.c \
 				$(SRCDIR)/execution/exec_utils.c \
 				$(SRCDIR)/errors/errors.c \
 				$(SRCDIR)/lexer/expansion.c \

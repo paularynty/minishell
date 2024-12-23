@@ -84,7 +84,10 @@ int	resolve_output_fd(t_mini *shell, t_command *cmd, int *output_fd)
 		*output_fd = -1;
 	}
 	if (cmd->tokens->type == REDIR_OUT)
+	{
+		debug_print("Opening output file %s\n", cmd->tokens->next->value);
 		*output_fd = open_outfile(shell, cmd->tokens->next->value);
+	}
 	else if (cmd->tokens->type == REDIR_APPEND)
 		*output_fd = open_append_file(shell, cmd->tokens->next->value);
 	if (*output_fd == -2)

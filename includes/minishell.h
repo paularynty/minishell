@@ -15,6 +15,7 @@
 # include <readline/history.h>
 # include <sys/wait.h>
 # include <sys/stat.h>
+# include <termios.h> //for tcgetattr, tcsetattr
 
 //own headers
 # include "defines.h"
@@ -28,7 +29,7 @@
 # define debug_print(...) ((void)0)
 #endif
 
-# define CHECK
+//# define CHECK
 #ifdef CHECK
 # define check_print(...) printf( __VA_ARGS__)
 #else
@@ -58,6 +59,7 @@ typedef struct s_mini
 	char	*input;
 	char	*heredoc;
 	int		**pipes;
+	int		std[2];
 	int		*pids;
 	int		exit_flag; // flag to check if minishell loop should be exited
 	int		exit_code; //exit status to exit the entire program with
@@ -123,7 +125,12 @@ int		dup_input(t_mini *shell, t_command *command, int i);
 int		dup_output(t_mini *shell, t_command *command, int i);
 int		dup2_close(int old_fd, int new_fd);
 
+//execution/exec_std.c
+int		save_std(t_mini *shell);
+int		reset_std(t_mini *shell);
+
 //execution/exec_utils.c
+char	**extract_from_tcmd(t_mini *shell, t_command *command);
 int 	count_cmd_args_for_exec(t_token *tokens);
 int		check_access(t_mini *shell, char *cmd);
 void	wait_for_children(t_mini *shell);
@@ -134,7 +141,9 @@ char	*get_full_path(char **env_path, char *cmd);
 char	*get_cmd_path(t_mini *shell, char *cmd);
 
 //execution/exec_pipeline.c
-int		exec_child(t_mini *shell, t_command *command);
+void	close_all_pipes(t_mini *shell, int i);
+int		fork_and_execute(t_mini *shell, t_command *command, int i);
+int		init_pipeline(t_mini *shell);
 
 //redirect/file_handler.c
 int		open_infile(t_mini *shell, char *infile);

@@ -49,23 +49,8 @@ static void	free_pipes(t_mini *shell, int i)
 	shell->pipes = NULL;
 }
 
-// static void	close_unused_pipes(int pipe_fd[][2], int cmd_count, int index)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (i < cmd_count - 1)
-// 	{
-// 		if (i != index - 1)
-// 			close(pipe_fd[i][0]);
-// 		if (i != index)
-// 			close(pipe_fd[i][1]);
-// 		i++;
-// 	}
-// }
-
 /* Closes all pipes. (Should also set to -1?) */
-static void	close_all_pipes(t_mini *shell, int i)
+void	close_all_pipes(t_mini *shell, int i)
 {
 	if (shell->cmd_count > 1)
 	{
@@ -100,69 +85,13 @@ void	close_unused_fds(t_mini *shell, int i)
 	}
 }
 
-/***********************************************************
- * 
- * 
- * This is Chat GPT inspired, but I think dupping should involve pipe_fds,
- * and also take into account the cmd_count. If cmd_count = 1 and the cmd == builtin, no need to even
- * be in the child process? Also input and output depends on the commands index.
- * 
- * 
- ***********************************************************/
-// void	handle_child_process(t_command *cmd, t_mini *shell, int pipe_fd[][2], int cmd_count)
-// {
-// 	char	*cmd_path;
-
-// 	close_unused_pipes(pipe_fd, cmd_count, cmd->cmd_i);
-// 	//dupping, still unsure of this suggestion:
-// 	if (dup2(cmd->input_fd, STDIN_FILENO) == -1)
-// 		// I'm way too confused at this point, at least close fd's here and also in parent, return correct error and exit process?
-// 	if (dup2(cmd->output_fd, STDOUT_FILENO) == -1)
-// 		// I'm way too confused at this point, at least close fd's here and also in parent, return correct error and exit process?
-// 	// close_all_pipes or close_unused_pipes? CONFUSION STRIKES AGAIN
-// 	// shell->cmd = prep_command(); // it's now static, no time to modify I leave in 5 minutes
-// 	if (!shell->cmd || !(cmd_path = get_cmd_path(shell, shell->cmd[0])))
-// 	{
-// 		// error handlingia tulille
-// 		//exitataan process oikealla return valuella (=exit code)
-// 	}
-// 	execve(cmd_path, shell->cmd, shell->env);
-//     free(cmd_path); // If execve fails, free allocated resources.
-//     error_cmd(shell, shell->cmd[0]);
-//     exit(shell->exit_code);
-// }
-
-// void	execute_pipeline(t_mini *shell, t_command *cmd, int pipe_fd[][2], pid_t *pids)
-// {
-// 	int	i;
-// 	int	error;
-
-// 	i = 0;
-// 	error = 0;
-// 	while (cmd)
-// 	{
-// 		cmd->input_fd = handle_input(cmd, &error);
-// 		cmd->output_fd = handle_output(cmd, &error);
-// 		if (!error)
-// 		{
-// 			setup_fds(cmd, pipe_fd, cmd->cmd_count);
-// 			pids[i] = fork();
-// 			if (pids[i] == 0)
-// 				handle_child_process(cmd, shell, pipe_fd, cmd->cmd_count);
-// 			else if (pids[i] < 0)
-// 				shell->abort = 1;
-// 				// free and close everything and exit;
-// 		}
-// 		else
-// 			// Save correct exit_code to shell struct and proceed to the next cmd.
-// 		cmd = cmd->next;
-// 		i++;
-// 	}
-// }
-
 static void	exec_forked_builtin(t_mini *shell, int is_builtin)
 {
+	// if (!save_std(shell))
+	// 	debug_print("Failed to save std\n");
 	handle_builtin(is_builtin, shell); //rework this to take in account failed builtin exec
+	// if (!reset_std(shell))
+	// 	debug_print("Failed to reset std\n");
 	// cleanup_success(shell);
 	exit(EXIT_SUCCESS);
 }
@@ -170,8 +99,8 @@ static void	exec_forked_builtin(t_mini *shell, int is_builtin)
 /* Executes command in child process. 
 Upon successful execve() call, exits with EXIT_SUCCESS (0). 
 Otherwise cleans everything and exits with predetermined exit code.*/
-static void	exec_forked_cmd(t_mini *shell, t_command *command, int i)
-// static void	exec_forked_cmd(t_mini *shell)
+// static void	exec_forked_cmd(t_mini *shell, t_command *command, int i)
+static void	exec_forked_cmd(t_mini *shell)
 {
 	char	*cmd_path;
 	
@@ -180,10 +109,10 @@ static void	exec_forked_cmd(t_mini *shell, t_command *command, int i)
 		check_access(shell, shell->cmd[0]);
 	check_access(shell, cmd_path);
 	signal_reset();
-	debug_print("Current input_fd: %d\n", command->input_fd);
-	debug_print("Current output_fd: %d\n", command->output_fd);
-	debug_print("Current read pipe fd: %d\n", shell->pipes[i][0]);
-	debug_print("Current write pipe fd: %d\n", shell->pipes[i][1]);
+	// debug_print("Current input_fd: %d\n", command->input_fd);
+	// debug_print("Current output_fd: %d\n", command->output_fd);
+	// debug_print("Current read pipe fd: %d\n", shell->pipes[i][0]);
+	// debug_print("Current write pipe fd: %d\n", shell->pipes[i][1]);
 	if (execve(cmd_path, shell->cmd, shell->env) == -1)
 	{
 		free(cmd_path);
@@ -191,13 +120,13 @@ static void	exec_forked_cmd(t_mini *shell, t_command *command, int i)
 	}
 }
 
-static int	fork_and_execute(t_mini *shell, t_command *command, int i)
+int	fork_and_execute(t_mini *shell, t_command *command, int i)
 {
 	int	is_builtin;
 
 	is_builtin = builtins(shell->cmd[0]);
 	signal_reset();
-	// debug_print("Forking process %d (fd_in: %d, pipe_out: %d)\n", i, fd_in, pipefd[1]);
+	//debug_print("Forking process %d (fd_in: %d, pipe_out: %d)\n", i, command->input_fd, shell->pipes[i][1]);
 	shell->pids[i] = fork();
 	if (shell->pids[i] == -1)
 	{
@@ -217,7 +146,8 @@ static int	fork_and_execute(t_mini *shell, t_command *command, int i)
 		if (builtins(shell->cmd[0])) //check for builtin cmd in pipe
 			exec_forked_builtin(shell, is_builtin);
 		else
-			exec_forked_cmd(shell, command, i);
+			// exec_forked_cmd(shell, command, i);
+			exec_forked_cmd(shell);
 	}
 	return (TRUE);
 }
@@ -240,16 +170,14 @@ int	create_pipes(t_mini *shell)
 	return (TRUE);
 }
 
+/* Allocates memory for 2D pipe array.*/
 static int	allocate_pipes(t_mini *shell)
 {
 	int	i;
 
 	shell->pipes = malloc(sizeof(int *) * (shell->cmd_count - 1));
 	if (!shell->pipes)
-	{
-		shell->abort = 1;
 		return (FALSE);
-	}
 	i = 0;
 	while (i < shell->cmd_count - 1)
 	{
@@ -257,7 +185,6 @@ static int	allocate_pipes(t_mini *shell)
 		if (!shell->pipes[i])
 		{
 			free_pipes(shell, i);
-			shell->abort = 1;
 			return (FALSE);
 		}
 		i++;
@@ -265,49 +192,39 @@ static int	allocate_pipes(t_mini *shell)
 	return (TRUE);
 }
 
-/* Creates and allocates PID array (one PID for each shell->cmd_count).
-Creates pipes, and executes pipeline.*/
-static int	init_pipeline(t_mini *shell)
+/* Creates and allocates PID array (one PID for each shell->cmd_count).*/
+static int	allocate_pids(t_mini *shell)
 {
 	shell->pids = ft_calloc(shell->cmd_count, sizeof(pid_t));
 	if (!shell->pids)
 	{
 		// free and close everything and exit minishell (malloc failure);
-		shell->abort = 1;
 		return (FALSE);
-	}
-	if (shell->cmd_count > 1)
-	{
-		if (!allocate_pipes(shell))
-			return (FALSE);
 	}
 	return (TRUE);
 }
 
-int	exec_child(t_mini *shell, t_command *command)
-{
-	int	i;
 
-	i = 0;
-	if (!init_pipeline(shell))
+/*Calls allocate_pids.
+Calls allocate_pipes() and create_pipes() if cmd_count > 1.
+Returns to exec_child().*/
+int	init_pipeline(t_mini *shell)
+{
+	if (!allocate_pids(shell))
 		return (FALSE);
-	if (!create_pipes(shell))
+	if (shell->cmd_count > 1)
 	{
-		free(shell->pids);
-		close_all_pipes(shell, i); //modify to suit 2d pipe array better
-		// close all open fds, free everything, and determine exit code
-		return (FALSE);
-	}
-	while (i < shell->cmd_count)
-	{
-		if (fork_and_execute(shell, command, i) == -1)
+		if (!allocate_pipes(shell))
 			return (FALSE);
-		signal_child();
-		close_all_pipes(shell, i);
-		i++;
-		command = command->next;
+		if (!create_pipes(shell))
+		{
+			free(shell->pids);
+			// close all open fds, free everything, and determine exit code
+			return (FALSE);
+		}
+		debug_print("cmd count: %d\n", shell->cmd_count);
+		debug_print("pipe read end: %d\n", shell->pipes[0][0]);
+		debug_print("pipe write end: %d\n", shell->pipes[0][1]);
 	}
-	wait_for_children(shell);
-	cleanup_success(shell);
-	return (shell->exit_code);
+	return (TRUE);
 }

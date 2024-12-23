@@ -2,6 +2,17 @@
 
 sig_atomic_t	g_mrworldwide = 0;
 
+static void	setup_terminal(void)
+{
+	struct termios	term;
+
+	if (tcgetattr(STDIN_FILENO, &term) == -1)
+		exit(EXIT_FAILURE);
+	term.c_lflag &= ~ECHOCTL;
+	if (tcsetattr(STDIN_FILENO, TCSANOW, &term) == -1)
+		exit(EXIT_FAILURE);
+}
+
 static void	minishell(t_mini *shell)
 {
 	char		*input;
@@ -43,6 +54,7 @@ int	main(int argc, char **argv, char **env)
 
 	(void)argc;
 	(void)argv;
+	setup_terminal();
 	if (!setup(&shell, env))
 	{
 		ft_putstr_fd("minishell: initialization error", STDERR_FILENO);

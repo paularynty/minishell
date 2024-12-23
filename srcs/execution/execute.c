@@ -1,39 +1,30 @@
 #include "minishell.h"
 
-static char	**prep_command(t_mini *shell, t_command *command)
-{
-	t_token	*token;
-	int		count;
-	int		i;
-
-	if (!command || !command->tokens)
-		return (NULL);
-	count = count_cmd_args_for_exec(command->tokens);
-	shell->cmd = (char **)malloc(sizeof(char *) * (count + 1));
-	if (!shell->cmd)
-		return (NULL);
-	i = 0;
-	token = command->tokens;
-	while (token)
-	{
-		if (token->type == CMD)
-		{
-			shell->cmd[i] = ft_strdup(token->value);
-			if (!shell->cmd[i])
-				ft_free_array(&shell->cmd);
-			i++;
-		}
-		token = token->next;
-		check_print("token loop\n");
-	}
-	shell->cmd[i] = NULL;
-	return (shell->cmd);
-}
-
 static int	exec_parent(t_mini *shell, int is_builtin)
 {
 	handle_builtin(is_builtin, shell);
 	return (TRUE);
+}
+
+static int	exec_child(t_mini *shell, t_command *command)
+{
+	int	i;
+
+	i = 0;
+	if (!init_pipeline(shell))
+		return (FALSE);
+	while (i < shell->cmd_count)
+	{
+		if (fork_and_execute(shell, command, i) == -1)
+			return (FALSE);
+		signal_child();
+		close_all_pipes(shell, i);
+		i++;
+		command = command->next;
+	}
+	wait_for_children(shell);
+	cleanup_success(shell);
+	return (shell->exit_code);
 }
 
 //TO DO: up until a pipe, only the first token can be CMD
@@ -45,7 +36,7 @@ int	execute(t_mini *shell, t_command *command)
 	int		i;
 
 	i = 0;
-	shell->cmd = prep_command(shell, command);
+	shell->cmd = extract_from_tcmd(shell, command);
 	is_builtin = builtins(shell->cmd[0]);
 	if (shell->cmd_count == 1 && is_builtin)
 		exec_parent(shell, is_builtin);

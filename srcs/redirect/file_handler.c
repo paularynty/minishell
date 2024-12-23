@@ -1,14 +1,5 @@
 #include "minishell.h"
 
-void	error_file(t_mini *shell, char *file, char *error_str, int ex)
-{
-	if (file && file[0] != '\0')
-		ft_putstr_fd(file, 2);
-	write(2, ": ", 2);
-	ft_putendl_fd(error_str, 2);
-	shell->exit_code = ex;
-}
-
 // Tries to open input file and prints correct error in case of failure
 int	open_infile(t_mini *shell, char *infile)
 {
@@ -37,7 +28,7 @@ int	open_outfile(t_mini *shell, char *outfile)
 {
 	int	fd_out;
 
-	fd_out = open(outfile, O_DIRECTORY);
+	fd_out = open(outfile, __O_DIRECTORY);
 	if (fd_out != -1)
 	{
 		close(fd_out);
@@ -58,7 +49,8 @@ int	open_outfile(t_mini *shell, char *outfile)
 	return (fd_out);
 }
 
-// Tries to open output append file and prints correct error in case of failure
+/*Attempts to open output append file. 
+Returns fd_out on success, -2 on failure with corresponding error message.*/
 int	open_append_file(t_mini *shell, char *outfile)
 {
 	int	fd_out;
@@ -84,7 +76,7 @@ int	open_append_file(t_mini *shell, char *outfile)
 	return (fd_out);
 }
 
-// Opens heredoc
+/* Opens heredoc. */
 int	open_heredoc(t_mini *shell, char *heredoc_file)
 {
 	int	input_fd;
