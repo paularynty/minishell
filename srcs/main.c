@@ -22,7 +22,8 @@ static void	minishell(t_mini *shell)
 	while (TRUE)
 	{
 		get_prompt(shell, prompt, sizeof(prompt));
-		input = readline(prompt);
+		if (isatty(fileno(stdin)))
+			input = readline(prompt);
 		if (input == NULL)
 			break ;
 		if (*input)

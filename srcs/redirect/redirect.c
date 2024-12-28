@@ -68,7 +68,7 @@ int	resolve_input_fd(t_mini *shell, t_command *cmd, int *input_fd)
 		*input_fd = -1;
 	}
 	if (cmd->tokens->type == REDIR_IN)
-		*input_fd = open_infile(shell, cmd->tokens->value);
+		*input_fd = open_infile(shell, cmd->tokens->next->value);
 	// else if (cmd->tokens->type == HEREDOC)
 	// 	*input_fd = open_heredoc(cmd, cmd->heredoc_name);
 	if (*input_fd == -2)

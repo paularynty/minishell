@@ -30,18 +30,22 @@ static int	exec_child(t_mini *shell, t_command *command)
 //TO DO: up until a pipe, only the first token can be CMD
 //the next ones after that (excl. redires etc.) are ARG
 //so that executor works as it should
-int	execute(t_mini *shell, t_command *command)
+int	execute(t_mini *shell, t_command *commands)
 {
 	int		is_builtin;
 	int		i;
 
 	i = 0;
-	shell->cmd = extract_from_tcmd(shell, command);
-	is_builtin = builtins(shell->cmd[0]);
+	shell->cmd = extract_all_commands(shell, commands);
+	while (i < shell->cmd_count)
+	{
+		is_builtin = builtins(shell->cmd[i][0]);
+		i++;
+	}
 	if (shell->cmd_count == 1 && is_builtin)
 		exec_parent(shell, is_builtin);
 	else
-		exec_child(shell, command);
-	ft_free_array(&shell->cmd);
+		exec_child(shell, commands);
+	ft_free_array(shell->cmd);
 	return (shell->exit_code);
 }

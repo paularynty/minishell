@@ -1,17 +1,18 @@
 #include "minishell.h"
 
 /*Extracts the commands and tokens from t_command into char **array. */
-char	**extract_from_tcmd(t_mini *shell, t_command *command)
+static char	**extract_singular_command(t_command *command)
 {
 	t_token	*token;
+	char	**cmd;
 	int		count;
 	int		i;
 
 	if (!command || !command->tokens)
 		return (NULL);
 	count = count_cmd_args_for_exec(command->tokens);
-	shell->cmd = (char **)malloc(sizeof(char *) * (count + 1));
-	if (!shell->cmd)
+	cmd = (char **)malloc(sizeof(char *) * (count + 1));
+	if (!cmd)
 		return (NULL);
 	i = 0;
 	token = command->tokens;
@@ -19,15 +20,43 @@ char	**extract_from_tcmd(t_mini *shell, t_command *command)
 	{
 		if (token->type == CMD)
 		{
-			shell->cmd[i] = ft_strdup(token->value);
-			if (!shell->cmd[i])
-				ft_free_array(&shell->cmd);
+			cmd[i] = ft_strdup(token->value);
+			if (!cmd[i])
+				ft_free_array(&cmd);
 			i++;
 		}
 		token = token->next;
 	}
-	shell->cmd[i] = NULL;
-	return (shell->cmd);
+	cmd[i] = NULL;
+	return (cmd);
+}
+
+char	***extract_all_commands(t_mini *shell, t_command *commands)
+{
+	t_command	*temp;
+	char		***cmds;
+	int			i;
+
+	cmds = (char ***)malloc(sizeof(char **) * (shell->cmd_count + 1));
+	if (!cmds)
+		return (NULL);
+	temp = commands;
+	i = 0;
+	while (temp)
+	{
+		cmds[i] = extract_singular_command(temp);
+		if (!cmds[i])
+		{
+			while (i > 0)
+				ft_free_array(&cmds[--i]);
+			free(cmds);
+			return (NULL);
+		}
+		i++;
+		temp = temp->next;
+	}
+	cmds[i] = NULL;
+	return (cmds);
 }
 
 /*	Loops over shell->cmd_count and waits for all child processes 

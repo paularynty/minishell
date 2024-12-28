@@ -53,7 +53,7 @@ typedef struct s_env
 typedef struct s_mini
 {
 	char	**env;
-	char	**cmd;
+	char	***cmd; //array of 2D arrays that each hold a command and its arguments
 	int		cmd_count;
 	char	*cwd;
 	char	*input;
@@ -89,7 +89,7 @@ int		builtin_cd(t_mini *shell);
 int		builtin_echo(char **cmd);
 
 //builtins/exit.c
-int		builtin_exit(t_mini *shell);
+int		builtin_exit(t_mini *shell, char **args);
 
 //builtins/export.c
 int		count_array_elements(char **array);
@@ -130,7 +130,8 @@ int		save_std(t_mini *shell);
 int		reset_std(t_mini *shell);
 
 //execution/exec_utils.c
-char	**extract_from_tcmd(t_mini *shell, t_command *command);
+// char	**extract_singular_command(t_mini *shell, t_command *command);
+char	***extract_all_commands(t_mini *shell, t_command *commands);
 int 	count_cmd_args_for_exec(t_token *tokens);
 int		check_access(t_mini *shell, char *cmd);
 void	wait_for_children(t_mini *shell);

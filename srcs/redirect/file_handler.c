@@ -5,6 +5,7 @@ int	open_infile(t_mini *shell, char *infile)
 {
 	int	input_fd;
 
+	debug_print("Opening %s\n", infile);
 	input_fd = open(infile, O_RDONLY);
 	if (input_fd == -1)
 	{

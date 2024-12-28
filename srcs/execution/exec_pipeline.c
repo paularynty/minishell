@@ -100,23 +100,24 @@ static void	exec_forked_builtin(t_mini *shell, int is_builtin)
 Upon successful execve() call, exits with EXIT_SUCCESS (0). 
 Otherwise cleans everything and exits with predetermined exit code.*/
 // static void	exec_forked_cmd(t_mini *shell, t_command *command, int i)
-static void	exec_forked_cmd(t_mini *shell)
+static void	exec_forked_cmd(t_mini *shell, int i)
 {
 	char	*cmd_path;
 	
-	cmd_path = get_cmd_path(shell, shell->cmd[0]);
+	cmd_path = get_cmd_path(shell, shell->cmd[i][0]);
 	if (!cmd_path)
-		check_access(shell, shell->cmd[0]);
+		check_access(shell, shell->cmd[i][0]);
 	check_access(shell, cmd_path);
 	signal_reset();
 	// debug_print("Current input_fd: %d\n", command->input_fd);
 	// debug_print("Current output_fd: %d\n", command->output_fd);
 	// debug_print("Current read pipe fd: %d\n", shell->pipes[i][0]);
 	// debug_print("Current write pipe fd: %d\n", shell->pipes[i][1]);
-	if (execve(cmd_path, shell->cmd, shell->env) == -1)
+	debug_print("Sending to execve: %s\n", shell->cmd[i][0]);
+	if (execve(cmd_path, shell->cmd[i], shell->env) == -1)
 	{
 		free(cmd_path);
-		error_cmd(shell, shell->cmd[0]);
+		error_cmd(shell, shell->cmd[i][0]);
 	}
 }
 
@@ -124,9 +125,8 @@ int	fork_and_execute(t_mini *shell, t_command *command, int i)
 {
 	int	is_builtin;
 
-	is_builtin = builtins(shell->cmd[0]);
+	is_builtin = builtins(shell->cmd[i][0]);
 	signal_reset();
-	//debug_print("Forking process %d (fd_in: %d, pipe_out: %d)\n", i, command->input_fd, shell->pipes[i][1]);
 	shell->pids[i] = fork();
 	if (shell->pids[i] == -1)
 	{
@@ -143,11 +143,11 @@ int	fork_and_execute(t_mini *shell, t_command *command, int i)
 			debug_print("failed to dup input\n");
 		if (!dup_output(shell, command, i))
 			debug_print("failed to dup output\n");
-		if (builtins(shell->cmd[0])) //check for builtin cmd in pipe
+		if (builtins(shell->cmd[i][0])) //check for builtin cmd in pipe
 			exec_forked_builtin(shell, is_builtin);
 		else
 			// exec_forked_cmd(shell, command, i);
-			exec_forked_cmd(shell);
+			exec_forked_cmd(shell, i);
 	}
 	return (TRUE);
 }
@@ -170,7 +170,7 @@ int	create_pipes(t_mini *shell)
 	return (TRUE);
 }
 
-/* Allocates memory for 2D pipe array.*/
+/* Allocates memory for 2D pipe array (int **pipes).*/
 static int	allocate_pipes(t_mini *shell)
 {
 	int	i;

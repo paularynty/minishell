@@ -6,4 +6,4 @@ libft/libft.a
 test.*
 readline.supp
 tester/
-test
+test*
