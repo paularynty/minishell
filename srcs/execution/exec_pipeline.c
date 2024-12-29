@@ -85,11 +85,11 @@ void	close_unused_fds(t_mini *shell, int i)
 	}
 }
 
-static void	exec_forked_builtin(t_mini *shell, int is_builtin)
+static void	exec_forked_builtin(t_mini *shell, t_command *command, int is_builtin)
 {
 	// if (!save_std(shell))
 	// 	debug_print("Failed to save std\n");
-	handle_builtin(is_builtin, shell); //rework this to take in account failed builtin exec
+	handle_builtin(is_builtin, shell, command); //rework this to take in account failed builtin exec
 	// if (!reset_std(shell))
 	// 	debug_print("Failed to reset std\n");
 	// cleanup_success(shell);
@@ -100,54 +100,51 @@ static void	exec_forked_builtin(t_mini *shell, int is_builtin)
 Upon successful execve() call, exits with EXIT_SUCCESS (0). 
 Otherwise cleans everything and exits with predetermined exit code.*/
 // static void	exec_forked_cmd(t_mini *shell, t_command *command, int i)
-static void	exec_forked_cmd(t_mini *shell, int i)
+static void	exec_forked_cmd(t_mini *shell, t_command *command)
 {
 	char	*cmd_path;
 	
-	cmd_path = get_cmd_path(shell, shell->cmd[i][0]);
+	cmd_path = get_cmd_path(shell, command->cmd[0]);
 	if (!cmd_path)
-		check_access(shell, shell->cmd[i][0]);
+		check_access(shell, command->cmd[0]);
 	check_access(shell, cmd_path);
 	signal_reset();
-	// debug_print("Current input_fd: %d\n", command->input_fd);
-	// debug_print("Current output_fd: %d\n", command->output_fd);
-	// debug_print("Current read pipe fd: %d\n", shell->pipes[i][0]);
-	// debug_print("Current write pipe fd: %d\n", shell->pipes[i][1]);
-	debug_print("Sending to execve: %s\n", shell->cmd[i][0]);
-	if (execve(cmd_path, shell->cmd[i], shell->env) == -1)
+	// debug_print("sending to execve: %s\n", command->cmd[0]);
+	if (execve(cmd_path, command->cmd, shell->env) == -1)
 	{
 		free(cmd_path);
-		error_cmd(shell, shell->cmd[i][0]);
+		error_cmd(shell, command->cmd[0]);
 	}
 }
 
-int	fork_and_execute(t_mini *shell, t_command *command, int i)
+int	fork_and_execute(t_mini *shell, t_command *command)
 {
 	int	is_builtin;
 
-	is_builtin = builtins(shell->cmd[i][0]);
+	// debug_print("cmd_i: %d\n", command->cmd_i);
+	is_builtin = builtins(command->cmd[0]);
 	signal_reset();
-	shell->pids[i] = fork();
-	if (shell->pids[i] == -1)
+	shell->pids[command->cmd_i] = fork();
+	if (shell->pids[command->cmd_i] == -1)
 	{
 		perror("fork failed");
 		return (-1);
 	}
-	else if (shell->pids[i] == 0)
+	else if (shell->pids[command->cmd_i] == 0)
 	{
-		debug_print("Child process %d created (PID: %d)\n", i, getpid());
-		close_unused_fds(shell, i);
+		// debug_print("Child process %d created (PID: %d)\n", command->cmd_i, getpid());
+		close_unused_fds(shell, command->cmd_i);
 		if (!resolve_fds(shell, command))
 			debug_print("failed to resolve fds\n");
-		if (!dup_input(shell, command, i))
+		if (!dup_input(shell, command, command->cmd_i))
 			debug_print("failed to dup input\n");
-		if (!dup_output(shell, command, i))
+		if (!dup_output(shell, command, command->cmd_i))
 			debug_print("failed to dup output\n");
-		if (builtins(shell->cmd[i][0])) //check for builtin cmd in pipe
-			exec_forked_builtin(shell, is_builtin);
+		if (builtins(command->cmd[0])) //check for builtin cmd in pipe
+			exec_forked_builtin(shell, command, is_builtin);
 		else
 			// exec_forked_cmd(shell, command, i);
-			exec_forked_cmd(shell, i);
+			exec_forked_cmd(shell, command);
 	}
 	return (TRUE);
 }
@@ -222,9 +219,9 @@ int	init_pipeline(t_mini *shell)
 			// close all open fds, free everything, and determine exit code
 			return (FALSE);
 		}
-		debug_print("cmd count: %d\n", shell->cmd_count);
-		debug_print("pipe read end: %d\n", shell->pipes[0][0]);
-		debug_print("pipe write end: %d\n", shell->pipes[0][1]);
+		// debug_print("cmd count: %d\n", shell->cmd_count);
+		// debug_print("pipe read end: %d\n", shell->pipes[0][0]);
+		// debug_print("pipe write end: %d\n", shell->pipes[0][1]);
 	}
 	return (TRUE);
 }

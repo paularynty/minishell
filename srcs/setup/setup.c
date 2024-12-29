@@ -6,7 +6,6 @@
 //create env pending list, this can be a 2D array;
 int	setup(t_mini *shell, char **env)
 {
-	shell->cmd = NULL;
 	shell->cwd = NULL;
 	shell->cmd_count = 0;
 	shell->input = NULL;

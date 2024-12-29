@@ -5,34 +5,35 @@
 
 typedef struct s_mini t_mini;
 
-// Token types (no need for AND/OR)
+/*Determines token type of each token. */
 typedef enum e_token_type
 {
-	CMD,            // Command name
+	CMD,            // Command and arguments
 	FILENAME,       // Filename
-	REDIR_IN,    // Input redirection ("<")
-	REDIR_OUT,   // Output redirection (">")
-	REDIR_APPEND,// Append redirection (">>")
-	HEREDOC, 		// ("<<")
+	REDIR_IN,    	// Input redirection ("<")
+	REDIR_OUT,   	// Output redirection (">")
+	REDIR_APPEND,	// Append redirection (">>")
+	HEREDOC, 		// Heredoc ("<<")
 	DELIMITER 		// EOF after heredoc
 } t_token_type;
 
-// Token structure
+/*Token structure which holds token type (CMD, REDIR etc.)
+and token value ("echo", "file.txt", etc.).*/
 typedef struct s_token
 {
-	t_token_type	type;  // Type of the token (CMD, ARG, etc.)
-	char			*value;// Token value (e.g., "echo", "file.txt")
+	t_token_type	type;
+	char			*value;
 	struct s_token	*next;
 } t_token;
 
-// Command structure
+/*Command structure.*/
 typedef struct	s_command
 {
-	t_token	*tokens;    // Linked list of tokens for the command
+	t_token	*tokens;    	// Linked list of tokens for the command
+	char	**cmd;      	// 2D array of command and its arguments
 	int		input_fd;       // Input redirection file descriptor
 	int		output_fd;      // Output redirection file descriptor
 	int		cmd_i;
-	int		cmd_count;
 	struct s_command	*next; // Next command (if part of a chain, separated by pipes)
 } t_command;
 
@@ -58,6 +59,7 @@ int 		valid_redirection(const char *input);
 int			backslash(const char *input);
 
 //parser/helper_funcs.c
+int 		count_token_type(t_token *tokens, enum e_token_type type);
 int			char_is_whitespace(char c);
 void		free_2d_array(char **array);
 int			count_pipes(const char *input);
@@ -69,7 +71,7 @@ void		free_tokens(t_token *tokens);
 int			quotes_offset(const char *input, char quote);
 
 //parser/create_command.c
-t_command	*create_command(char *cmd_str, int pipes, int i);
+t_command	*create_command(char *cmd_str, int i);
 
 //parser/create_tokens.c
 void		add_token(t_token **head, t_token *new_token);

@@ -1,5 +1,19 @@
 #include "minishell.h"
 
+int count_token_type(t_token *tokens, enum e_token_type type)
+{
+    int count;
+
+	count = 0;
+    while (tokens)
+    {
+        if (tokens->type == type)
+            count++;
+        tokens = tokens->next;
+    }
+    return (count);
+}
+
 /********************************
  * 
  * This function is only used to print out the contents of the cmd_lists so we can see whether

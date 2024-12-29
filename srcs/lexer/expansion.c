@@ -108,7 +108,7 @@ char	*expand_input(t_mini *shell, char *input)
 	i = 0;
 	while (input[i])
 	{
-		if (input[i] == '$' && input[i + 1] != '$' && !whitespace(input[i + 1]))
+		if (input[i] == '$' && input[i + 1] != '$' && !char_is_whitespace(input[i + 1]))
 		{
 			if (input[i + 1] == '?')
 				input = expand_exitcode(shell, input, &i);
