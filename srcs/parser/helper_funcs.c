@@ -1,5 +1,19 @@
 #include "minishell.h"
 
+int count_token_type(t_token *tokens, enum e_token_type type)
+{
+    int count;
+
+	count = 0;
+    while (tokens)
+    {
+        if (tokens->type == type)
+            count++;
+        tokens = tokens->next;
+    }
+    return (count);
+}
+
 /********************************
  * 
  * This function is only used to print out the contents of the cmd_lists so we can see whether
@@ -14,34 +28,30 @@ void print_list(t_command *commands)
 
     while (current)
     {
-        printf("Command:\n");
+        check_print("Command:\n");
         t_token *token = current->tokens; // Start with the first token
         int i = 0;
-
         if (token)
         {
-            printf("  Tokens:\n");
+            check_print("  Tokens:\n");
             while (token)
             {
-                printf("    [%d]: %s (type: %d)\n", i, token->value, token->type);
+                check_print("    [%d]: %s (type: %d)\n", i, token->value, token->type);
                 token = token->next; // Move to the next token
                 i++;
             }
         }
         else
         {
-            printf("  Tokens: NULL\n");
+			check_print("  Tokens: NULL\n");
         }
-
-        printf("  Input FD: %d\n", current->input_fd);
-        printf("  Output FD: %d\n", current->output_fd);
-
+        check_print("  Input FD: %d\n", current->input_fd);
+        check_print("  Output FD: %d\n", current->output_fd);
         current = current->next; // Move to the next command
         if (current)
-            printf("  ---- Next Command ----\n");
+            check_print("  ---- Next Command ----\n");
     }
 }
-
 
 void	free_2d_array(char **array)
 {
@@ -59,7 +69,6 @@ void	free_2d_array(char **array)
 	array = NULL;
 }
 
-
 /********************************
  * 
  * The insides of the quotes are their own argument, so we count how long this
@@ -70,7 +79,7 @@ int	quotes_offset(const char *input, char quote)
 {
 	int	offset;
 
-	offset = 1; // we already have quotes opened, so we start with 1 instead of 1
+	offset = 1; // we already have quotes opened, so we start with 1 instead of 0
 	while (input[offset] && input[offset] != quote)
 		offset++;
 	offset++;
@@ -103,33 +112,6 @@ int	count_pipes(const char *input)
 			i++;
 	}
 	return (pipes);
-}
-
-/********************************
- * 
- * custom strndup which could be added to libft
- *  The strndup() function is similar to strdup, but copies at most n bytes.  If s is
- *  longer than n, only n bytes are copied, and  a  terminating  null  byte	
- *  ('\0') is added.
- *
- * 
- ******************************/
-char	*ft_strndup(const char *src, size_t n)
-{
-	char	*dup;
-	size_t	i;
-
-	i = 0;
-	dup = (char *)malloc(sizeof(*src) * (n + 1));
-	if (!dup)
-		return (NULL);
-	while (src[i] && i < n)
-	{
-		dup[i] = src[i];
-		i++;
-	}
-	dup[i] = '\0';
-	return (dup);
 }
 
 int	char_is_whitespace(char c)

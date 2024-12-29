@@ -39,8 +39,12 @@ SRCS			= $(SRCDIR)/main.c \
 				$(SRCDIR)/builtins/unset.c \
 				$(SRCDIR)/environment/env_utils.c \
 				$(SRCDIR)/environment/env.c \
-				$(SRCDIR)/execution/exec_utils.c \
 				$(SRCDIR)/execution/execute.c \
+				$(SRCDIR)/execution/exec_dup_close.c \
+				$(SRCDIR)/execution/exec_path.c \
+				$(SRCDIR)/execution/exec_pipeline.c \
+				$(SRCDIR)/execution/exec_std.c \
+				$(SRCDIR)/execution/exec_utils.c \
 				$(SRCDIR)/errors/errors.c \
 				$(SRCDIR)/lexer/expansion.c \
 				$(SRCDIR)/lexer/lexer.c \
@@ -54,6 +58,8 @@ SRCS			= $(SRCDIR)/main.c \
 				$(SRCDIR)/parser/free_cmd_contents.c \
 				$(SRCDIR)/parser/parser.c \
 				$(SRCDIR)/parser/split_by_pipes.c \
+				$(SRCDIR)/redirect/file_handler.c \
+				$(SRCDIR)/redirect/redirect.c \
 				$(SRCDIR)/signals/signals.c \
 				$(SRCDIR)/setup/setup.c \
 				$(SRCDIR)/utils/cleanup.c \

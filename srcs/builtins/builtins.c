@@ -1,24 +1,25 @@
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
-void	handle_builtin(int id, t_mini *shell)
+void	handle_builtin(int id, t_mini *shell, t_command *command)
 {
 	int	code;
 
+	signal_reset();
 	code = 0;
 	if (id == BUILTIN_CD)
-		code = builtin_cd(shell);
+		code = builtin_cd(shell, command);
 	if (id == BUILTIN_ECHO)
-		code = builtin_echo(shell->cmd);
-	if (id == BUILTIN_ENV)
+		code = builtin_echo(command->cmd);
+	else if (id == BUILTIN_ENV)
 		code = builtin_env(shell);
-	if (id == BUILTIN_EXIT)
-		code = builtin_exit(shell);
-	if (id == BUILTIN_EXPORT)
-		code = builtin_export(shell);
-	if (id == BUILTIN_PWD)
+	else if (id == BUILTIN_EXIT)
+		code = builtin_exit(shell, command->cmd);
+	else if (id == BUILTIN_EXPORT)
+		code = builtin_export(shell, command);
+	else if (id == BUILTIN_PWD)
 		code = builtin_pwd(shell);
-	if (id == BUILTIN_UNSET)
-		code = builtin_unset(shell);
+	else if (id == BUILTIN_UNSET)
+		code = builtin_unset(shell, command);
 	shell->exit_code = code;
 }
 

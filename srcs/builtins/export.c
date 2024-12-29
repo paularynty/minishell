@@ -1,4 +1,4 @@
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 //if just export, you add to pending list, which is different from env
 //you can export multiple vars in a single command
@@ -8,11 +8,25 @@
 //when adding new export variable, put it in alphabetical order
 //when calling export [arg], give prompt back if successful
 //and only print export if it's a standalone command
+//need to be able to export multiple variables
 
-// int	valid_export(char *str)
-// {
-	
-// }
+int	valid_export(char *str)
+{
+	if (*str == '\0' || *str == '=' || ft_isdigit(*str))
+		return (FALSE);
+	while (*str && *str != '=')
+	{
+		if (*str == '_')
+		{
+			str++;
+			continue ;
+		}
+		if (!ft_isalnum(*str))
+			return (FALSE);
+		str++;
+	}
+	return (TRUE);
+}
 
 static void	sort_export_table(char **env)
 {
@@ -44,8 +58,8 @@ int	export_variable(t_mini *shell, char *arg)
 {
 	char	*value;
 
-	// if (!valid_export(arg))
-	// 	return (-1);
+	if (!valid_export(arg))
+		return (-1);
 	value = ft_strchr(arg, '=');
 	if (!value)
 	{
@@ -83,7 +97,7 @@ static int	print_export_vars(char **env)
 	return (TRUE);
 }
 
-int	builtin_export(t_mini *shell)
+int	builtin_export(t_mini *shell, t_command *command)
 {
 	char	**temp;
 	int		i;
@@ -93,11 +107,11 @@ int	builtin_export(t_mini *shell)
 	if (!temp)
 		return (-1);
 	sort_export_table(temp);
-	if (!shell->cmd[1])
+	if (!command->cmd[1])
 		return (print_export_vars(temp));
-	while (shell->cmd[i])
+	while (command->cmd[i])
 	{
-		if (!export_variable(shell, shell->cmd[i]))
+		if (!export_variable(shell, command->cmd[i]))
 		{
 			// error_export(shell->cmd[i]);
 			shell->exit_code = 1;

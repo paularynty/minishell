@@ -1,4 +1,4 @@
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 //echo needs to take into account expanding
 
@@ -17,7 +17,12 @@ int	builtin_echo(char **cmd)
 		i++;
 	}
 	while (cmd[i])
-		printf("%s", cmd[i++]);
+	{
+		printf("%s", cmd[i]);
+		if (cmd[i + 1] != NULL)
+			printf(" ");
+		i++;
+	}
 	if (newline)
 		printf("\n");
 	return (0);

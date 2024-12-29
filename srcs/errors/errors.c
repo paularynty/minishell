@@ -1,4 +1,4 @@
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 void	error_builtin(char *builtin, char *str, char *error_str)
 {
@@ -40,4 +40,13 @@ int	error_cmd(t_mini *shell, char *cmd)
 	else
 		shell->exit_code = 127;
 	return (shell->exit_code);
+}
+
+void	error_file(t_mini *shell, char *file, char *error_str, int ex)
+{
+	if (file && file[0] != '\0')
+		ft_putstr_fd(file, 2);
+	write(2, ": ", 2);
+	ft_putendl_fd(error_str, 2);
+	shell->exit_code = ex;
 }

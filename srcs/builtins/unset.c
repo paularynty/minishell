@@ -1,9 +1,11 @@
-#include "../../includes/minishell.h"
+#include "minishell.h"
+
+//TO DO:
+//need to be able to unset multiple variables
 
 //if you create with export something, it goes to env
 //if you say export var XXX, it goes to pending list
 //in unset you need to keep track to remove both from env and pending list
-
 void	env_unset_variable(char **env, char *variable)
 {
 	int		i;
@@ -27,11 +29,11 @@ void	env_unset_variable(char **env, char *variable)
 	}
 }
 
-int	builtin_unset(t_mini *shell)
+int	builtin_unset(t_mini *shell, t_command *command)
 {
-	if (!shell->cmd[1])
+	if (!command->cmd[1])
 		return (0);
 	else
-		env_unset_variable(shell->env, shell->cmd[1]);
+		env_unset_variable(shell->env, command->cmd[1]);
 	return (0);
 }

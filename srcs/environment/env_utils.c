@@ -1,5 +1,4 @@
-#include "../../includes/minishell.h"
-
+#include "minishell.h"
 char	*env_get_variable(char **env, char *key)
 {
 	int		i;
@@ -128,7 +127,7 @@ char	**clone_env(char **env)
 		if (!clone[i])
 		{
 			ft_free_array(&clone);
-			return (FALSE);
+			return (NULL);
 		}
 		i++;
 	}

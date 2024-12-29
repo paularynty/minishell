@@ -15,11 +15,26 @@
 # include <readline/history.h>
 # include <sys/wait.h>
 # include <sys/stat.h>
+# include <termios.h> //for tcgetattr, tcsetattr
 
 //own headers
 # include "defines.h"
 # include "parser.h"
 # include "../libft/libft.h"
+
+# define DEBUG
+#ifdef DEBUG 
+# define debug_print(...) fprintf(stderr, __VA_ARGS__)
+#else
+# define debug_print(...) ((void)0)
+#endif
+
+//# define CHECK
+#ifdef CHECK
+# define check_print(...) printf( __VA_ARGS__)
+#else
+# define check_print(...) ((void)0)
+#endif
 
 //global variable to carry the exit status. mrworldwide for now
 //sig_atomic_t = atomic relative to signal handling
@@ -27,24 +42,19 @@
 //let's decide on that later)
 extern int	g_mrworldwide;
 
-typedef struct s_env
-{
-	char			*key;
-	char			*value;
-	int				flag;
-	struct s_env	*next;
-}	t_env;
-
 typedef struct s_mini
 {
 	char	**env;
-	char	**cmd;
+	int		cmd_count;
 	char	*cwd;
 	char	*input;
 	char	*heredoc;
-	int		pipe_fd[2];
+	int		**pipes;
+	int		std[2];
+	int		*pids;
 	int		exit_flag; // flag to check if minishell loop should be exited
 	int		exit_code; //exit status to exit the entire program with
+	int		abort;
 }	t_mini;
 
 enum e_builtins {
@@ -59,29 +69,29 @@ enum e_builtins {
 };
 
 //builtins/builtins.c
-void	handle_builtin(int id, t_mini *shell);
+void	handle_builtin(int id, t_mini *shell, t_command *command);
 int		builtins(char *line);
 
 //builtins/cd.c
 int		update_pwd(t_mini *shell);
-int		builtin_cd(t_mini *shell);
+int		builtin_cd(t_mini *shell, t_command *command);
 
 //builtins/echo.c
 int		builtin_echo(char **cmd);
 
 //builtins/exit.c
-int		builtin_exit(t_mini *shell);
+int		builtin_exit(t_mini *shell, char **args);
 
 //builtins/export.c
 int		count_array_elements(char **array);
-int		builtin_export(t_mini *shell);
+int		builtin_export(t_mini *shell, t_command *command);
 
 //builtins/pwd.c
 int		builtin_pwd(t_mini *shell);
 
 //builtins/unset.c
 void	env_unset_variable(char **env, char *variable);
-int		builtin_unset(t_mini *shell);
+int		builtin_unset(t_mini *shell, t_command *command);
 
 //environment/create_env.c
 char	*env_get_variable(char **env, char *key);
@@ -93,15 +103,50 @@ char	**clone_env(char **env);
 int		builtin_env(t_mini *shell);
 
 //errors/errors.c
+void	error_file(t_mini *shell, char *file, char *error_str, int ex);
 void	error_builtin(char *builtin, char *str, char *error_str);
 int		error_cmd(t_mini *shell, char *cmd);
 
 //execution/execute.c
-void	execute(t_mini *shell, t_command *commands);
+int		execute(t_mini *shell, t_command *command);
+
+//execution/exec_dup_close.c
+int		resolve_fds(t_mini *shell, t_command *command);
+int		dup_input(t_mini *shell, t_command *command, int i);
+int		dup_output(t_mini *shell, t_command *command, int i);
+int		dup2_close(int old_fd, int new_fd);
+
+//execution/exec_std.c
+int		save_std(t_mini *shell);
+int		reset_std(t_mini *shell);
 
 //execution/exec_utils.c
+// char	**extract_singular_command(t_mini *shell, t_command *command);
+// char	***extract_all_commands(t_mini *shell, t_command *commands);
+// int 	count_cmd_args_for_exec(t_token *tokens); //put as static func in parser
 int		check_access(t_mini *shell, char *cmd);
-int		wait_for_children(t_mini *shell, pid_t pid);
+void	wait_for_children(t_mini *shell);
+
+//execution/exec_path.c
+char	**get_env_path(char **env);
+char	*get_full_path(char **env_path, char *cmd);
+char	*get_cmd_path(t_mini *shell, char *cmd);
+
+//execution/exec_pipeline.c
+void	close_all_pipes(t_mini *shell, int i);
+int		fork_and_execute(t_mini *shell, t_command *command);
+int		init_pipeline(t_mini *shell);
+
+//redirect/file_handler.c
+int		open_infile(t_mini *shell, char *infile);
+int		open_outfile(t_mini *shell, char *outfile);
+int		open_append_file(t_mini *shell, char *outfile);
+int		open_heredoc(t_mini *shell, char *heredoc_file);
+
+//redirect/redirect.c
+int		process_redir(t_mini *shell, t_command *cmd, int *input_fd, int *output_fd);
+int		resolve_input_fd(t_mini *shell, t_command *command, int *input_fd);
+int		resolve_output_fd(t_mini *shell, t_command *command, int *output_fd);
 
 //setup/setup.c
 int		setup(t_mini *shell, char **env);
@@ -109,9 +154,13 @@ int		setup(t_mini *shell, char **env);
 //signals/signals.cvoid	signal_heredoc(int signal)
 void	signal_heredoc(int signal);
 void	signal_ctrl_c(int signal);
-void	init_signals(void);
+void	signal_child(void);
+void	signal_reset(void);
+void	signal_init(void);
 
 //utils/cleanup.c
+void	clean_commands(t_command *command);
+void	cleanup_success(t_mini *shell);
 void	cleanup(t_mini *shell);
 
 //utils/prompt.c

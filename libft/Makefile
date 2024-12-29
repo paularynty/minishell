@@ -6,7 +6,7 @@
 #    By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/17 18:26:18 by prynty            #+#    #+#              #
-#    Updated: 2024/11/09 19:20:14 by prynty           ###   ########.fr        #
+#    Updated: 2024/12/20 16:55:18 by prynty           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -87,6 +87,7 @@ SRCS		= ft_atoi.c \
 		  ft_strlen.c \
 		  ft_strmapi.c \
 		  ft_strncmp.c \
+		  ft_strndup.c \
 		  ft_strnstr.c \
 		  ft_strrchr.c \
 		  ft_strtrim.c \

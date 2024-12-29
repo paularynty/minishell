@@ -7,7 +7,7 @@
 # define FALSE 0
 
 # define CD "cd"
-# define ECHO "echo"
+# define B_ECHO "echo"
 # define ENV "env"
 # define EXIT "exit"
 # define EXPORT "export"
