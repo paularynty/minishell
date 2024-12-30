@@ -8,6 +8,20 @@
  ******************************/
 #include <stdio.h>
 
+void	print_2d_arr(char **arr)
+{
+	int	i;
+	
+	i = 0;
+	if (!arr || !arr[i])
+		return ;
+	while (arr[i])
+	{
+		printf("%s\n", arr[i]);
+		i++;
+	}
+}
+
 void print_list(t_command *commands)
 {
     t_command *current = commands;

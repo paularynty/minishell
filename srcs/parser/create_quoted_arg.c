@@ -10,8 +10,11 @@ char	*create_quoted_arg(char *str, int *i, int len)
 	arg = (char *)malloc(sizeof(char) * len + 1);
 	if (!arg)
 		return (NULL);
+	while (str[*i] && char_is_whitespace(str[*i]))
+		(*i)++;
 	while (str[*i] && !char_is_whitespace(str[*i]))
 	{
+		printf("quoted_str: %s pointer: %c\n", str, str[*i]);
 		if (str[*i] == '"' || str[*i] == '\'')
 		{
 			j = *i;
@@ -21,7 +24,7 @@ char	*create_quoted_arg(char *str, int *i, int len)
 		}
 		else
 			arg[k++] = str[(*i)++];
-		(*i)++;
+		printf("copied str: %s\n", arg);
 	}
 	arg[k] = '\0';
 	return (arg);

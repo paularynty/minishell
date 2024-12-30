@@ -62,6 +62,7 @@ int			char_is_whitespace(char c);
 void		free_2d_array(char **array);
 int			count_pipes(const char *input);
 void	    print_list(t_command *commands);
+void		print_2d_arr(char **arr);
 
 //parser/free_cmd_contents.c
 void		free_commands(t_command *commands);

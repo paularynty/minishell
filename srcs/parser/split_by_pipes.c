@@ -8,7 +8,10 @@ static int	process_input(const char *input, char **cmd, int *j, int *start)
 	while (input && input[i])
 	{
 		if (input[i] == '\'' || input[i] == '"')
+		{
 			i += quotes_offset(input + i, input[i]);
+//			printf("i after quotes_offset: %d\n", i);
+		}
 		else if (input[i] == '|')
 		{
 			if (*start >= i)
@@ -56,12 +59,16 @@ char	**split_by_pipes(const char *input, int *pipes)
 	start = 0;
 	end = process_input(input, cmd, &j, &start);
 	// printf("After process input\n");
-	if (!end || (start < end && !(cmd[j++] = ft_strndup(input + start, end - start))))
+	if (start < end)
 	{
-		while (j > 0)
-			free(cmd[--j]);
-		free(cmd);
-		return (NULL);
+		cmd[j] = ft_strndup(input + start, end - start);
+		if (!cmd[j])
+		{
+			free_2d_array(cmd);
+			return (NULL);
+		}
+//		printf("cmd[%d]: %s\n", j, cmd[j]);
+		j++;
 	}
 	cmd[j] = NULL;
 	return (cmd);

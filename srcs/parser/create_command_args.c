@@ -42,18 +42,21 @@ static int	count_arg_lenght(char *cmd_str, int i, bool *quotes)
 	len = 0;
 	while (cmd_str[i] && char_is_whitespace(cmd_str[i]))
 		i++;
-	while (cmd_str[i])
+	while (cmd_str[i] && !char_is_whitespace(cmd_str[i]))
 	{
 		if (cmd_str[i] == '"' || cmd_str[i] == '\'')
 		{
 			len += quotes_offset(cmd_str + i, cmd_str[i]) - 2;
 			*quotes = true;
-			return (len);
+			i = len + 3;
+//			printf("len after quotes_offset: %d\n", len);
+//			printf("i after quotes_offset: %d\n", i);
 		}
-		if (cmd_str[i] == '"' || cmd_str[i] == '\'' || char_is_whitespace(cmd_str[i]))
-			break ;
+		else
+			len++;
 		i++;
-		len++;
+//		printf("len: %d\n", len);
+//		printf("i: %d\n", i);
 	}
 	return (len);
 }
@@ -66,7 +69,7 @@ static char	*extract_arg(char *cmd_str, int *i)
 
 	quotes = false;
 	len = count_arg_lenght(cmd_str, *i, &quotes);
-	// printf("arg len: %d\n", len);
+	printf("arg len: %d\n", len);
 	if (len <= 0)
 		return (NULL);
 	if (quotes)

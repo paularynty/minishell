@@ -30,6 +30,8 @@ t_command	*tokenizer(const char *input)
 	cmds = split_by_pipes(input, &pipes);
 	if (!cmds)
 		return (NULL);
+	// printf("After split_by_pipes\n");
+	// print_2d_arr(cmds);
 	while (cmds[i] != NULL)
 	{
 		current_cmd = create_command(cmds[i], pipes, i);
