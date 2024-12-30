@@ -32,11 +32,6 @@ t_command	*create_command(char *cmd_str, int pipes, int i)
 		free(command);
 		return (NULL);
 	}
-    t_token *temp = command->tokens;
-    while (temp)
-    {
-        temp = temp->next;
-    }
 	if (args)
 		free_2d_array(args);
 	command->next  = NULL;

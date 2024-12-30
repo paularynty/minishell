@@ -15,16 +15,18 @@ void print_list(t_command *commands)
     while (current)
     {
         printf("Command:\n");
-        t_token *token = current->tokens; // Start with the first token
-        int i = 0;
-
-        if (token)
+        if (current->tokens)
         {
             printf("  Tokens:\n");
+            t_token *token = current->tokens;
+            int i = 0;
             while (token)
             {
-                printf("    [%d]: %s (type: %d)\n", i, token->value, token->type);
-                token = token->next; // Move to the next token
+                if (token->value) // Check value before accessing
+                    printf("    [%d]: %s (type: %d)\n", i, token->value, token->type);
+                else
+                    printf("    [%d]: (NULL token value)\n", i);
+                token = token->next;
                 i++;
             }
         }
@@ -36,11 +38,12 @@ void print_list(t_command *commands)
         printf("  Input FD: %d\n", current->input_fd);
         printf("  Output FD: %d\n", current->output_fd);
 
-        current = current->next; // Move to the next command
-        if (current)
+        if (current->next)
             printf("  ---- Next Command ----\n");
+        current = current->next;
     }
 }
+
 
 
 void	free_2d_array(char **array)
