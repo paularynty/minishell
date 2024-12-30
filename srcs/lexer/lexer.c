@@ -95,15 +95,18 @@ char	*add_missing_spaces(char *input)
 
 int 	lexer(t_mini *shell, char *line)
 {
-	if (!valid_input(line))
-		return (FALSE);
-//	check_print("\nafted valid_input: %s\n", line);
 	shell->input = expand_input(shell, line);
 	if (!shell->input) // if there was a malloc fail
 	{
 		check_print("\nWE DON'T HAVE AN INPUT\n");
 		return (FALSE);
 	}
+	if (!valid_input(shell->input))
+	{
+		free(shell->input);
+		return (FALSE);
+	}
+	check_print("\nafted valid_input: %s\n", line);
 	shell->input = add_missing_spaces(shell->input);
 	if (!shell->input) // if there was a malloc fail
 	{

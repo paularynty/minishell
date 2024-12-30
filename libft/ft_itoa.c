@@ -3,55 +3,78 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: sniemela <sniemela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/24 15:39:24 by prynty            #+#    #+#             */
-/*   Updated: 2024/08/24 18:13:40 by prynty           ###   ########.fr       */
+/*   Created: 2024/04/18 16:32:13 by sniemela          #+#    #+#             */
+/*   Updated: 2024/08/06 09:52:30 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static size_t	get_len(int n)
+static char	*ft_put_nbr(int nb, char *str, int *i)
 {
-	size_t	len;
-
-	len = 0;
-	if (n == 0)
-		return (1);
-	while (n)
+	if (nb < 10)
 	{
-		n /= 10;
+		str[*i] = nb + '0';
+		(*i)++;
+	}
+	if (nb > 9)
+	{
+		ft_put_nbr(nb / 10, str, i);
+		ft_put_nbr(nb % 10, str, i);
+	}
+	return (str);
+}
+
+static char	*allocatememory(int len)
+{
+	char	*str;
+
+	str = (char *)malloc(sizeof(char) * (len + 1));
+	if (!str)
+		return (NULL);
+	return (str);
+}
+
+static int	countlength(int nbr)
+{
+	int	len;
+
+	len = 1;
+	if (nbr < 0)
+		len = 2;
+	while (nbr > 9 || nbr < -9)
+	{
 		len++;
+		nbr = nbr / 10;
 	}
 	return (len);
 }
 
-char	*ft_itoa(int n)
+char	*ft_itoa(int nbr)
 {
+	int		len;
 	char	*str;
-	size_t	len;
-	long	nbr;
+	int		i;
 
-	nbr = n;
-	len = get_len(n);
-	str = (char *)malloc(sizeof(char) * (len + 1));
+	i = 0;
+	len = countlength(nbr);
+	str = allocatememory(len);
 	if (!str)
 		return (NULL);
-	if (nbr < 0)
-		nbr *= -1;
-	if (n == 0)
+	if (nbr == -2147483648)
 	{
-		str[0] = '0';
+		ft_strlcpy(str, "-2147483648", len + 1);
 		return (str);
 	}
-	str[len] = '\0';
-	while (len--)
+	if (nbr < 0)
 	{
-		str[len] = nbr % 10 + '0';
-		nbr /= 10;
+		str[i] = '-';
+		nbr = nbr * (-1);
+		i++;
 	}
-	if (n < 0)
-		str[0] = '-';
+	ft_put_nbr(nbr, str, &i);
+	str[i] = '\0';
 	return (str);
 }
