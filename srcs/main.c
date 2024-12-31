@@ -36,13 +36,13 @@ static void	minishell(t_mini *shell)
 				free(input);
 				continue ;
 			}
-			print_list(commands);
 			check_print("Before execution\n");
 			execute(shell, commands);
 			if (shell->exit_flag || shell->abort)
 				break ;
 		}
-		// free(input);
+		if (input && *input)
+			free(input);
 		shell->cmd_count = 0; //resetting here as otherwise they will increment infinitely
 		input = NULL;
 	}

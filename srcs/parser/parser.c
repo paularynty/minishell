@@ -44,7 +44,7 @@ t_command	*tokenizer(t_mini *shell, const char *input)
 			return (NULL);
 		}
 		add_command(&commands, current_cmd);
-		check_print("Command added\n");
+//		check_print("Command added\n");
 		shell->cmd_count++;
 		i++;
 	}

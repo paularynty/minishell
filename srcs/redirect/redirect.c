@@ -60,63 +60,63 @@ static void	close_fd_if_needed(int fd)
 		close(fd);
 }
 
-int	resolve_input_fd(t_mini *shell, t_command *cmd, int *input_fd)
+int	resolve_input_fd(t_mini *shell, t_command *cmd, t_token *token)
 {
-	if (*input_fd != -1)
+	check_print("Entering resolve_input_fd: token type = %d\n", token->type);
+	if (cmd->input_fd != -1) // Are there cases like this?
 	{
-		close(*input_fd);
-		*input_fd = -1;
+		close(cmd->input_fd);
+		cmd->input_fd = -1;
 	}
-	if (cmd->tokens->type == REDIR_IN)
-		*input_fd = open_infile(shell, cmd->tokens->next->value);
+	if (token->type == REDIR_IN)
+		cmd->input_fd = open_infile(shell, token->next->value);
 	// else if (cmd->tokens->type == HEREDOC)
 	// 	*input_fd = open_heredoc(cmd, cmd->heredoc_name);
-	if (*input_fd == -2)
+	if (cmd->input_fd == -2)
 		return (FALSE);
 	return (TRUE);
 }
 
-int	resolve_output_fd(t_mini *shell, t_command *cmd, int *output_fd)
+int	resolve_output_fd(t_mini *shell, t_command *cmd, t_token *token)
 {
-	if (*output_fd != -1)
+	check_print("Entering resolve_output_fd: token type = %d\n", token->type);
+	if (cmd->output_fd != -1)
 	{
-		close(*output_fd);
-		*output_fd = -1;
+		close(cmd->output_fd);
+		cmd->output_fd = -1;
 	}
-	if (cmd->tokens->type == REDIR_OUT)
+	if (token->type == REDIR_OUT)
 	{
-		debug_print("Opening output file %s\n", cmd->tokens->next->value);
-		*output_fd = open_outfile(shell, cmd->tokens->next->value);
+		debug_print("Opening output file %s\n", token->next->value);
+		cmd->output_fd = open_outfile(shell, token->next->value);
 	}
-	else if (cmd->tokens->type == REDIR_APPEND)
-		*output_fd = open_append_file(shell, cmd->tokens->next->value);
-	if (*output_fd == -2)
+	else if (token->type == REDIR_APPEND)
+		cmd->output_fd = open_append_file(shell, token->next->value);
+	if (cmd->output_fd == -2)
 		return (FALSE);
 	return (TRUE);
 }
 
-int	process_redir(t_mini *shell, t_command *cmd, 
-	int *input_fd, int *output_fd)
+int	process_redir(t_mini *shell, t_command *cmd)
 {
 	t_token	*token;
 
 	token = cmd->tokens;
 	while (token)
 	{
-		if (cmd->tokens->type == REDIR_IN || cmd->tokens->type == HEREDOC)
+		if (token->type == REDIR_IN || token->type == HEREDOC)
 		{
-			if (!resolve_input_fd(shell, cmd, input_fd))
+			if (!resolve_input_fd(shell, cmd, token))
 			{
-				close_fd_if_needed(*output_fd);
+				close_fd_if_needed(cmd->output_fd);
 				return (FALSE);
 			}
 		}
-		else if (cmd->tokens->type == REDIR_OUT 
-			|| cmd->tokens->type == REDIR_APPEND)
+		else if (token->type == REDIR_OUT || token->type == REDIR_APPEND)
 		{
-			if (!resolve_output_fd(shell, cmd, output_fd))
+			if (!resolve_output_fd(shell, cmd, token))
 			{
-				close_fd_if_needed(*input_fd);
+				close_fd_if_needed(cmd->input_fd);
 				return (FALSE);
 			}
 		}
@@ -124,4 +124,3 @@ int	process_redir(t_mini *shell, t_command *cmd,
 	}
 	return (TRUE);
 }
-

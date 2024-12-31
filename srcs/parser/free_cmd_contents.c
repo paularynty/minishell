@@ -24,4 +24,5 @@ void	free_commands(t_command *commands)
 		free(commands);
 		commands = temp;
 	}
+	// need to add close_fd's in here aswell?
 }

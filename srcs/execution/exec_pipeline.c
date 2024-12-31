@@ -136,6 +136,9 @@ int	fork_and_execute(t_mini *shell, t_command *command)
 		close_unused_fds(shell, command->cmd_i);
 		if (!resolve_fds(shell, command))
 			debug_print("failed to resolve fds\n");
+		check_print("After resolving fd's\n");
+		check_print("Command nro %d's input_fd: %d\n", command->cmd_i, command->input_fd);
+		check_print("Command nro %d's output_fd: %d\n", command->cmd_i, command->output_fd);
 		if (!dup_input(shell, command, command->cmd_i))
 			debug_print("failed to dup input\n");
 		if (!dup_output(shell, command, command->cmd_i))

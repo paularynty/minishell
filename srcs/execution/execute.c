@@ -42,7 +42,7 @@ int	execute(t_mini *shell, t_command *command)
 	if (shell->cmd_count == 1 && is_builtin)
 		exec_parent(shell, command, is_builtin);
 	else
-		exec_child(shell, command);
+		exec_child(shell, command); // what if it fails?
 	// Free the cmd arrays in each command node (will move this to its own function later)
 	curr = command;
 	while (curr)

@@ -49,21 +49,21 @@ static int	count_arg_length(char *cmd_str, int i, bool *quotes)
 			len += quotes_offset(cmd_str + i, cmd_str[i]) - 2;
 			*quotes = true;
 			i += quotes_offset(cmd_str + i, cmd_str[i]);
-			check_print("len after quotes_offset: %d\n", len);
-			check_print("i after quotes_offset: %d\n", i);
-			check_print("cmd_str pointer after quotes_offset: %s\n", cmd_str + i);
+			// check_print("len after quotes_offset: %d\n", len);
+			// check_print("i after quotes_offset: %d\n", i);
+			// check_print("cmd_str pointer after quotes_offset: %s\n", cmd_str + i);
 		}
 		else
 		{
 			len++;
 			i++;
 		}
-		check_print("len: %d\n", len);
-		check_print("i: %d\n", i);
-		check_print("cmd_str pointer: %s\n", cmd_str + i);
+		// check_print("len: %d\n", len);
+		// check_print("i: %d\n", i);
+		// check_print("cmd_str pointer: %s\n", cmd_str + i);
 	}
-	check_print("len: %d\n", len);
-	check_print("i: %d\n", i);
+	// check_print("len: %d\n", len);
+	// check_print("i: %d\n", i);
 	return (len);
 }
 

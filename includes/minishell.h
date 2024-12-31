@@ -29,7 +29,7 @@
 # define debug_print(...) ((void)0)
 #endif
 
-//# define CHECK
+# define CHECK
 #ifdef CHECK
 # define check_print(...) printf( __VA_ARGS__)
 #else
@@ -144,9 +144,9 @@ int		open_append_file(t_mini *shell, char *outfile);
 int		open_heredoc(t_mini *shell, char *heredoc_file);
 
 //redirect/redirect.c
-int		process_redir(t_mini *shell, t_command *cmd, int *input_fd, int *output_fd);
-int		resolve_input_fd(t_mini *shell, t_command *command, int *input_fd);
-int		resolve_output_fd(t_mini *shell, t_command *command, int *output_fd);
+int		process_redir(t_mini *shell, t_command *cmd);
+int		resolve_input_fd(t_mini *shell, t_command *command, t_token *token);
+int		resolve_output_fd(t_mini *shell, t_command *command, t_token *token);
 
 //setup/setup.c
 int		setup(t_mini *shell, char **env);
