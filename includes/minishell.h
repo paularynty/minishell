@@ -22,14 +22,14 @@
 # include "parser.h"
 # include "../libft/libft.h"
 
-# define DEBUG
+//# define DEBUG
 #ifdef DEBUG 
 # define debug_print(...) fprintf(stderr, __VA_ARGS__)
 #else
 # define debug_print(...) ((void)0)
 #endif
 
-# define CHECK
+//# define CHECK
 #ifdef CHECK
 # define check_print(...) printf( __VA_ARGS__)
 #else
@@ -141,7 +141,7 @@ int		init_pipeline(t_mini *shell);
 int		open_infile(t_mini *shell, char *infile);
 int		open_outfile(t_mini *shell, char *outfile);
 int		open_append_file(t_mini *shell, char *outfile);
-int		open_heredoc(t_mini *shell, char *heredoc_file);
+int		handle_heredoc(char *delimiter);
 
 //redirect/redirect.c
 int		process_redir(t_mini *shell, t_command *cmd);

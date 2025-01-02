@@ -32,12 +32,10 @@ static void	minishell(t_mini *shell)
 			if (lexer(shell, input))
 				commands = tokenizer(shell, shell->input);
 			else
-			{
-				free(input);
 				continue ;
-			}
-			check_print("Before execution\n");
+			// check_print("Before execution\n");
 			execute(shell, commands);
+			free_commands(commands); // I think freeing command list should be right after executing.
 			if (shell->exit_flag || shell->abort)
 				break ;
 		}
@@ -46,7 +44,7 @@ static void	minishell(t_mini *shell)
 		shell->cmd_count = 0; //resetting here as otherwise they will increment infinitely
 		input = NULL;
 	}
-	clean_commands(commands);
+	//clean_commands(commands);
 }
 
 int	main(int argc, char **argv, char **env)

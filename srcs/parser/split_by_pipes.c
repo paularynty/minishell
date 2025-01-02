@@ -31,7 +31,6 @@ static char	**allocate_cmd_array(int pipes)
 	int	cmd_count;
 	char	**cmd;
 
-	// printf("pipes: %d\n", pipes);
 	cmd_count = pipes + 1;
 	cmd = (char **)malloc(sizeof(char *)*(cmd_count + 1));
 	if (!cmd)
@@ -39,23 +38,21 @@ static char	**allocate_cmd_array(int pipes)
 	return (cmd);
 }
 
-char	**split_by_pipes(const char *input, int *pipes)
+char	**split_by_pipes(const char *input)
 {
 	char **cmd;
 	int	j;
 	int	start;
 	int	end;
+	int	pipes;
 
-	// printf("input: %s\n", input);
-	*pipes = count_pipes(input);
-	cmd = allocate_cmd_array(*pipes);
-	// printf("After allocate_cmd_array\n");
+	pipes = count_pipes(input);
+	cmd = allocate_cmd_array(pipes);
 	if (!cmd)
 		return (NULL);
 	j = 0;
 	start = 0;
 	end = process_input(input, cmd, &j, &start);
-	// printf("After process input\n");
 	if (start < end)
 	{
 		cmd[j] = ft_strndup(input + start, end - start);

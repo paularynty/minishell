@@ -62,7 +62,7 @@ static void	close_fd_if_needed(int fd)
 
 int	resolve_input_fd(t_mini *shell, t_command *cmd, t_token *token)
 {
-	check_print("Entering resolve_input_fd: token type = %d\n", token->type);
+//	check_print("Entering resolve_input_fd: token type = %d\n", token->type);
 	if (cmd->input_fd != -1) // Are there cases like this?
 	{
 		close(cmd->input_fd);
@@ -70,8 +70,8 @@ int	resolve_input_fd(t_mini *shell, t_command *cmd, t_token *token)
 	}
 	if (token->type == REDIR_IN)
 		cmd->input_fd = open_infile(shell, token->next->value);
-	// else if (cmd->tokens->type == HEREDOC)
-	// 	*input_fd = open_heredoc(cmd, cmd->heredoc_name);
+	else if (token->type == HEREDOC)
+		cmd->input_fd = handle_heredoc(token->next->value);
 	if (cmd->input_fd == -2)
 		return (FALSE);
 	return (TRUE);
@@ -79,7 +79,7 @@ int	resolve_input_fd(t_mini *shell, t_command *cmd, t_token *token)
 
 int	resolve_output_fd(t_mini *shell, t_command *cmd, t_token *token)
 {
-	check_print("Entering resolve_output_fd: token type = %d\n", token->type);
+//	check_print("Entering resolve_output_fd: token type = %d\n", token->type);
 	if (cmd->output_fd != -1)
 	{
 		close(cmd->output_fd);

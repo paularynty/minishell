@@ -66,6 +66,18 @@ int valid_redirection(const char *input)
 	return (TRUE);
 }
 
+void	invalid_pipes_message(int pipes)
+{
+	if (pipes >= 2 && pipes <= 3)
+	{
+		ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
+	}
+	else if (pipes > 3)
+	{
+		ft_putstr_fd("minishell: syntax error near unexpected token `||'\n", 2);
+	}	
+}
+
 int	valid_pipes(const char *input)
 {
 	int		i;
@@ -82,15 +94,10 @@ int	valid_pipes(const char *input)
 			pipes++;
 			i++;
 		}
-		if (pipes >= 2 && pipes <= 3)
+		if (pipes >= 2)
 		{
-			ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
+			invalid_pipes_message(pipes);
 			return (FALSE);
-		}
-		else if (pipes > 3)
-		{
-			ft_putstr_fd("minishell: syntax error near unexpected token `||'\n", 2);
-			return (FALSE);	
 		}
 		i++;
 	}

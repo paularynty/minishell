@@ -1,4 +1,5 @@
 #include "minishell.h"
+// NEEDS TO BE EDITED OR SPLIT INTO TWO FUNCTIONS
 
 char	*create_quoted_arg(char *str, int *i, int len)
 {

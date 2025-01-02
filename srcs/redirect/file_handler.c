@@ -77,24 +77,52 @@ int	open_append_file(t_mini *shell, char *outfile)
 	return (fd_out);
 }
 
-/* Opens heredoc. */
-int	open_heredoc(t_mini *shell, char *heredoc_file)
+void	heredoc_eof(int	line, char *delimiter)
 {
-	int	input_fd;
+	char	*line_str;
 
-	input_fd = open(heredoc_file, O_RDONLY);
-	if (input_fd == -1)
+	line_str = ft_itoa(line);
+	// if (!line_str)
+	//	what do we do ?? 
+	ft_putstr_fd("warning: here-document at line ", STDERR_FILENO);
+	ft_putstr_fd(line_str, STDERR_FILENO);
+	ft_putstr_fd(" delimited by end-of-file (wanted `", STDERR_FILENO);
+	ft_putstr_fd(delimiter, STDERR_FILENO);
+	ft_putstr_fd("')\n", STDERR_FILENO);
+	free(line_str);
+}
+
+/* handles heredoc by writing STDIN into a pipe until delimeter is met, then return pipe read end. 
+	No actual files are created. */
+int handle_heredoc(char *delimiter)
+{
+	int		pipe_fd[2];
+	char	*line;
+
+	if (pipe(pipe_fd) == -1)
 	{
-		if (access(heredoc_file, F_OK) == -1)
-		{
-			error_file(shell, heredoc_file, "No such file or directory", 1);
-			return (-2);
-		}
-		if (access(heredoc_file, R_OK) == -1)
-		{
-			error_file(shell, heredoc_file, "Permission denied", 1);
-			return (-2);
-		}
+		perror("pipe failed");
+		return (-2);
 	}
-	return (input_fd);
+	write(STDOUT_FILENO, "> ", 2);
+	while (1) // Keep looping until we get the delimiter or EOF
+	{
+		line = get_next_line(STDIN_FILENO);  // Get a line from stdin
+		if (line == NULL) // EOF encountered
+		{
+			heredoc_eof(__LINE__, delimiter);  // Handle EOF
+        	break ;
+		}
+		if (ft_strncmp(line, delimiter, ft_strlen(delimiter)) == 0 &&
+		line[ft_strlen(delimiter)] == '\n')
+        {
+			free(line);
+			break;
+		}
+		write(pipe_fd[1], line, ft_strlen(line));
+		free(line);  // Free the line after writing it to the pipe
+		write(STDOUT_FILENO, "> ", 2);  // Prompt for the next line
+	}
+	close(pipe_fd[1]); // Close the write end of the pipe
+	return (pipe_fd[0]); // Return the read end of the pipe
 }
