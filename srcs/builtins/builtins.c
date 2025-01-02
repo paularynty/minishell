@@ -25,6 +25,8 @@ void	handle_builtin(int id, t_mini *shell, t_command *command)
 
 int	builtins(char *cmd)
 {
+	if (!cmd)
+		return (BUILTIN_NONE);
 	if (ft_strcmp(cmd, "cd") == 0)
 		return (BUILTIN_CD);
 	if (ft_strcmp(cmd, "echo") == 0)

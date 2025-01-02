@@ -63,7 +63,7 @@ static void	close_fd_if_needed(int fd)
 int	resolve_input_fd(t_mini *shell, t_command *cmd, t_token *token)
 {
 //	check_print("Entering resolve_input_fd: token type = %d\n", token->type);
-	if (cmd->input_fd != -1) // Are there cases like this?
+	if (cmd->input_fd != -1)
 	{
 		close(cmd->input_fd);
 		cmd->input_fd = -1;
@@ -79,7 +79,7 @@ int	resolve_input_fd(t_mini *shell, t_command *cmd, t_token *token)
 
 int	resolve_output_fd(t_mini *shell, t_command *cmd, t_token *token)
 {
-//	check_print("Entering resolve_output_fd: token type = %d\n", token->type);
+	check_print("Entering resolve_output_fd: token type = %d\n", token->type);
 	if (cmd->output_fd != -1)
 	{
 		close(cmd->output_fd);
