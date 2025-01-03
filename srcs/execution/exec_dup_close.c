@@ -33,20 +33,12 @@
 
 int	resolve_fds(t_mini *shell, t_command *command)
 {
-	int	input_fd;
-	int	output_fd;
-
-	input_fd = -1;
-	output_fd = -1;
-	if (!process_redir(shell, command, &input_fd, &output_fd))
+	check_print("calling process_redir from resolve_fd's\n");
+	if (!process_redir(shell, command))
 		return (FALSE);
-	if (input_fd != -1)
-		command->input_fd = input_fd;
-	else
+	if (command->input_fd == -1)
 		command->input_fd = STDIN_FILENO;
-	if (output_fd != -1)
-		command->output_fd = output_fd;
-	else
+	if (command->output_fd == -1)
 		command->output_fd = STDOUT_FILENO;
 	return (TRUE);
 }

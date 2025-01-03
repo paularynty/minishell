@@ -8,7 +8,7 @@
 int 	valid_input(char *input)
 {
 	if (str_is_whitespace(input))
-		return (FALSE); // handle whitespace separately? To an exit_function which frees any allocated memory, in bash history is added, rl_on_newline()
+		return (FALSE);
 	if (!matching_quotes(input))
 		return (FALSE);
 	if (backslash(input))
@@ -65,7 +65,6 @@ char	*add_missing_spaces(char *input)
 			if (ft_strchr("><", input[i]) && i > 0)
 			{
 				spaced = add_space(input, i);
-				// printf("spaced input: %s\n", spaced);
 				free(input);
 				if (!spaced)
 					return (NULL);
@@ -74,10 +73,9 @@ char	*add_missing_spaces(char *input)
 				if (input[i] == input[i - 1])
 					i++;
 			}
-			else if ((input[i - 1] == '<' || input[i - 1] == '>') && !ft_strchr("><", input[i]))
+			else if (i > 0 && (input[i - 1] == '<' || input[i - 1] == '>') && !ft_strchr("><", input[i]))
 			{
 				spaced = add_space(input, i);
-				// printf("spaced input: %s\n", spaced);
 				free(input);
 				if (!spaced)
 					return (NULL);
@@ -95,13 +93,15 @@ char	*add_missing_spaces(char *input)
 
 int 	lexer(t_mini *shell, char *line)
 {
-	if (!valid_input(line))
-		return (FALSE);
-//	check_print("\nafted valid_input: %s\n", line);
 	shell->input = expand_input(shell, line);
 	if (!shell->input) // if there was a malloc fail
 	{
 		check_print("\nWE DON'T HAVE AN INPUT\n");
+		return (FALSE);
+	}
+	if (!valid_input(shell->input))
+	{
+		free(shell->input);
 		return (FALSE);
 	}
 	shell->input = add_missing_spaces(shell->input);
@@ -110,6 +110,6 @@ int 	lexer(t_mini *shell, char *line)
 		check_print("\nWE DON'T HAVE AN INPUT\n");
 		return (FALSE);
 	}
-	check_print("expanded and spaced input: %s\n", shell->input);
+//	check_print("expanded and spaced input: %s\n", shell->input);
 	return (TRUE);
 }

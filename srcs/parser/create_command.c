@@ -50,7 +50,6 @@ static char	**extract_command(t_command *command)
 t_command	*create_command(char *cmd_str, int i)
 {
 	t_command	*command;
-	// t_token		*temp;
 	char		**args;
 
 	command = init_command(i);
@@ -60,15 +59,10 @@ t_command	*create_command(char *cmd_str, int i)
 	// check_print("After split_cmd_args\n");
 	if (!args || !tokenize_args(command, args))
 	{
-		free_2d_array(args); // check later if in ft_free_array there's a check to avoid double free
+		free_2d_array(args);
 		free(command);
 		return (NULL);
 	}
-	// temp = command->tokens;
-    // while (temp)
-    //     temp = temp->next;
-	// if (args)
-	// 	free_2d_array(args); //afaik this chunk is not needed anymore bc of extract_command but I'll leave this here just in case smth breaks in parsing later
 	command->cmd = extract_command(command);
 	if (!command->cmd)
 	{

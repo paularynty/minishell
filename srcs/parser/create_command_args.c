@@ -42,19 +42,28 @@ static int	count_arg_length(char *cmd_str, int i, bool *quotes)
 	len = 0;
 	while (cmd_str[i] && char_is_whitespace(cmd_str[i]))
 		i++;
-	while (cmd_str[i])
+	while (cmd_str[i] && !char_is_whitespace(cmd_str[i]))
 	{
 		if (cmd_str[i] == '"' || cmd_str[i] == '\'')
 		{
 			len += quotes_offset(cmd_str + i, cmd_str[i]) - 2;
 			*quotes = true;
-			return (len);
+			i += quotes_offset(cmd_str + i, cmd_str[i]);
+			// check_print("len after quotes_offset: %d\n", len);
+			// check_print("i after quotes_offset: %d\n", i);
+			// check_print("cmd_str pointer after quotes_offset: %s\n", cmd_str + i);
 		}
-		if (cmd_str[i] == '"' || cmd_str[i] == '\'' || char_is_whitespace(cmd_str[i]))
-			break ;
-		i++;
-		len++;
+		else
+		{
+			len++;
+			i++;
+		}
+		// check_print("len: %d\n", len);
+		// check_print("i: %d\n", i);
+		// check_print("cmd_str pointer: %s\n", cmd_str + i);
 	}
+	// check_print("len: %d\n", len);
+	// check_print("i: %d\n", i);
 	return (len);
 }
 

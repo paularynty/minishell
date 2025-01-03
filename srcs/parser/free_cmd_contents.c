@@ -21,7 +21,9 @@ void	free_commands(t_command *commands)
 	{
 		temp = commands->next;
 		free_tokens(commands->tokens);
+		free_2d_array(commands->cmd);
 		free(commands);
 		commands = temp;
 	}
+	// need to add close_fd's in here aswell?
 }

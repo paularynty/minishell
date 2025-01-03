@@ -13,40 +13,49 @@ static void	setup_terminal(void)
 		exit(EXIT_FAILURE);
 }
 
+char	*setup_input(t_mini *shell)
+{
+	char	*input;
+	char	prompt[1024];
+
+	input = NULL;
+	get_prompt(shell, prompt, sizeof(prompt));
+	if (isatty(fileno(stdin)))
+		input = readline(prompt);
+	return (input);
+}
+
 static void	minishell(t_mini *shell)
 {
 	char		*input;
-	char		prompt[1024];
 	t_command	*commands;
 
 	while (TRUE)
 	{
-		get_prompt(shell, prompt, sizeof(prompt));
-		if (isatty(fileno(stdin)))
-			input = readline(prompt);
+		input = setup_input(shell);
 		if (input == NULL)
 			break ;
 		if (*input)
 		{
 			add_history(input); //this could be moved somewhere in parsing/exec functions
 			if (lexer(shell, input))
+			{
 				commands = tokenizer(shell, shell->input);
+				execute(shell, commands);
+			//		free_commands(commands); // I think freeing command list should be right after executing?
+			}
 			else
 			{
-				free(input);
-				continue ;
+				if (input && *input)
+					free(input);
 			}
-			print_list(commands);
-			check_print("Before execution\n");
-			execute(shell, commands);
 			if (shell->exit_flag || shell->abort)
 				break ;
 		}
-		// free(input);
-		shell->cmd_count = 0; //resetting here as otherwise they will increment infinitely
+		shell->cmd_count = 0; // move to execute
 		input = NULL;
 	}
-	clean_commands(commands);
+	//clean_commands(commands);
 }
 
 int	main(int argc, char **argv, char **env)

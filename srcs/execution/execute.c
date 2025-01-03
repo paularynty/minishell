@@ -35,20 +35,20 @@ If it is a builtin and there is only one command, it is executed in the parent.
 Otherwise, we move onto exec_child to fork and execute commands as necessary.*/
 int	execute(t_mini *shell, t_command *command)
 {
-	t_command	*curr;
+//	t_command	*curr;
 	int			is_builtin;
 
 	is_builtin = builtins(command->cmd[0]);
 	if (shell->cmd_count == 1 && is_builtin)
 		exec_parent(shell, command, is_builtin);
 	else
-		exec_child(shell, command);
-	// Free the cmd arrays in each command node (will move this to its own function later)
-	curr = command;
+		exec_child(shell, command); // what if it fails?
+	// I implemented this into my previously made free_commands(t_command *commands) function, which is in in free_cmd_contents.c file
+/*	curr = command;
 	while (curr)
 	{
 		ft_free_array(&curr->cmd);
 		curr = curr->next;
-	}
+	}*/
 	return (shell->exit_code);
 }

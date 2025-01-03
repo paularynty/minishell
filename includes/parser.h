@@ -84,7 +84,7 @@ char		**split_cmd_args(char *cmd_str);
 char		*create_quoted_arg(char *str, int *i, int len);
 
 //parser/split_by_pipes.c
-char		**split_by_pipes(const char *input, int *pipes);
+char		**split_by_pipes(const char *input);
 
 //parser/parser.c
 t_command	*tokenizer(t_mini *shell, const char *input);

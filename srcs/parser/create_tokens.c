@@ -71,11 +71,6 @@ int		tokenize_args(t_command *command, char **args)
 			new_token = create_token(args[i], NULL);
 		if (!new_token)
 			return (FALSE);
-		// if (new_token->type == HEREDOC) we will see about this later...
-		// {
-		// 	if (!handle_heredoc(command, args[++i])) ???
-		// 		return (FALSE);
-		// }
 		else
 			add_token(&(command->tokens), new_token);
 		i++;
