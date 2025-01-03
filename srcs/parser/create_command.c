@@ -70,7 +70,7 @@ t_command	*create_command(char *cmd_str, int i)
 		free_2d_array(args);
 		return (NULL);
 	}
-	free_2d_array(args);
+	// free_2d_array(args);
 	command->next = NULL;
 	return (command);
 }

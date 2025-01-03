@@ -62,7 +62,7 @@
 /*	Loops over shell->cmd_count and waits for all child processes 
 	matching pid[i] to die.
 	Upon unsuccessful waitpid() call, errno is assigned to shell->exit_code.*/
-void	wait_for_children(t_mini *shell)
+int	wait_for_children(t_mini *shell)
 {
 	int		i;
 	int		status;
@@ -79,18 +79,22 @@ void	wait_for_children(t_mini *shell)
 		if (WIFEXITED(status))
 		{
 			if (g_mrworldwide == 1)
-				g_mrworldwide = 1;
+				// g_mrworldwide = 1;
+				shell->exit_code = 1;
 			else
-				g_mrworldwide = WEXITSTATUS(status); //or shell->exit_code?
+				// g_mrworldwide = WEXITSTATUS(status); //or shell->exit_code?
+				shell->exit_code = WEXITSTATUS(status);
 		}
 		else if (WIFSIGNALED(status))
 		{
 			signum = WTERMSIG(status);
 			if (signum == SIGINT)
-				g_mrworldwide = 130;
+				// g_mrworldwide = 130;
+				shell->exit_code = 130;
 		}
 		i++;
 	}
+	return (shell->exit_code);
 }
 
 bool	is_dir(char *path)
@@ -110,17 +114,20 @@ int	check_access(t_mini *shell, char *cmd)
 			errno = ENOENT;
 		else
 			errno = 0;
-		return (error_cmd(shell, cmd));
+		error_cmd(shell, cmd);
+		// return (error_cmd(shell, cmd));
 	}
 	if (is_dir(cmd) == true)
 	{
 		errno = EISDIR;
-		return (error_cmd(shell, cmd));
+		error_cmd(shell, cmd);
+		// return (error_cmd(shell, cmd));
 	}
 	if (access(cmd, X_OK) == -1)
 	{	
 		errno = EACCES;
-		return (error_cmd(shell, cmd));
+		error_cmd(shell, cmd);
+		// return (error_cmd(shell, cmd));
 	}
 	return (0);
 }

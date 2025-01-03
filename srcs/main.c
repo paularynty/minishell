@@ -2,16 +2,16 @@
 
 sig_atomic_t	g_mrworldwide = 0;
 
-static void	setup_terminal(void)
-{
-	struct termios	term;
+// static void	setup_terminal(void)
+// {
+// 	struct termios	term;
 
-	if (tcgetattr(STDIN_FILENO, &term) == -1)
-		exit(EXIT_FAILURE);
-	term.c_lflag &= ~ECHOCTL;
-	if (tcsetattr(STDIN_FILENO, TCSANOW, &term) == -1)
-		exit(EXIT_FAILURE);
-}
+// 	if (tcgetattr(STDIN_FILENO, &term) == -1)
+// 		exit(EXIT_FAILURE);
+// 	term.c_lflag &= ~ECHOCTL;
+// 	if (tcsetattr(STDIN_FILENO, TCSANOW, &term) == -1)
+// 		exit(EXIT_FAILURE);
+// }
 
 char	*setup_input(t_mini *shell)
 {
@@ -20,8 +20,7 @@ char	*setup_input(t_mini *shell)
 
 	input = NULL;
 	get_prompt(shell, prompt, sizeof(prompt));
-	if (isatty(fileno(stdin)))
-		input = readline(prompt);
+	input = readline(prompt);
 	return (input);
 }
 
@@ -44,16 +43,20 @@ static void	minishell(t_mini *shell)
 				execute(shell, commands);
 			//		free_commands(commands); // I think freeing command list should be right after executing?
 			}
-			else
+			else if (!lexer(shell, input))
 			{
 				if (input && *input)
+				{
 					free(input);
+					continue ;
+				}
 			}
 			if (shell->exit_flag || shell->abort)
 				break ;
 		}
+		free(shell->input);
 		shell->cmd_count = 0; // move to execute
-		input = NULL;
+		// input = NULL;
 	}
 	//clean_commands(commands);
 }
@@ -64,7 +67,7 @@ int	main(int argc, char **argv, char **env)
 
 	(void)argc;
 	(void)argv;
-	setup_terminal();
+	// setup_terminal();
 	if (!setup(&shell, env))
 	{
 		ft_putstr_fd("minishell: initialization error", STDERR_FILENO);

@@ -22,7 +22,7 @@
 # include "parser.h"
 # include "../libft/libft.h"
 
-//# define DEBUG
+# define DEBUG
 #ifdef DEBUG 
 # define debug_print(...) fprintf(stderr, __VA_ARGS__)
 #else
@@ -105,7 +105,8 @@ int		builtin_env(t_mini *shell);
 //errors/errors.c
 void	error_file(t_mini *shell, char *file, char *error_str, int ex);
 void	error_builtin(char *builtin, char *str, char *error_str);
-int		error_cmd(t_mini *shell, char *cmd);
+void	error_cmd(t_mini *shell, char *cmd);
+// int		error_cmd(t_mini *shell, char *cmd);
 
 //execution/execute.c
 int		execute(t_mini *shell, t_command *command);
@@ -125,7 +126,8 @@ int		reset_std(t_mini *shell);
 // char	***extract_all_commands(t_mini *shell, t_command *commands);
 // int 	count_cmd_args_for_exec(t_token *tokens); //put as static func in parser
 int		check_access(t_mini *shell, char *cmd);
-void	wait_for_children(t_mini *shell);
+// void	wait_for_children(t_mini *shell);
+int		wait_for_children(t_mini *shell);
 
 //execution/exec_path.c
 char	**get_env_path(char **env);

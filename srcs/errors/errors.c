@@ -1,5 +1,6 @@
 #include "minishell.h"
 
+//check correct exit codes for builtins
 void	error_builtin(char *builtin, char *str, char *error_str)
 {
 	char	buffer[1024];
@@ -22,7 +23,8 @@ void	error_builtin(char *builtin, char *str, char *error_str)
 	ft_putstr_fd(buffer, STDERR_FILENO);
 }
 
-int	error_cmd(t_mini *shell, char *cmd)
+//check for '/' character at end of directory, if yes, ex = 126, if not, ex = 1
+void	error_cmd(t_mini *shell, char *cmd)
 {
 	int	exitcode;
 
@@ -39,7 +41,7 @@ int	error_cmd(t_mini *shell, char *cmd)
 		shell->exit_code = 126;
 	else
 		shell->exit_code = 127;
-	return (shell->exit_code);
+	exit(shell->exit_code);
 }
 
 void	error_file(t_mini *shell, char *file, char *error_str, int ex)

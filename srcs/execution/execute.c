@@ -25,9 +25,9 @@ static int	exec_child(t_mini *shell, t_command *command)
 		close_all_pipes(shell, curr->cmd_i);
 		curr = curr->next;
 	}
-	wait_for_children(shell);
+	shell->exit_code = wait_for_children(shell);
 	cleanup_success(shell);
-	return (shell->exit_code);
+	return (TRUE);
 }
 
 /*Checks if the command of the very first t_cmd node is a builtin.

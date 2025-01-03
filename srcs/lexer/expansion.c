@@ -64,7 +64,7 @@ char	*expand_variable(t_mini *shell, char *input, int *i)
 	char	*new_input;
 
 	end = *i + 1;
-	while (input[end] && !whitespace(input[end]) && input[end] != '"' && input[end] != '\'')
+	while (input[end] && !char_is_whitespace(input[end]) && input[end] != '"' && input[end] != '\'')
 		end++;
 	if (end <= *i + 1)
 		return (input);
