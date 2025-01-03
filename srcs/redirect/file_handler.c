@@ -110,7 +110,7 @@ int handle_heredoc(char *delimiter)
 		line = get_next_line(STDIN_FILENO);  // Get a line from stdin
 		if (line == NULL) // EOF encountered
 		{
-			heredoc_eof(__LINE__, delimiter);  // Handle EOF
+			heredoc_eof(__LINE__, delimiter);  // Handle EOF, need to make __LINE__ take line from terminal
         	break ;
 		}
 		if (ft_strncmp(line, delimiter, ft_strlen(delimiter)) == 0 &&
