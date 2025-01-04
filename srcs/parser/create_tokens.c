@@ -57,7 +57,7 @@ static t_token	*create_token(char *arg, char *prev)
 	return (token);
 }
 
-int		tokenize_args(t_cmd *command, char **args)
+int		tokenize_args(t_cmd *cmd, char **args)
 {
 	int		i;
 	t_token	*new_token;
@@ -72,7 +72,7 @@ int		tokenize_args(t_cmd *command, char **args)
 		if (!new_token)
 			return (FALSE);
 		else
-			add_token(&(command->tokens), new_token);
+			add_token(&(cmd->tokens), new_token);
 		i++;
 	}
 	return (TRUE);

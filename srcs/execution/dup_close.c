@@ -1,53 +1,53 @@
 #include "minishell.h"
 
-// void	open_file(t_mini *shell, t_cmd *command)
+// void	open_file(t_mini *shell, t_cmd *cmd)
 // {
 // 	if (first_or_second == FIRST)
 // 	{
-// 		if (open(command->input_fd, O_RDONLY) == -1)
-// 			exit_error(shell, command->input_fd);
+// 		if (open(cmd->input_fd, O_RDONLY) == -1)
+// 			exit_error(shell, cmd->input_fd);
 // 	}
 // 	if (first_or_second == SECOND)
 // 	{
-// 		if (open(command->output_fd, O_CREAT | O_WRONLY | O_TRUNC, 0644) == -1)
-// 			exit_error(shell, command->output_fd);
+// 		if (open(cmd->output_fd, O_CREAT | O_WRONLY | O_TRUNC, 0644) == -1)
+// 			exit_error(shell, cmd->output_fd);
 // 	}
 // }
 
-// void	dup_close(t_mini *shell, t_cmd *command)
+// void	dup_close(t_mini *shell, t_cmd *cmd)
 // {
 // 	if (first_or_second == FIRST)
 // 	{
-// 		if (dup2(command->input_fd, STDIN_FILENO) == -1
+// 		if (dup2(cmd->input_fd, STDIN_FILENO) == -1
 // 			|| dup2(shell->pipe_fd[1], STDOUT_FILENO) == -1)
 // 			exit_error(shell, "dup2 failed on first child");
 // 	}
 // 	else if (first_or_second == SECOND)
 // 	{
 // 		if (dup2(shell->pipe_fd[0], STDIN_FILENO) == -1
-// 			|| dup2(command->output_fd, STDOUT_FILENO) == -1)
+// 			|| dup2(cmd->output_fd, STDOUT_FILENO) == -1)
 // 			exit_error(shell, "dup2 failed on second child");
 // 	}
-// 	close_all(shell, command);
+// 	close_all(shell, cmd);
 // }
 
-int	resolve_fds(t_mini *shell, t_cmd *command)
+int	resolve_fds(t_mini *shell, t_cmd *cmd)
 {
 	check_print("calling process_redir from resolve_fd's\n");
-	if (!process_redir(shell, command))
+	if (!process_redir(shell, cmd))
 		return (FALSE);
-	if (command->input_fd == -1)
-		command->input_fd = STDIN_FILENO;
-	if (command->output_fd == -1)
-		command->output_fd = STDOUT_FILENO;
+	if (cmd->input_fd == -1)
+		cmd->input_fd = STDIN_FILENO;
+	if (cmd->output_fd == -1)
+		cmd->output_fd = STDOUT_FILENO;
 	return (TRUE);
 }
 
-int	dup_input(t_mini *shell, t_cmd *command, int i)
+int	dup_input(t_mini *shell, t_cmd *cmd, int i)
 {
-	if (command->input_fd != STDIN_FILENO)
+	if (cmd->input_fd != STDIN_FILENO)
 	{
-		if (!dup2_close(command->input_fd, STDIN_FILENO))
+		if (!dup2_close(cmd->input_fd, STDIN_FILENO))
 		{
 			perror("dup2 failed for input redirection");
 			shell->exit_code = 1;
@@ -70,11 +70,11 @@ int	dup_input(t_mini *shell, t_cmd *command, int i)
 
 // Duplicates output to fd if there is a redirection or to write end of pipe
 // Redirection takes precedence over pipe
-int	dup_output(t_mini *shell, t_cmd *command, int i)
+int	dup_output(t_mini *shell, t_cmd *cmd, int i)
 {
-	if (command->output_fd != STDOUT_FILENO)
+	if (cmd->output_fd != STDOUT_FILENO)
 	{
-		if (!dup2_close(command->output_fd, STDOUT_FILENO))
+		if (!dup2_close(cmd->output_fd, STDOUT_FILENO))
 		{
 			perror("dup2 failed for output redirection");
 			shell->exit_code = 1;

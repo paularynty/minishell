@@ -36,11 +36,11 @@ int count_token_type(t_token *tokens, enum e_token_type type)
  * data is stored as it should.
  * 
  ******************************/
-void print_list(t_cmd *commands)
+void print_list(t_cmd *cmds)
 {
     t_cmd *curr;
 
-	curr = commands;
+	curr = cmds;
     while (curr)
     {
         check_print("Command:\n");
@@ -62,7 +62,7 @@ void print_list(t_cmd *commands)
         }
         check_print("  Input FD: %d\n", curr->input_fd);
         check_print("  Output FD: %d\n", curr->output_fd);
-        curr = curr->next; // Move to the next command
+        curr = curr->next; // Move to the next cmd
         if (curr)
             check_print("  ---- Next Command ----\n");
     }

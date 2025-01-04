@@ -13,17 +13,17 @@ void	free_tokens(t_token *tokens)
 	}
 }
 
-void	free_commands(t_cmd *commands)
+void	free_cmds(t_cmd *cmds)
 {
 	t_cmd	*temp;
 
-	while (commands)
+	while (cmds)
 	{
-		temp = commands->next;
-		free_tokens(commands->tokens);
-		free_2d_array(commands->cmd);
-		free(commands);
-		commands = temp;
+		temp = cmds->next;
+		free_tokens(cmds->tokens);
+		free_2d_array(cmds->cmd);
+		free(cmds);
+		cmds = temp;
 	}
 	// need to add close_fd's in here aswell?
 }

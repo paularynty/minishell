@@ -17,16 +17,16 @@ static void	add_command(t_cmd **head, t_cmd *new_cmd)
 }
 
 /*Splits input by pipes into command chunks.
-Adds command chunks to linked list.*/
+Adds cmd chunks to linked list.*/
 t_cmd	*tokenizer(t_mini *shell, const char *input)
 {
 	char		**cmds;
-	t_cmd	*commands;
+	t_cmd	*cmds;
 	t_cmd	*current_cmd;
 	int			i;
 
 	i = 0;
-	commands = NULL;
+	cmds = NULL;
 	cmds = split_by_pipes(input);
 	if (!cmds)
 		return (NULL);
@@ -44,5 +44,5 @@ t_cmd	*tokenizer(t_mini *shell, const char *input)
 		i++;
 	}
 	free_2d_array(cmds);
-	return (commands);
+	return (cmds);
 }

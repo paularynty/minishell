@@ -27,12 +27,12 @@
 // 	fd[1] = -1;
 // }
 
-// void	close_all(t_mini *shell, t_cmd *command)
+// void	close_all(t_mini *shell, t_cmd *cmd)
 // {
-// 	if (command->input_fd >= 0)
-// 		close(command->input_fd);
-// 	if (command->output_fd >= 0)
-// 		close(command->output_fd);
+// 	if (cmd->input_fd >= 0)
+// 		close(cmd->input_fd);
+// 	if (cmd->output_fd >= 0)
+// 		close(cmd->output_fd);
 // 	close(shell->pipe[0]);
 // 	close(shell->pipe[1]);
 // }

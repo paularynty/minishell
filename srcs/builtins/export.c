@@ -97,7 +97,7 @@ static int	print_export_vars(char **env)
 	return (TRUE);
 }
 
-int	builtin_export(t_mini *shell, t_cmd *command)
+int	builtin_export(t_mini *shell, t_cmd *cmd)
 {
 	char	**temp;
 	int		i;
@@ -107,11 +107,11 @@ int	builtin_export(t_mini *shell, t_cmd *command)
 	if (!temp)
 		return (-1);
 	sort_export_table(temp);
-	if (!command->cmd[1])
+	if (!cmd->cmds[1])
 		return (print_export_vars(temp));
-	while (command->cmd[i])
+	while (cmd->cmds[i])
 	{
-		if (!export_variable(shell, command->cmd[i]))
+		if (!export_variable(shell, cmd->cmds[i]))
 		{
 			// error_export(shell->cmd[i]);
 			shell->exit_code = 1;

@@ -26,8 +26,8 @@ char	*setup_input(t_mini *shell)
 
 static void	minishell(t_mini *shell)
 {
-	char		*input;
-	t_cmd	*commands;
+	char	*input;
+	t_cmd	*cmds;
 
 	while (TRUE)
 	{
@@ -40,8 +40,8 @@ static void	minishell(t_mini *shell)
 			add_history(input); //this could be moved somewhere in parsing/exec functions
 			if (lexer(shell, input))
 			{
-				commands = tokenizer(shell, shell->input);
-				execute(shell, commands);
+				cmds = tokenizer(shell, shell->input);
+				execute(shell, cmds);
 			//		free_commands(commands); // I think freeing command list should be right after executing?
 			}
 			else if (!lexer(shell, input))

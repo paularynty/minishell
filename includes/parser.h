@@ -26,15 +26,15 @@ typedef struct s_token
 	struct s_token	*next;
 } t_token;
 
-/*Command structure.*/
-typedef struct	s_command
+/*cmd structure.*/
+typedef struct	s_cmd
 {
 	t_token	*tokens;    	// Linked list of tokens for the command
-	char	**cmd;      	// 2D array of command and its arguments
+	char	**cmds;      	// 2D array of command and its arguments
 	int		input_fd;       // Input redirection file descriptor
 	int		output_fd;      // Output redirection file descriptor
 	int		cmd_i;
-	struct s_command	*next; // Next command (if part of a chain, separated by pipes)
+	struct s_cmd	*next; // Next command (if part of a chain, separated by pipes)
 } t_cmd;
 
 //lexer/expansion.c
@@ -66,10 +66,10 @@ int 		count_token_type(t_token *tokens, enum e_token_type type);
 int			char_is_whitespace(char c);
 void		free_2d_array(char **array);
 int			count_pipes(const char *input);
-void	    print_list(t_cmd *commands);
+void	    print_list(t_cmd *cmds);
 
 //parser/free_cmd_contents.c
-void		free_commands(t_cmd *commands);
+void		free_commands(t_cmd *cmds);
 void		free_tokens(t_token *tokens);
 int			quote_offset(const char *input, char quote);
 
@@ -78,7 +78,7 @@ t_cmd	*create_command(char *cmd_str, int i);
 
 //parser/create_tokens.c
 void		add_token(t_token **head, t_token *new_token);
-int			tokenize_args(t_cmd *command, char **args);
+int			tokenize_args(t_cmd *cmd, char **args);
 
 //parser/create_command_args.c
 char		**split_cmd_args(char *cmd_str);

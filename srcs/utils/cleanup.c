@@ -13,17 +13,17 @@ static void	clean_tokens(t_token *tokens)
     }
 }
 
-void	clean_commands(t_cmd *command) 
+void	clean_commands(t_cmd *cmd) 
 {
 	t_cmd	*temp;
 	
-	while (command)
+	while (cmd)
 	{
-		clean_tokens(command->tokens);
-		command->tokens = NULL;
-		command->next = NULL;
-		temp = command;
-		command = command->next;
+		clean_tokens(cmd->tokens);
+		cmd->tokens = NULL;
+		cmd->next = NULL;
+		temp = cmd;
+		cmd = cmd->next;
 		free(temp);
 		temp = NULL;
     }
@@ -52,7 +52,7 @@ void	cleanup_success(t_mini *shell)
 void	cleanup(t_mini *shell)
 {
 	ft_free_array(&shell->env);
-	// ft_free_array(&shell->command);
+	// ft_free_array(&shell->cmd);
 	// free(shell->input);
 	// shell->input = NULL;
 	free(shell->cwd);

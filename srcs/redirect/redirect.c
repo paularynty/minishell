@@ -1,10 +1,10 @@
 #include "minishell.h"
 
-// int	handle_heredoc(t_mini *shell, t_cmd *command)
+// int	handle_heredoc(t_mini *shell, t_cmd *cmd)
 // {
 // 	char *line;
 
-// 	if (command->tokens->type == HEREDOC)
+// 	if (cmd->tokens->type == HEREDOC)
 // 		line = readline("> ");	
 // 	return (TRUE);
 // }

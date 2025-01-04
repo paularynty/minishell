@@ -29,11 +29,11 @@ void	env_unset_variable(char **env, char *variable)
 	}
 }
 
-int	builtin_unset(t_mini *shell, t_cmd *command)
+int	builtin_unset(t_mini *shell, t_cmd *cmd)
 {
-	if (!command->cmd[1])
+	if (!cmd->cmds[1])
 		return (0);
 	else
-		env_unset_variable(shell->env, command->cmd[1]);
+		env_unset_variable(shell->env, cmd->cmds[1]);
 	return (0);
 }
