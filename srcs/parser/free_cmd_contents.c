@@ -13,9 +13,9 @@ void	free_tokens(t_token *tokens)
 	}
 }
 
-void	free_commands(t_command *commands)
+void	free_commands(t_cmd *commands)
 {
-	t_command	*temp;
+	t_cmd	*temp;
 
 	while (commands)
 	{

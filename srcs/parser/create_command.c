@@ -1,10 +1,10 @@
 #include "minishell.h"
 
-static t_command	*init_command(int i)
+static t_cmd	*init_cmd(int i)
 {
-	t_command	*cmd;
+	t_cmd	*cmd;
 
-	cmd = malloc(sizeof(t_command));
+	cmd = malloc(sizeof(t_cmd));
 	if (!cmd)
 		return (NULL);
 	cmd->cmd = NULL;
@@ -17,7 +17,7 @@ static t_command	*init_command(int i)
 }
 
 /*Extracts the CMD token type commands into cmd->args 2D array. */
-static char	**extract_command(t_command *command)
+static char	**extract_cmd(t_cmd *command)
 {
 	t_token	*token;
 	char	**cmd;
@@ -47,12 +47,12 @@ static char	**extract_command(t_command *command)
 	return (cmd);
 }
 
-t_command	*create_command(char *cmd_str, int i)
+t_cmd	*create_command(char *cmd_str, int i)
 {
-	t_command	*command;
+	t_cmd	*command;
 	char		**args;
 
-	command = init_command(i);
+	command = init_cmd(i);
 	if (!command)
 		return (NULL);
 	args = split_cmd_args(cmd_str);
@@ -63,7 +63,7 @@ t_command	*create_command(char *cmd_str, int i)
 		free(command);
 		return (NULL);
 	}
-	command->cmd = extract_command(command);
+	command->cmd = extract_cmd(command);
 	if (!command->cmd)
 	{
 		free(command);

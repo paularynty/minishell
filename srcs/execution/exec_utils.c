@@ -1,64 +1,5 @@
 #include "minishell.h"
 
-// /*Extracts the commands and tokens from t_command into char **array. */
-// static char	**extract_singular_command(t_command *command)
-// {
-// 	t_token	*token;
-// 	char	**cmd;
-// 	int		count;
-// 	int		i;
-
-// 	if (!command || !command->tokens)
-// 		return (NULL);
-// 	count = count_cmd_args_for_exec(command->tokens);
-// 	cmd = (char **)malloc(sizeof(char *) * (count + 1));
-// 	if (!cmd)
-// 		return (NULL);
-// 	i = 0;
-// 	token = command->tokens;
-// 	while (token)
-// 	{
-// 		if (token->type == CMD)
-// 		{
-// 			cmd[i] = ft_strdup(token->value);
-// 			if (!cmd[i])
-// 				ft_free_array(&cmd);
-// 			i++;
-// 		}
-// 		token = token->next;
-// 	}
-// 	cmd[i] = NULL;
-// 	return (cmd);
-// }
-
-// char	***extract_all_commands(t_mini *shell, t_command *commands)
-// {
-// 	t_command	*temp;
-// 	char		***cmds;
-// 	int			i;
-
-// 	cmds = (char ***)malloc(sizeof(char **) * (shell->cmd_count + 1));
-// 	if (!cmds)
-// 		return (NULL);
-// 	temp = commands;
-// 	i = 0;
-// 	while (temp)
-// 	{
-// 		cmds[i] = extract_singular_command(temp);
-// 		if (!cmds[i])
-// 		{
-// 			while (i > 0)
-// 				ft_free_array(&cmds[--i]);
-// 			free(cmds);
-// 			return (NULL);
-// 		}
-// 		i++;
-// 		temp = temp->next;
-// 	}
-// 	cmds[i] = NULL;
-// 	return (cmds);
-// }
-
 /*	Loops over shell->cmd_count and waits for all child processes 
 	matching pid[i] to die.
 	Upon unsuccessful waitpid() call, errno is assigned to shell->exit_code.*/
@@ -108,26 +49,18 @@ bool	is_dir(char *path)
 
 int	check_access(t_mini *shell, char *cmd)
 {
+	if (!cmd)
+		error_cmd(shell, cmd, "command not found", 127);
 	if (access(cmd, F_OK) == -1)
 	{
 		if (ft_strchr(cmd, '/'))
-			errno = ENOENT;
+			error_cmd(shell, cmd, "No such file or directory", 1);
 		else
-			errno = 0;
-		error_cmd(shell, cmd);
-		// return (error_cmd(shell, cmd));
+			error_cmd(shell, cmd, "command not found", 127);
 	}
 	if (is_dir(cmd) == true)
-	{
-		errno = EISDIR;
-		error_cmd(shell, cmd);
-		// return (error_cmd(shell, cmd));
-	}
+		error_cmd(shell, cmd, "Is a directory", 126);
 	if (access(cmd, X_OK) == -1)
-	{	
-		errno = EACCES;
-		error_cmd(shell, cmd);
-		// return (error_cmd(shell, cmd));
-	}
+		error_cmd(shell, cmd, "Permission denied", 1);
 	return (0);
 }

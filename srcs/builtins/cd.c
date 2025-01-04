@@ -74,7 +74,7 @@ static int	cd_home(t_mini *shell)
 	return (change_dir(home));
 }
 
-int	builtin_cd(t_mini *shell, t_command *command)
+int	builtin_cd(t_mini *shell, t_cmd *command)
 {
 	if (command->cmd[2])
 	{

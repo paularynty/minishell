@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-// void	open_file(t_mini *shell, t_command *command)
+// void	open_file(t_mini *shell, t_cmd *command)
 // {
 // 	if (first_or_second == FIRST)
 // 	{
@@ -14,7 +14,7 @@
 // 	}
 // }
 
-// void	dup_close(t_mini *shell, t_command *command)
+// void	dup_close(t_mini *shell, t_cmd *command)
 // {
 // 	if (first_or_second == FIRST)
 // 	{
@@ -31,7 +31,7 @@
 // 	close_all(shell, command);
 // }
 
-int	resolve_fds(t_mini *shell, t_command *command)
+int	resolve_fds(t_mini *shell, t_cmd *command)
 {
 	check_print("calling process_redir from resolve_fd's\n");
 	if (!process_redir(shell, command))
@@ -43,7 +43,7 @@ int	resolve_fds(t_mini *shell, t_command *command)
 	return (TRUE);
 }
 
-int	dup_input(t_mini *shell, t_command *command, int i)
+int	dup_input(t_mini *shell, t_cmd *command, int i)
 {
 	if (command->input_fd != STDIN_FILENO)
 	{
@@ -70,7 +70,7 @@ int	dup_input(t_mini *shell, t_command *command, int i)
 
 // Duplicates output to fd if there is a redirection or to write end of pipe
 // Redirection takes precedence over pipe
-int	dup_output(t_mini *shell, t_command *command, int i)
+int	dup_output(t_mini *shell, t_cmd *command, int i)
 {
 	if (command->output_fd != STDOUT_FILENO)
 	{

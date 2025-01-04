@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-// int	handle_heredoc(t_mini *shell, t_command *command)
+// int	handle_heredoc(t_mini *shell, t_cmd *command)
 // {
 // 	char *line;
 
@@ -9,7 +9,7 @@
 // 	return (TRUE);
 // }
 
-// int	handle_input(t_command *cmd, int *error)
+// int	handle_input(t_cmd *cmd, int *error)
 // {
 // 	t_token	*token;
 // 	int		fd;
@@ -27,7 +27,7 @@
 // 	return (fd);
 // }
 
-// int	handle_output(t_command *cmd, int *error)
+// int	handle_output(t_cmd *cmd, int *error)
 // {
 // 	t_token	*token;
 // 	int		fd;
@@ -60,7 +60,7 @@ static void	close_fd_if_needed(int fd)
 		close(fd);
 }
 
-int	resolve_input_fd(t_mini *shell, t_command *cmd, t_token *token)
+int	resolve_input_fd(t_mini *shell, t_cmd *cmd, t_token *token)
 {
 //	check_print("Entering resolve_input_fd: token type = %d\n", token->type);
 	if (cmd->input_fd != -1)
@@ -77,7 +77,7 @@ int	resolve_input_fd(t_mini *shell, t_command *cmd, t_token *token)
 	return (TRUE);
 }
 
-int	resolve_output_fd(t_mini *shell, t_command *cmd, t_token *token)
+int	resolve_output_fd(t_mini *shell, t_cmd *cmd, t_token *token)
 {
 	check_print("Entering resolve_output_fd: token type = %d\n", token->type);
 	if (cmd->output_fd != -1)
@@ -97,7 +97,7 @@ int	resolve_output_fd(t_mini *shell, t_command *cmd, t_token *token)
 	return (TRUE);
 }
 
-int	process_redir(t_mini *shell, t_command *cmd)
+int	process_redir(t_mini *shell, t_cmd *cmd)
 {
 	t_token	*token;
 

@@ -35,10 +35,10 @@ typedef struct	s_command
 	int		output_fd;      // Output redirection file descriptor
 	int		cmd_i;
 	struct s_command	*next; // Next command (if part of a chain, separated by pipes)
-} t_command;
+} t_cmd;
 
 //lexer/expansion.c
-char		*expand_exitcode(t_mini *shell, char *input, int *i);
+char		*expand_exit_code(t_mini *shell, char *input, int *i);
 char		*expand_input(t_mini *shell, char *input);
 char		*expand_variable(t_mini *shell, char *input, int *i);
 char		*get_variable(t_mini *shell, char *key, int key_len);
@@ -48,34 +48,37 @@ char		*replace_segment(char *input, int start, int end, char *replacement);
 int 		valid_input(char *input);
 int 		lexer(t_mini *shell, char *line);
 
+//lexer/lexer_utils.c
+int 		str_is_whitespace(const char *str);
+void		error_pipes(int pipes);
+
 //lexer/valid_input.c
 int			closed_pipes(const char *input);
 int			matching_quotes(const char *str);
-int 		str_is_whitespace(const char *str);
 int			valid_pipes(const char *input);
 int 		valid_redirection(const char *input);
 
 //lexer/valid_input2.c
 int			backslash(const char *input);
 
-//parser/helper_funcs.c
+//parser/parser_utils.c
 int 		count_token_type(t_token *tokens, enum e_token_type type);
 int			char_is_whitespace(char c);
 void		free_2d_array(char **array);
 int			count_pipes(const char *input);
-void	    print_list(t_command *commands);
+void	    print_list(t_cmd *commands);
 
 //parser/free_cmd_contents.c
-void		free_commands(t_command *commands);
+void		free_commands(t_cmd *commands);
 void		free_tokens(t_token *tokens);
-int			quotes_offset(const char *input, char quote);
+int			quote_offset(const char *input, char quote);
 
 //parser/create_command.c
-t_command	*create_command(char *cmd_str, int i);
+t_cmd	*create_command(char *cmd_str, int i);
 
 //parser/create_tokens.c
 void		add_token(t_token **head, t_token *new_token);
-int			tokenize_args(t_command *command, char **args);
+int			tokenize_args(t_cmd *command, char **args);
 
 //parser/create_command_args.c
 char		**split_cmd_args(char *cmd_str);
@@ -87,6 +90,6 @@ char		*create_quoted_arg(char *str, int *i, int len);
 char		**split_by_pipes(const char *input);
 
 //parser/parser.c
-t_command	*tokenizer(t_mini *shell, const char *input);
+t_cmd	*tokenizer(t_mini *shell, const char *input);
 
 #endif

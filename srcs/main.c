@@ -27,10 +27,11 @@ char	*setup_input(t_mini *shell)
 static void	minishell(t_mini *shell)
 {
 	char		*input;
-	t_command	*commands;
+	t_cmd	*commands;
 
 	while (TRUE)
 	{
+		//reset_signals();
 		input = setup_input(shell);
 		if (input == NULL)
 			break ;
@@ -54,12 +55,14 @@ static void	minishell(t_mini *shell)
 			if (shell->exit_flag || shell->abort)
 				break ;
 		}
-		free(shell->input);
+		// free(shell->input);
 		shell->cmd_count = 0; // move to execute
 		// input = NULL;
 	}
 	//clean_commands(commands);
 }
+
+
 
 int	main(int argc, char **argv, char **env)
 {

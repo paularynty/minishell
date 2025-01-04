@@ -12,8 +12,6 @@ int	setup(t_mini *shell, char **env)
 	shell->heredoc = NULL;
 	shell->pipes = NULL;
 	shell->pids = NULL;
-	// shell->std[0] = -1;
-	// shell->std[1] = -1;
 	shell->exit_flag = FALSE;
 	shell->exit_code = 0;
 	shell->abort = 0;

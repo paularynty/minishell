@@ -69,12 +69,12 @@ enum e_builtins {
 };
 
 //builtins/builtins.c
-void	handle_builtin(int id, t_mini *shell, t_command *command);
+void	handle_builtin(int id, t_mini *shell, t_cmd *command);
 int		builtins(char *line);
 
 //builtins/cd.c
 int		update_pwd(t_mini *shell);
-int		builtin_cd(t_mini *shell, t_command *command);
+int		builtin_cd(t_mini *shell, t_cmd *command);
 
 //builtins/echo.c
 int		builtin_echo(char **cmd);
@@ -84,14 +84,14 @@ int		builtin_exit(t_mini *shell, char **args);
 
 //builtins/export.c
 int		count_array_elements(char **array);
-int		builtin_export(t_mini *shell, t_command *command);
+int		builtin_export(t_mini *shell, t_cmd *command);
 
 //builtins/pwd.c
 int		builtin_pwd(t_mini *shell);
 
 //builtins/unset.c
 void	env_unset_variable(char **env, char *variable);
-int		builtin_unset(t_mini *shell, t_command *command);
+int		builtin_unset(t_mini *shell, t_cmd *command);
 
 //environment/create_env.c
 char	*env_get_variable(char **env, char *key);
@@ -105,16 +105,16 @@ int		builtin_env(t_mini *shell);
 //errors/errors.c
 void	error_file(t_mini *shell, char *file, char *error_str, int ex);
 void	error_builtin(char *builtin, char *str, char *error_str);
-void	error_cmd(t_mini *shell, char *cmd);
+void	error_cmd(t_mini *shell, char *cmd, char *error_str, int ex);
 // int		error_cmd(t_mini *shell, char *cmd);
 
 //execution/execute.c
-int		execute(t_mini *shell, t_command *command);
+int		execute(t_mini *shell, t_cmd *command);
 
 //execution/exec_dup_close.c
-int		resolve_fds(t_mini *shell, t_command *command);
-int		dup_input(t_mini *shell, t_command *command, int i);
-int		dup_output(t_mini *shell, t_command *command, int i);
+int		resolve_fds(t_mini *shell, t_cmd *command);
+int		dup_input(t_mini *shell, t_cmd *command, int i);
+int		dup_output(t_mini *shell, t_cmd *command, int i);
 int		dup2_close(int old_fd, int new_fd);
 
 //execution/exec_std.c
@@ -122,8 +122,8 @@ int		save_std(t_mini *shell);
 int		reset_std(t_mini *shell);
 
 //execution/exec_utils.c
-// char	**extract_singular_command(t_mini *shell, t_command *command);
-// char	***extract_all_commands(t_mini *shell, t_command *commands);
+// char	**extract_singular_command(t_mini *shell, t_cmd *command);
+// char	***extract_all_commands(t_mini *shell, t_cmd *commands);
 // int 	count_cmd_args_for_exec(t_token *tokens); //put as static func in parser
 int		check_access(t_mini *shell, char *cmd);
 // void	wait_for_children(t_mini *shell);
@@ -136,7 +136,7 @@ char	*get_cmd_path(t_mini *shell, char *cmd);
 
 //execution/exec_pipeline.c
 void	close_all_pipes(t_mini *shell, int i);
-int		fork_and_execute(t_mini *shell, t_command *command);
+int		fork_and_execute(t_mini *shell, t_cmd *command);
 int		init_pipeline(t_mini *shell);
 
 //redirect/file_handler.c
@@ -146,9 +146,9 @@ int		open_append_file(t_mini *shell, char *outfile);
 int		handle_heredoc(char *delimiter);
 
 //redirect/redirect.c
-int		process_redir(t_mini *shell, t_command *cmd);
-int		resolve_input_fd(t_mini *shell, t_command *command, t_token *token);
-int		resolve_output_fd(t_mini *shell, t_command *command, t_token *token);
+int		process_redir(t_mini *shell, t_cmd *cmd);
+int		resolve_input_fd(t_mini *shell, t_cmd *command, t_token *token);
+int		resolve_output_fd(t_mini *shell, t_cmd *command, t_token *token);
 
 //setup/setup.c
 int		setup(t_mini *shell, char **env);
@@ -161,7 +161,7 @@ void	signal_reset(void);
 void	signal_init(void);
 
 //utils/cleanup.c
-void	clean_commands(t_command *command);
+void	clean_commands(t_cmd *command);
 void	cleanup_success(t_mini *shell);
 void	cleanup(t_mini *shell);
 

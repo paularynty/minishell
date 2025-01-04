@@ -8,7 +8,7 @@ static int	process_input(const char *input, char **cmd, int *j, int *start)
 	while (input && input[i])
 	{
 		if (input[i] == '\'' || input[i] == '"')
-			i += quotes_offset(input + i, input[i]);
+			i += quote_offset(input + i, input[i]);
 		else if (input[i] == '|')
 		{
 			if (*start >= i)

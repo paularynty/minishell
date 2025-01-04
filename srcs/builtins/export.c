@@ -97,7 +97,7 @@ static int	print_export_vars(char **env)
 	return (TRUE);
 }
 
-int	builtin_export(t_mini *shell, t_command *command)
+int	builtin_export(t_mini *shell, t_cmd *command)
 {
 	char	**temp;
 	int		i;

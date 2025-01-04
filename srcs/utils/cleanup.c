@@ -13,9 +13,9 @@ static void	clean_tokens(t_token *tokens)
     }
 }
 
-void	clean_commands(t_command *command) 
+void	clean_commands(t_cmd *command) 
 {
-	t_command	*temp;
+	t_cmd	*temp;
 	
 	while (command)
 	{

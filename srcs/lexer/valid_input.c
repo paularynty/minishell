@@ -1,14 +1,22 @@
 #include "minishell.h"
 
-int 	str_is_whitespace(const char *str)
+int	backslash(const char *input)
 {
-	while (*str)
+	int	i;
+
+	i = 0;
+	while (input && input[i])
 	{
-		if (*str != 32 && (*str < 9 || *str > 13))
-			return (0);
-		str++;
+		if (input[i] == '\'' || input[i] == '"')
+			i += quote_offset(input + i, input[i]);
+		if (input[i] == '\\')
+		{
+			ft_putstr_fd("minishell: syntax error near unexpected token `\\'\n", 2);
+			return (TRUE);
+		}
+		i++;
 	}
-	return (1);
+	return (FALSE);
 }
 
 int	matching_quotes(const char *str)
@@ -66,14 +74,6 @@ int valid_redirection(const char *input)
 	return (TRUE);
 }
 
-void	invalid_pipes_message(int pipes)
-{
-	if (pipes >= 2 && pipes <= 3)
-		ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
-	else if (pipes > 3)
-		ft_putstr_fd("minishell: syntax error near unexpected token `||'\n", 2);
-}
-
 int	valid_pipes(const char *input)
 {
 	int		i;
@@ -83,7 +83,7 @@ int	valid_pipes(const char *input)
 	while (input[i])
 	{
 		if (input[i] == '\'' || input[i] == '"')
-			i += quotes_offset(input + i, input[i]);
+			i += quote_offset(input + i, input[i]);
 		pipes = 0;
 		while (input[i] && input[i] == '|')
 		{
@@ -92,7 +92,7 @@ int	valid_pipes(const char *input)
 		}
 		if (pipes >= 2)
 		{
-			invalid_pipes_message(pipes);
+			error_pipes(pipes);
 			return (FALSE);
 		}
 		i++;
@@ -110,12 +110,12 @@ int	closed_pipes(const char *input)
 	while (input[i])
 	{
 		if (input[i] == '\'' || input[i] == '"')
-			i += quotes_offset(input + i, input[i]);
+			i += quote_offset(input + i, input[i]);
 		if (input[i] == '|')
 		{
 			if (str_is_whitespace(input + i + 1))
 			{
-				ft_putstr_fd("minishell: unmatched '|' marks.\n", 2);
+				ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
 				return (FALSE);
 			}
 		}

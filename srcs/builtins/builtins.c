@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	handle_builtin(int id, t_mini *shell, t_command *command)
+void	handle_builtin(int id, t_mini *shell, t_cmd *command)
 {
 	int	code;
 

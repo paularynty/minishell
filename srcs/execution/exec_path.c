@@ -49,10 +49,7 @@ char	*get_cmd_path(t_mini *shell, char *cmd)
 		if (access(cmd, F_OK) == 0)
 			return (cmd);
 		else
-		{
-			errno = ENOENT;
-			error_cmd(shell, cmd);
-		}
+			error_cmd(shell, cmd, "No such file or directory", 127);
 	}
 	env_path = get_env_path(shell->env);
 	if (!env_path)

@@ -27,7 +27,7 @@
 // 	fd[1] = -1;
 // }
 
-// void	close_all(t_mini *shell, t_command *command)
+// void	close_all(t_mini *shell, t_cmd *command)
 // {
 // 	if (command->input_fd >= 0)
 // 		close(command->input_fd);
@@ -83,76 +83,6 @@ void	close_unused_fds(t_mini *shell, int i)
 		}
 		j++;
 	}
-}
-
-static void	exec_forked_builtin(t_mini *shell, t_command *command, int is_builtin)
-{
-	// if (!save_std(shell))
-	// 	debug_print("Failed to save std\n");
-	handle_builtin(is_builtin, shell, command); //rework this to take in account failed builtin exec
-	// if (!reset_std(shell))
-	// 	debug_print("Failed to reset std\n");
-	// cleanup_success(shell);
-	exit(EXIT_SUCCESS);
-}
-
-/* Executes command in child process. 
-Upon successful execve() call, exits with EXIT_SUCCESS (0). 
-Otherwise cleans everything and exits with predetermined exit code.*/
-// static void	exec_forked_cmd(t_mini *shell, t_command *command, int i)
-static void	exec_forked_cmd(t_mini *shell, t_command *command)
-{
-	char	*cmd_path;
-	
-	cmd_path = get_cmd_path(shell, command->cmd[0]);
-	if (!cmd_path)
-		check_access(shell, command->cmd[0]);
-	check_access(shell, cmd_path);
-	signal_reset();
-	// debug_print("sending to execve: %s\n", command->cmd[0]);
-	if (execve(cmd_path, command->cmd, shell->env) == -1)
-	{
-		free(cmd_path);
-		error_cmd(shell, command->cmd[0]);
-	}
-}
-
-int	fork_and_execute(t_mini *shell, t_command *command)
-{
-	int	is_builtin;
-
-	// debug_print("cmd_i: %d\n", command->cmd_i);
-	is_builtin = builtins(command->cmd[0]);
-	signal_reset();
-	shell->pids[command->cmd_i] = fork();
-	if (shell->pids[command->cmd_i] == -1)
-	{
-		perror("fork failed");
-		return (-1);
-	}
-	else if (shell->pids[command->cmd_i] == 0)
-	{
-		// debug_print("Child process %d created (PID: %d)\n", command->cmd_i, getpid());
-		close_unused_fds(shell, command->cmd_i);
-		if (!resolve_fds(shell, command))
-		{
-			debug_print("failed to resolve fds\n");
-			return (FALSE);
-		}
-		check_print("After resolving fd's\n");
-		check_print("Command nro %d's input_fd: %d\n", command->cmd_i, command->input_fd);
-		check_print("Command nro %d's output_fd: %d\n", command->cmd_i, command->output_fd);
-		if (!dup_input(shell, command, command->cmd_i))
-			debug_print("failed to dup input\n");
-		if (!dup_output(shell, command, command->cmd_i))
-			debug_print("failed to dup output\n");
-		if (builtins(command->cmd[0])) //check for builtin cmd in pipe
-			exec_forked_builtin(shell, command, is_builtin);
-		else
-			// exec_forked_cmd(shell, command, i);
-			exec_forked_cmd(shell, command);
-	}
-	return (TRUE);
 }
 
 /* Creates pipes from shell->pipes array. All pipes are created at the same time. */

@@ -40,17 +40,18 @@ SRCS			= $(SRCDIR)/main.c \
 				$(SRCDIR)/environment/env_utils.c \
 				$(SRCDIR)/environment/env.c \
 				$(SRCDIR)/execution/execute.c \
-				$(SRCDIR)/execution/exec_dup_close.c \
+				$(SRCDIR)/execution/dup_close.c \
 				$(SRCDIR)/execution/exec_path.c \
-				$(SRCDIR)/execution/exec_pipeline.c \
 				$(SRCDIR)/execution/exec_std.c \
 				$(SRCDIR)/execution/exec_utils.c \
+				$(SRCDIR)/execution/pipes.c \
 				$(SRCDIR)/errors/errors.c \
-				$(SRCDIR)/lexer/expansion.c \
+				$(SRCDIR)/lexer/expand.c \
 				$(SRCDIR)/lexer/lexer.c \
+				$(SRCDIR)/lexer/lexer_utils.c \
 				$(SRCDIR)/lexer/valid_input.c \
 				$(SRCDIR)/lexer/valid_input2.c \
-				$(SRCDIR)/parser/helper_funcs.c \
+				$(SRCDIR)/parser/parser_utils.c \
 				$(SRCDIR)/parser/create_command.c \
 				$(SRCDIR)/parser/create_command_args.c \
 				$(SRCDIR)/parser/create_quoted_arg.c \

@@ -84,7 +84,7 @@ char	*expand_variable(t_mini *shell, char *input, int *i)
 	return (new_input);
 }
 
-char	*expand_exitcode(t_mini *shell, char *input, int *i)
+char	*expand_exit_code(t_mini *shell, char *input, int *i)
 {
 	char	*value;
 	char	*new_input;
@@ -108,30 +108,30 @@ char	*expand_input(t_mini *shell, char *input)
 	i = 0;
 	while (input[i])
 	{
-		if (input[i] == '$' && input[i + 1] != '$' && !char_is_whitespace(input[i + 1]))
+		if (input[i] == '$')
 		{
-			if (input[i + 1] == '?')
-				input = expand_exitcode(shell, input, &i);
-			else if (input[i + 1] == '"' || input[i + 1] == '\'')
+			if input[i + 1] != '$' && !char_is_whitespace(input[i + 1]))
 			{
-//				check_print("We have quotes, input before replace segment: %s\n", input);
-				input = replace_segment(input, i, i + 1, NULL);
-//				check_print("Input after replace segment: %s\n", input);
-				if (input[i + 1] == '"')
-					i++;
+				if (input[i + 1] == '?')
+					input = expand_exit_code(shell, input, &i);
+				else if (input[i + 1] == '"' || input[i + 1] == '\'')
+				{
+					input = replace_segment(input, i, i + 1, NULL);
+					if (input[i + 1] == '"')
+						i++;
+					else
+						i += quote_offset(input + i + 1, input[i + 1]);
+				}
 				else
-					i += quotes_offset(input + i + 1, input[i + 1]);
-//			check_print("Input's index after i increase: %s\n", (input + i));
+					input = expand_variable(shell, input, &i);
+				if (!input)
+					return (NULL);
 			}
+			else if (input[i] == '\'')
+				i += quote_offset(input + i, input[i]);
 			else
-				input = expand_variable(shell, input, &i);
-			if (!input)
-				return (NULL);
+				i++;
 		}
-		else if (input[i] == '\'')
-			i += quotes_offset(input + i, input[i]);
-		else
-			i++;
 	}
 	return (input);
 }

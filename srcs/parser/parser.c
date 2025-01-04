@@ -1,8 +1,8 @@
 #include "minishell.h"
 
-static void	add_command(t_command **head, t_command *new_cmd)
+static void	add_command(t_cmd **head, t_cmd *new_cmd)
 {
-	t_command	*temp;
+	t_cmd	*temp;
 
 	temp = NULL;
 	if (!*head)
@@ -18,11 +18,11 @@ static void	add_command(t_command **head, t_command *new_cmd)
 
 /*Splits input by pipes into command chunks.
 Adds command chunks to linked list.*/
-t_command	*tokenizer(t_mini *shell, const char *input)
+t_cmd	*tokenizer(t_mini *shell, const char *input)
 {
 	char		**cmds;
-	t_command	*commands;
-	t_command	*current_cmd;
+	t_cmd	*commands;
+	t_cmd	*current_cmd;
 	int			i;
 
 	i = 0;

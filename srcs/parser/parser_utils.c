@@ -1,5 +1,21 @@
 #include "minishell.h"
 
+void	free_2d_array(char **array)
+{
+	int	i;
+
+	i = 0;
+	if (!array)
+		return ;
+	while (array[i])
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array);
+	array = NULL;
+}
+
 int count_token_type(t_token *tokens, enum e_token_type type)
 {
     int count;
@@ -20,16 +36,15 @@ int count_token_type(t_token *tokens, enum e_token_type type)
  * data is stored as it should.
  * 
  ******************************/
-#include <stdio.h>
-
-void print_list(t_command *commands)
+void print_list(t_cmd *commands)
 {
-    t_command *current = commands;
+    t_cmd *curr;
 
-    while (current)
+	curr = commands;
+    while (curr)
     {
         check_print("Command:\n");
-        t_token *token = current->tokens; // Start with the first token
+        t_token *token = curr->tokens; // Start with the first token
         int i = 0;
         if (token)
         {
@@ -45,41 +60,26 @@ void print_list(t_command *commands)
         {
 			check_print("  Tokens: NULL\n");
         }
-        check_print("  Input FD: %d\n", current->input_fd);
-        check_print("  Output FD: %d\n", current->output_fd);
-        current = current->next; // Move to the next command
-        if (current)
+        check_print("  Input FD: %d\n", curr->input_fd);
+        check_print("  Output FD: %d\n", curr->output_fd);
+        curr = curr->next; // Move to the next command
+        if (curr)
             check_print("  ---- Next Command ----\n");
     }
-}
-
-void	free_2d_array(char **array)
-{
-	int	i;
-
-	i = 0;
-	if (!array)
-		return ;
-	while (array[i])
-	{
-		free(array[i]);
-		i++;
-	}
-	free(array);
-	array = NULL;
 }
 
 /********************************
  * 
  * The insides of the quotes are their own argument, so we count how long this
- * argument is (including quotes)
+ * argument is (including quotes). 
+ * We already have quotes opened, so offset is first initialized to 1.
  * 
  ******************************/
-int	quotes_offset(const char *input, char quote)
+int	quote_offset(const char *input, char quote)
 {
 	int	offset;
 
-	offset = 1; // we already have quotes opened, so we start with 1 instead of 0
+	offset = 1; // 
 	while (input[offset] && input[offset] != quote)
 		offset++;
 	offset++;
@@ -88,7 +88,7 @@ int	quotes_offset(const char *input, char quote)
 
 /********************************
  * 
- * we count how many pipes occur
+ * we count how many pipes occur. index is moved until quotes are closed.
  * 
  ******************************/
 int	count_pipes(const char *input)
@@ -100,9 +100,8 @@ int	count_pipes(const char *input)
 	i = 0;
 	while (input && input[i])
 	{
-		// printf("Inspecting input %s in letter %c\n", input, input[i]);
 		if (input[i] == '\'' || input[i] == '"')
-			i += quotes_offset(input + i, input[i]); // we move index until quotes are closed
+			i += quote_offset(input + i, input[i]);
 		else if (input[i] == '|')
 		{
 			pipes++;
