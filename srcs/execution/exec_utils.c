@@ -40,11 +40,11 @@ int	wait_for_children(t_mini *shell)
 
 bool	is_dir(char *path)
 {
-    struct stat	sb;
+	struct stat	sb;
 
     if (stat(path, &sb) == -1)
-        return (false);
-    return (S_ISDIR(sb.st_mode));
+		return (false);
+	return (S_ISDIR(sb.st_mode));
 }
 
 int	check_access(t_mini *shell, char *cmd)

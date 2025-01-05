@@ -54,6 +54,21 @@
 // 	return (fd);
 // }
 
+int	redirect_fd(int src_fd, int dest_fd)
+{
+	if (src_fd != dest_fd)
+	{
+		if (dup2(src_fd, dest_fd) == -1)
+		{
+			perror("dup2 failed");
+			close(src_fd);
+			return (FALSE);
+		}
+		close(src_fd);
+	}
+	return (TRUE);
+}
+
 static void	close_fd_if_needed(int fd)
 {
 	if (fd > 2)
@@ -79,7 +94,7 @@ int	resolve_input_fd(t_mini *shell, t_cmd *cmd, t_token *token)
 
 int	resolve_output_fd(t_mini *shell, t_cmd *cmd, t_token *token)
 {
-	check_print("Entering resolve_output_fd: token type = %d\n", token->type);
+	debug_print("Entering resolve_output_fd: token type = %d\n", token->type);
 	if (cmd->output_fd != -1)
 	{
 		close(cmd->output_fd);

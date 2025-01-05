@@ -38,13 +38,7 @@ static void	minishell(t_mini *shell)
 		if (*input)
 		{
 			add_history(input); //this could be moved somewhere in parsing/exec functions
-			if (lexer(shell, input))
-			{
-				cmds = tokenizer(shell, shell->input);
-				execute(shell, cmds);
-			//		free_commands(commands); // I think freeing command list should be right after executing?
-			}
-			else if (!lexer(shell, input))
+			if (!lexer(shell, input))
 			{
 				if (input && *input)
 				{
@@ -52,6 +46,8 @@ static void	minishell(t_mini *shell)
 					continue ;
 				}
 			}
+			cmds = tokenizer(shell, shell->input);
+			execute(shell, cmds);
 			if (shell->exit_flag || shell->abort)
 				break ;
 		}
@@ -61,6 +57,44 @@ static void	minishell(t_mini *shell)
 	}
 	//clean_commands(commands);
 }
+
+// static void	minishell(t_mini *shell)
+// {
+// 	char	*input;
+// 	t_cmd	*cmds;
+
+// 	while (TRUE)
+// 	{
+// 		//reset_signals();
+// 		input = setup_input(shell);
+// 		if (input == NULL)
+// 			break ;
+// 		if (*input)
+// 		{
+// 			add_history(input); //this could be moved somewhere in parsing/exec functions
+// 			if (lexer(shell, input))
+// 			{
+// 				cmds = tokenizer(shell, shell->input);
+// 				execute(shell, cmds);
+// 			//		free_commands(commands); // I think freeing command list should be right after executing?
+// 			}
+// 			else if (!lexer(shell, input))
+// 			{
+// 				if (input && *input)
+// 				{
+// 					free(input);
+// 					continue ;
+// 				}
+// 			}
+// 			if (shell->exit_flag || shell->abort)
+// 				break ;
+// 		}
+// 		// free(shell->input);
+// 		shell->cmd_count = 0; // move to execute
+// 		// input = NULL;
+// 	}
+// 	//clean_commands(commands);
+// }
 
 
 

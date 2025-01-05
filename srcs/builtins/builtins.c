@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	handle_builtin(int id, t_mini *shell, t_cmd *cmd)
+int	handle_builtin(int id, t_mini *shell, t_cmd *cmd)
 {
 	int	code;
 
@@ -21,6 +21,7 @@ void	handle_builtin(int id, t_mini *shell, t_cmd *cmd)
 	else if (id == BUILTIN_UNSET)
 		code = builtin_unset(shell, cmd);
 	shell->exit_code = code;
+	return (code);
 }
 
 int	builtins(char *cmd)

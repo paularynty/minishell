@@ -27,10 +27,10 @@ int	matching_quotes(const char *str)
 	single = 0;
 	doubleq = 0;
 	while (*str)
-    {
-		if (*str == '\'' && doubleq % 2 == 0) // double quotes aren't open, so increase singles.
+	{
+		if (*str == '\'' && doubleq % 2 == 0)
 			single++;
-		else if (*str == '"' && single % 2 == 0) // single quotes aren't open, so we increase doubleqs.
+		else if (*str == '"' && single % 2 == 0)
 			doubleq++;
 		str++;
 	}
@@ -47,7 +47,7 @@ int	matching_quotes(const char *str)
 	return (TRUE);
 }
 
-int valid_redirection(const char *input)
+int	valid_redirection(const char *input)
 {
 	int		i;
 	char	redir;
@@ -91,10 +91,7 @@ int	valid_pipes(const char *input)
 			i++;
 		}
 		if (pipes >= 2)
-		{
-			error_pipes(pipes);
-			return (FALSE);
-		}
+			return (error_pipes(pipes), FALSE);
 		i++;
 	}
 	return (TRUE);

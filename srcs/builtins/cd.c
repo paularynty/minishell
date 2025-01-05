@@ -81,19 +81,19 @@ int	builtin_cd(t_mini *shell, t_cmd *cmd)
 		error_builtin(CD, NULL, "too many arguments");
 		return (1);
 	}
-	if (!cmd->cmds[1]) // if just "cd"
+	if (!cmd->cmds[1])
 	{
 		if (!cd_home(shell))
 			return (1);
 	}
-	else if (ft_strncmp(cmd->cmds[1], "-\0", 2) == 0)  // if "cd -"
+	else if (ft_strncmp(cmd->cmds[1], "-\0", 2) == 0)
 	{
 		if (!cd_oldpwd(shell))
 			return (1);
 	}
-	else if (!change_dir(cmd->cmds[1])) // if it's anything else other than cd or cd -
+	else if (!change_dir(cmd->cmds[1]))
 			return (1);
-	if (!update_pwd(shell)) // update env for PWD, OLDPWD
+	if (!update_pwd(shell))
 		return (1);
 	return (0);
 }

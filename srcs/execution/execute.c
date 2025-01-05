@@ -65,7 +65,6 @@ int	fork_and_execute(t_mini *shell, t_cmd *cmd)
 		if (builtins(cmd->cmds[0])) //check for builtin cmd in pipe
 			exec_forked_builtin(shell, cmd, is_builtin);
 		else
-			// exec_forked_cmd(shell, cmd, i);
 			exec_forked_cmd(shell, cmd);
 	}
 	return (TRUE);
@@ -73,7 +72,23 @@ int	fork_and_execute(t_mini *shell, t_cmd *cmd)
 
 static int	exec_parent(t_mini *shell, t_cmd *cmd, int is_builtin)
 {
-	handle_builtin(is_builtin, shell, cmd);
+	if (!resolve_fds(shell, cmd) || !save_std(shell, cmd))
+	{
+		shell->exit_code = 1; //check if this is correct, or if I should just carry over whatever exit code my builtin cmd returns
+		return (FALSE);
+	}
+	if (!redirect_fd(cmd->input_fd, STDIN_FILENO) || !redirect_fd(cmd->output_fd, STDOUT_FILENO))
+		return (FALSE);
+	if (handle_builtin(is_builtin, shell, cmd) > 0)
+	{
+		reset_std(shell, cmd);
+		return (FALSE);
+	}
+	if (cmd->input_fd != STDIN_FILENO || cmd->output_fd != STDOUT_FILENO)
+	{
+		if (!reset_std(shell, cmd))
+			return (FALSE);
+	}
 	return (TRUE);
 }
 

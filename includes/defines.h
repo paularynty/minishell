@@ -1,8 +1,6 @@
 #ifndef DEFINES_H
 # define DEFINES_H
 
-# include "minishell.h"
-
 # define TRUE 1
 # define FALSE 0
 

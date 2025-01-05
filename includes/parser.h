@@ -1,41 +1,12 @@
 #ifndef PARSER_H
 # define PARSER_H
 
-# include "minishell.h"
+# include "structs.h"
 
 typedef struct s_mini t_mini;
-
-/*Determines token type of each token. */
-typedef enum e_token_type
-{
-	CMD,            // Command and arguments
-	FILENAME,       // Filename
-	REDIR_IN,    	// Input redirection ("<")
-	REDIR_OUT,   	// Output redirection (">")
-	REDIR_APPEND,	// Append redirection (">>")
-	HEREDOC, 		// Heredoc ("<<")
-	DELIMITER 		// EOF after heredoc
-} t_token_type;
-
-/*Token structure which holds token type (CMD, REDIR etc.)
-and token value ("echo", "file.txt", etc.).*/
-typedef struct s_token
-{
-	t_token_type	type;
-	char			*value;
-	struct s_token	*next;
-} t_token;
-
-/*cmd structure.*/
-typedef struct	s_cmd
-{
-	t_token	*tokens;    	// Linked list of tokens for the command
-	char	**cmds;      	// 2D array of command and its arguments
-	int		input_fd;       // Input redirection file descriptor
-	int		output_fd;      // Output redirection file descriptor
-	int		cmd_i;
-	struct s_cmd	*next; // Next command (if part of a chain, separated by pipes)
-} t_cmd;
+typedef struct s_cmd t_cmd;
+typedef struct s_token t_token;
+// typedef enum e_token_type t_token_type;
 
 //lexer/expansion.c
 char		*expand_exit_code(t_mini *shell, char *input, int *i);
@@ -69,12 +40,12 @@ int			count_pipes(const char *input);
 void	    print_list(t_cmd *cmds);
 
 //parser/free_cmd_contents.c
-void		free_commands(t_cmd *cmds);
+void		free_commands(t_cmd *cmd);
 void		free_tokens(t_token *tokens);
 int			quote_offset(const char *input, char quote);
 
 //parser/create_command.c
-t_cmd	*create_command(char *cmd_str, int i);
+t_cmd		*create_command(char *cmd_str, int i);
 
 //parser/create_tokens.c
 void		add_token(t_token **head, t_token *new_token);
@@ -90,6 +61,6 @@ char		*create_quoted_arg(char *str, int *i, int len);
 char		**split_by_pipes(const char *input);
 
 //parser/parser.c
-t_cmd	*tokenizer(t_mini *shell, const char *input);
+t_cmd		*tokenizer(t_mini *shell, const char *input);
 
 #endif

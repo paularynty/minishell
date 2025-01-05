@@ -8,7 +8,7 @@ void	error_pipes(int pipes)
 		ft_putstr_fd("minishell: syntax error near unexpected token `||'\n", 2);
 }
 
-int 	str_is_whitespace(const char *str)
+int	str_is_whitespace(const char *str)
 {
 	while (*str)
 	{

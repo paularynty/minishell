@@ -33,7 +33,7 @@
 
 int	resolve_fds(t_mini *shell, t_cmd *cmd)
 {
-	check_print("calling process_redir from resolve_fd's\n");
+	// check_print("calling process_redir from resolve_fd's\n");
 	if (!process_redir(shell, cmd))
 		return (FALSE);
 	if (cmd->input_fd == -1)

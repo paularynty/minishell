@@ -1,4 +1,5 @@
 #include "minishell.h"
+
 int	count_array_elements(char **array)
 {
 	int	count;

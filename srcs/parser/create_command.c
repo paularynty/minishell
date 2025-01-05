@@ -11,24 +11,26 @@ static t_cmd	*init_cmd(int i)
 	cmd->tokens = NULL;
 	cmd->input_fd = -1;
 	cmd->output_fd = -1;
+	cmd->saved_stdin = -1;
+	cmd->saved_stdout = -1;
 	cmd->cmd_i = i;
 	cmd->next = NULL;
 	return (cmd);
 }
 
-/*Extracts the CMD token type commands into cmd->args 2D array. */
+/*Extracts tokens of CMD token type into cmd->cmds 2D array. */
 static char	**extract_cmd(t_cmd *cmd)
 {
 	t_token	*token;
-	char	**cmd;
+	char	**cmd_array;
 	int		count;
 	int		i;
 
 	if (!cmd || !cmd->tokens)
 		return (NULL);
 	count = count_token_type(cmd->tokens, CMD);
-	cmd = (char **)malloc(sizeof(char *) * (count + 1));
-	if (!cmd)
+	cmd_array = (char **)malloc(sizeof(char *) * (count + 1));
+	if (!cmd_array)
 		return (NULL);
 	i = 0;
 	token = cmd->tokens;
@@ -36,15 +38,15 @@ static char	**extract_cmd(t_cmd *cmd)
 	{
 		if (token->type == CMD)
 		{
-			cmd[i] = ft_strdup(token->value);
-			if (!cmd[i])
-				ft_free_array(&cmd);
+			cmd_array[i] = ft_strdup(token->value);
+			if (!cmd_array[i])
+				ft_free_array(&cmd_array);
 			i++;
 		}
 		token = token->next;
 	}
-	cmd[i] = NULL;
-	return (cmd);
+	cmd_array[i] = NULL;
+	return (cmd_array);
 }
 
 t_cmd	*create_command(char *cmd_str, int i)

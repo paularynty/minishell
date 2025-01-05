@@ -38,7 +38,7 @@ char	*replace_segment(char *input, int start, int end, char *replacement)
 	repl_len = ft_strlen(replacement);
 	// check_print("After strlen in replace_segment repl_len: %d\n", repl_len);
 	new_len = input_len - (end - start) + repl_len;
-	new_input = (char *)malloc(sizeof(char)* new_len + 1);
+	new_input = (char *)malloc(sizeof(char) * new_len + 1);
 	// check_print("After malloc in replace_segment input: %s\n", input);
 	if (!new_input)
 		return (NULL);
@@ -110,7 +110,9 @@ char	*expand_input(t_mini *shell, char *input)
 	{
 		if (input[i] == '$')
 		{
-			if input[i + 1] != '$' && !char_is_whitespace(input[i + 1]))
+			if (input[i + 1] == '"' || input[i + 1] == '\'')
+				return (input);
+			if (input[i + 1] != '$' && !char_is_whitespace(input[i + 1]))
 			{
 				if (input[i + 1] == '?')
 					input = expand_exit_code(shell, input, &i);
@@ -132,6 +134,7 @@ char	*expand_input(t_mini *shell, char *input)
 			else
 				i++;
 		}
+		i++;
 	}
 	return (input);
 }

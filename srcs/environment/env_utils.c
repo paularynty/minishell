@@ -1,4 +1,5 @@
 #include "minishell.h"
+
 char	*env_get_variable(char **env, char *key)
 {
 	int		i;

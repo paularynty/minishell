@@ -28,23 +28,23 @@ static int	process_input(const char *input, char **cmd, int *j, int *start)
 
 static char	**allocate_cmd_array(int pipes)
 {
-	int	cmd_count;
-	char	**cmd;
+	int		cmd_count;
+	char	**cmd_array;
 
 	cmd_count = pipes + 1;
-	cmd = (char **)malloc(sizeof(char *)*(cmd_count + 1));
-	if (!cmd)
+	cmd_array = (char **)malloc(sizeof(char *) * (cmd_count + 1));
+	if (!cmd_array)
 		return (NULL);
-	return (cmd);
+	return (cmd_array);
 }
 
 char	**split_by_pipes(const char *input)
 {
 	char **cmd;
-	int	j;
-	int	start;
-	int	end;
-	int	pipes;
+	int	 j;
+	int	 start;
+	int	 end;
+	int	 pipes;
 
 	pipes = count_pipes(input);
 	cmd = allocate_cmd_array(pipes);

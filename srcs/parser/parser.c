@@ -20,29 +20,29 @@ static void	add_command(t_cmd **head, t_cmd *new_cmd)
 Adds cmd chunks to linked list.*/
 t_cmd	*tokenizer(t_mini *shell, const char *input)
 {
-	char		**cmds;
-	t_cmd	*cmds;
+	char	**cmd_array;
+	t_cmd	*cmd;
 	t_cmd	*current_cmd;
-	int			i;
+	int		i;
 
 	i = 0;
-	cmds = NULL;
-	cmds = split_by_pipes(input);
-	if (!cmds)
+	cmd = NULL;
+	cmd_array = split_by_pipes(input);
+	if (!cmd_array)
 		return (NULL);
-	while (cmds[i] != NULL)
+	while (cmd_array[i] != NULL)
 	{
-		current_cmd = create_command(cmds[i], i);
+		current_cmd = create_command(cmd_array[i], i);
 		if (!current_cmd)
 		{
-			free_2d_array(cmds);
-			free_commands(commands);
+			free_2d_array(cmd_array);
+			free_commands(cmd);
 			return (NULL);
 		}
-		add_command(&commands, current_cmd);
+		add_command(&cmd, current_cmd);
 		shell->cmd_count++;
 		i++;
 	}
-	free_2d_array(cmds);
-	return (cmds);
+	free_2d_array(cmd_array);
+	return (cmd);
 }

@@ -16,13 +16,13 @@ void	free_2d_array(char **array)
 	array = NULL;
 }
 
-int count_token_type(t_token *tokens, enum e_token_type type)
+int	count_token_type(t_token *tokens, enum e_token_type type)
 {
-    int count;
+	int	count;
 
 	count = 0;
     while (tokens)
-    {
+	{
         if (tokens->type == type)
             count++;
         tokens = tokens->next;
@@ -38,14 +38,16 @@ int count_token_type(t_token *tokens, enum e_token_type type)
  ******************************/
 void print_list(t_cmd *cmds)
 {
-    t_cmd *curr;
+    t_cmd 	*curr;
+	t_token	*token;
+	int		i;
 
 	curr = cmds;
     while (curr)
     {
         check_print("Command:\n");
-        t_token *token = curr->tokens; // Start with the first token
-        int i = 0;
+        token = curr->tokens; // Start with the first token
+        i = 0;
         if (token)
         {
             check_print("  Tokens:\n");

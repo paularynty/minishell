@@ -50,7 +50,6 @@ SRCS			= $(SRCDIR)/main.c \
 				$(SRCDIR)/lexer/lexer.c \
 				$(SRCDIR)/lexer/lexer_utils.c \
 				$(SRCDIR)/lexer/valid_input.c \
-				$(SRCDIR)/lexer/valid_input2.c \
 				$(SRCDIR)/parser/parser_utils.c \
 				$(SRCDIR)/parser/create_command.c \
 				$(SRCDIR)/parser/create_command_args.c \
