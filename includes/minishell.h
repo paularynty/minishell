@@ -76,6 +76,8 @@ void	error_file(t_mini *shell, char *file, char *error_str, int ex);
 void	error_builtin(char *builtin, char *str, char *error_str);
 void	error_cmd(t_mini *shell, char *cmd, char *error_str, int ex);
 // int		error_cmd(t_mini *shell, char *cmd);
+void	error_export(char *str);
+
 
 //execution/execute.c
 int		execute(t_mini *shell, t_cmd *cmd);
@@ -91,6 +93,7 @@ int		save_std(t_mini *shell, t_cmd *cmd);
 int		reset_std(t_mini *shell, t_cmd *cmd);
 
 //execution/exec_utils.c
+bool	is_dir(char *path);
 int		check_access(t_mini *shell, char *cmd);
 int		wait_for_children(t_mini *shell);
 

@@ -53,7 +53,7 @@ int	check_access(t_mini *shell, char *cmd)
 		error_cmd(shell, cmd, "command not found", 127);
 	if (access(cmd, F_OK) == -1)
 	{
-		if (ft_strchr(cmd, '/'))
+		if (strchr(cmd, '/'))
 			error_cmd(shell, cmd, "No such file or directory", 1);
 		else
 			error_cmd(shell, cmd, "command not found", 127);

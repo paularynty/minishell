@@ -73,19 +73,19 @@ char	*add_missing_spaces(char *input)
 // We check whether the prompt is empty/whitespace, contains uneven quotes or other errors we can handle immediately
 // without taking into account pipes. Upon occuring, we send correct error message, update add_history and return matching exit code.
 // Add exit_code / error message handling later.
-int 	valid_input(char *input)
+int 	valid_input(t_mini *shell, char *input)
 {
 	if (str_is_whitespace(input))
 		return (FALSE);
-	if (!matching_quotes(input))
+	if (!matching_quotes(shell, input))
 		return (FALSE);
-	if (backslash(input))
+	if (backslash(shell, input))
 		return (FALSE);
-	if (!valid_redirection(input))
+	if (!valid_redirection(shell, input))
 		return (FALSE);
-	if (!closed_pipes(input))
+	if (!closed_pipes(shell, input))
 		return (FALSE);
-	if (!valid_pipes(input))
+	if (!valid_pipes(shell, input))
 		return (FALSE);
 	return (TRUE);
 }
@@ -98,7 +98,7 @@ int	lexer(t_mini *shell, char *line)
 		check_print("\nWE DON'T HAVE AN INPUT\n");
 		return (FALSE);
 	}
-	if (!valid_input(shell->input))
+	if (!valid_input(shell, shell->input))
 	{
 		// free(shell->input);
 		return (FALSE);

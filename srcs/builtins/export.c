@@ -28,6 +28,16 @@ int	valid_export(char *str)
 	return (TRUE);
 }
 
+static void	remove_eq(t_mini *shell, char *arg)
+{
+	char	*ptr;
+
+	ptr = env_get_variable(shell->env, arg);
+	if (!ptr)
+		return ;
+	*(ptr - 1) = '\0';
+}
+
 static void	sort_export_table(char **env)
 {
 	size_t	i;
@@ -59,12 +69,13 @@ int	export_variable(t_mini *shell, char *arg)
 	char	*value;
 
 	if (!valid_export(arg))
-		return (-1);
+		return (FALSE);
 	value = ft_strchr(arg, '=');
 	if (!value)
 	{
 		env_set_variable(shell, arg, "");
-		return (FALSE);
+		remove_eq(shell, arg);
+		return (TRUE);
 	}
 	*value++ = '\0';
 	env_unset_variable(shell->env, arg);
@@ -99,25 +110,27 @@ static int	print_export_vars(char **env)
 
 int	builtin_export(t_mini *shell, t_cmd *cmd)
 {
-	char	**temp;
 	int		i;
+	int		code;
+	char	**temp;
 
 	i = 1;
+	code = 0;
 	temp = clone_env(shell->env);
 	if (!temp)
 		return (-1);
 	sort_export_table(temp);
-	if (!cmd->cmds[1])
+	if (cmd->cmds[1] == NULL)
 		return (print_export_vars(temp));
 	while (cmd->cmds[i])
 	{
 		if (!export_variable(shell, cmd->cmds[i]))
 		{
-			// error_export(shell->cmd[i]);
-			shell->exit_code = 1;
+			error_export(cmd->cmds[i]);
+			code = 1;
 		}
 		i++;
 	}
 	ft_free_array(&temp);
-	return (shell->exit_code);
+	return (code);
 }

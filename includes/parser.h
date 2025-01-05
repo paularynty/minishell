@@ -16,21 +16,21 @@ char		*get_variable(t_mini *shell, char *key, int key_len);
 char		*replace_segment(char *input, int start, int end, char *replacement);
 
 //lexer/lexer.c
-int 		valid_input(char *input);
+int 		valid_input(t_mini *shell, char *input);
 int 		lexer(t_mini *shell, char *line);
 
 //lexer/lexer_utils.c
 int 		str_is_whitespace(const char *str);
-void		error_pipes(int pipes);
+void		error_pipes(t_mini *shell, int pipes);
 
 //lexer/valid_input.c
-int			closed_pipes(const char *input);
-int			matching_quotes(const char *str);
-int			valid_pipes(const char *input);
-int 		valid_redirection(const char *input);
+int			closed_pipes(t_mini *shell, const char *input);
+int			matching_quotes(t_mini *shell, const char *str);
+int			valid_pipes(t_mini *shell, const char *input);
+int 		valid_redirection(t_mini *shell, const char *input);
 
 //lexer/valid_input2.c
-int			backslash(const char *input);
+int			backslash(t_mini *shell, const char *input);
 
 //parser/parser_utils.c
 int 		count_token_type(t_token *tokens, enum e_token_type type);

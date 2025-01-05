@@ -126,7 +126,13 @@ int	execute(t_mini *shell, t_cmd *cmd)
 
 	is_builtin = builtins(cmd->cmds[0]);
 	if (shell->cmd_count == 1 && is_builtin)
-		exec_parent(shell, cmd, is_builtin);
+	{
+		if (!exec_parent(shell, cmd, is_builtin))
+			return (shell->exit_code);
+		//clean_commands;
+		shell->exit_code = 0;
+		return (shell->exit_code);
+	}
 	else
 		exec_child(shell, cmd); // what if it fails?
 	return (shell->exit_code);

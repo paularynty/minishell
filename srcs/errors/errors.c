@@ -26,16 +26,37 @@ void	error_builtin(char *builtin, char *str, char *error_str)
 //check for '/' character at end of directory, if yes, ex = 126, if not, ex = 1
 void	error_cmd(t_mini *shell, char *cmd, char *error_str, int ex)
 {
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(cmd, 2);
-	write(2, ": ", 2);
+	char	buffer[1024];
+
+	shell->exit_code = ex;
+	ft_strlcpy(buffer, "minishell: ", sizeof(buffer) - 1);
+	if (cmd)
+	{
+		ft_strlcat(buffer, cmd, sizeof(buffer) - 1);
+		ft_strlcat(buffer, ": ", sizeof(buffer) - 1);
+	}
 	if (!error_str)
 		error_str = strerror(errno);
 	if (error_str && error_str[0] != '\0')
-		ft_putendl_fd(error_str, 2);
-	shell->exit_code = ex;
+		ft_strlcat(buffer, error_str, sizeof(buffer) - 1);
+	ft_strlcat(buffer, "\n", sizeof(buffer));
+	ft_putstr_fd(buffer, STDERR_FILENO);
 	exit(shell->exit_code);
 }
+
+// //check for '/' character at end of directory, if yes, ex = 126, if not, ex = 1
+// void	error_cmd(t_mini *shell, char *cmd, char *error_str, int ex)
+// {
+// 	ft_putstr_fd("minishell: ", 2);
+// 	ft_putstr_fd(cmd, 2);
+// 	write(2, ": ", 2);
+// 	if (!error_str)
+// 		error_str = strerror(errno);
+// 	if (error_str && error_str[0] != '\0')
+// 		ft_putendl_fd(error_str, 2);
+// 	shell->exit_code = ex;
+// 	exit(shell->exit_code);
+// }
 
 // //check for '/' character at end of directory, if yes, ex = 126, if not, ex = 1
 // void	error_cmd(t_mini *shell, char *cmd)
@@ -60,9 +81,28 @@ void	error_cmd(t_mini *shell, char *cmd, char *error_str, int ex)
 
 void	error_file(t_mini *shell, char *file, char *error_str, int ex)
 {
-	if (file && file[0] != '\0')
-		ft_putstr_fd(file, 2);
-	write(2, ": ", 2);
-	ft_putendl_fd(error_str, 2);
+	char	buffer[1024];
+
 	shell->exit_code = ex;
+	ft_strlcpy(buffer, "minishell: ", sizeof(buffer) - 1);
+	if (file && file[0] != '\0')
+	{
+		ft_strlcat(buffer, file, sizeof(buffer) - 1);
+		ft_strlcat(buffer, ": ", sizeof(buffer) - 1);
+	}
+	if (error_str && error_str[0] != '\0')
+		ft_strlcat(buffer, error_str, sizeof(buffer) - 1);
+	ft_strlcat(buffer, "\n", sizeof(buffer));
+	ft_putstr_fd(buffer, STDERR_FILENO);
+}
+
+void	error_export(char *str)
+{
+	char	buffer[1024];
+
+	ft_strlcpy(buffer, "minishell: export: `", sizeof(buffer) - 1);
+	ft_strlcat(buffer, str, sizeof(buffer) - 1);
+	ft_strlcat(buffer, "': not a valid identifier\n", sizeof(buffer) - 1);
+	ft_putstr_fd(buffer, STDERR_FILENO);
+
 }

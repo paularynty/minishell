@@ -1,7 +1,5 @@
 #include "minishell.h"
 
-//echo needs to take into account expanding
-
 int	builtin_echo(char **cmd)
 {
 	int	i;

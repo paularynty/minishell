@@ -76,7 +76,6 @@ char	*expand_variable(t_mini *shell, char *input, int *i)
 	if (!value)
 		return (NULL);
 	new_input = replace_segment(input, *i, end, value);
-	free(input);
 	if (!new_input)
 		return (NULL);
 	*i += ft_strlen(value);

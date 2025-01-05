@@ -19,7 +19,7 @@ static int	is_numeric(char *str)
 {
 	if ((*str == '-' || *str == '+') && *(str + 1))
 		str++;
-	while (str != NULL)
+	while (*str)
 	{
 		if (!ft_isdigit(*str))
 			return (FALSE);
@@ -44,26 +44,17 @@ static int	exit_extra_args(t_mini *shell)
 int	builtin_exit(t_mini *shell, char **args)
 {
 	int	code;
-
+	
+	code = 0;
 	shell->exit_flag = TRUE;
 	if (isatty(STDIN_FILENO) && shell->cmd_count == 1)
 		ft_putstr_fd("exit\n", STDERR_FILENO);
 	if (args[1] == NULL)
 		return (shell->exit_code);
-	// if (shell->cmd[0][1])
-	// {
-	// 	while (shell->cmd[0][1][i])
-	// 	{
-	// 		if (!ft_isdigit(shell->cmd[0][1][i]))
-	// 			numeric_flag = TRUE;
-	// 		i++;
-	// 	}
-	// 	code = ft_atoi(shell->cmd[0][1]);
-	// }
 	if (!is_numeric(args[1]))
-		code = exit_non_numeric(args);
-	if (count_array_elements(args) > 2)
-		code = exit_extra_args(shell);
+		return (exit_non_numeric(args));
+	if (args[2] != NULL)
+		return (exit_extra_args(shell));
 	else
 		code = ft_atoi(args[1]);
 	return (code);

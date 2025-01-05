@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	backslash(const char *input)
+int	backslash(t_mini *shell, const char *input)
 {
 	int	i;
 
@@ -12,6 +12,7 @@ int	backslash(const char *input)
 		if (input[i] == '\\')
 		{
 			ft_putstr_fd("minishell: syntax error near unexpected token `\\'\n", 2);
+			shell->exit_code = 2;
 			return (TRUE);
 		}
 		i++;
@@ -19,7 +20,7 @@ int	backslash(const char *input)
 	return (FALSE);
 }
 
-int	matching_quotes(const char *str)
+int	matching_quotes(t_mini *shell, const char *str)
 {
 	int	single;
 	int	doubleq;
@@ -36,18 +37,20 @@ int	matching_quotes(const char *str)
 	}
 	if (single % 2 != 0)
 	{
-		ft_putstr_fd("minishell: unmatched `'' marks.\n", 2);
+		ft_putstr_fd("minishell: syntax error near unexpected token `''\n", 2);
+		shell->exit_code = 2;
 		return (FALSE);
 	}
 	if (doubleq % 2 != 0)
 	{
-		ft_putstr_fd("minishell: unmatched '\"' marks.\n", 2);
+		ft_putstr_fd("minishell: syntax error near unexpected token '\"'\n", 2);
+		shell->exit_code = 2;
 		return (FALSE);
 	}
 	return (TRUE);
 }
 
-int	valid_redirection(const char *input)
+int	valid_redirection(t_mini *shell, const char *input)
 {
 	int		i;
 	char	redir;
@@ -66,6 +69,7 @@ int	valid_redirection(const char *input)
 			if (!input[i] || input[i] == '\n' || ft_strchr("|><", input[i]))
 			{
 				ft_putstr_fd("minishell: syntax error near unexpected token `newline'\n", 2);
+				shell->exit_code = 2;
 				return (FALSE);
 			}
 		}
@@ -74,7 +78,7 @@ int	valid_redirection(const char *input)
 	return (TRUE);
 }
 
-int	valid_pipes(const char *input)
+int	valid_pipes(t_mini *shell, const char *input)
 {
 	int		i;
 	int		pipes;
@@ -91,13 +95,13 @@ int	valid_pipes(const char *input)
 			i++;
 		}
 		if (pipes >= 2)
-			return (error_pipes(pipes), FALSE);
+			return (error_pipes(shell, pipes), FALSE);
 		i++;
 	}
 	return (TRUE);
 }
 
-int	closed_pipes(const char *input)
+int	closed_pipes(t_mini *shell, const char *input)
 {
 	int	i;
 	int	open;
@@ -113,6 +117,7 @@ int	closed_pipes(const char *input)
 			if (str_is_whitespace(input + i + 1))
 			{
 				ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
+				shell->exit_code = 2;
 				return (FALSE);
 			}
 		}

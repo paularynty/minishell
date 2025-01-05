@@ -1,6 +1,7 @@
 #include "minishell.h"
 
-// Tries to open input file and prints correct error in case of failure
+/*Attempts to open input file. 
+Returns fd_out on success, -2 on failure with corresponding error message.*/
 int	open_infile(t_mini *shell, char *infile)
 {
 	int	input_fd;
@@ -24,15 +25,17 @@ int	open_infile(t_mini *shell, char *infile)
 	return (input_fd);
 }
 
-// Tries to open output file and prints correct error in case of failure
+/*Attempts to open output file. 
+Returns fd_out on success, -2 on failure with corresponding error message.*/
 int	open_outfile(t_mini *shell, char *outfile)
 {
 	int	fd_out;
 
-	fd_out = open(outfile, __O_DIRECTORY);
-	if (fd_out != -1)
+	fd_out = 0;
+	// fd_out = open(outfile, __O_DIRECTORY);
+	if (is_dir(outfile) == true)
+	// if (fd_out > -1)
 	{
-		close(fd_out);
 		error_file(shell, outfile, "Is a directory", 1);
 		return (-2);
 	}
@@ -56,10 +59,10 @@ int	open_append_file(t_mini *shell, char *outfile)
 {
 	int	fd_out;
 
-	fd_out = open(outfile, O_DIRECTORY);
-	if (fd_out != -1)
+	// fd_out = open(outfile, O_DIRECTORY);
+	if (is_dir(outfile) == true)
+	// if (fd_out > -1)
 	{
-		close(fd_out);
 		error_file(shell, outfile, "Is a directory", 1);
 		return (-2);
 	}
