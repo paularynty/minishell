@@ -37,7 +37,7 @@ char	*add_space(char *input, int end)
 	new_input = (char *)malloc(sizeof(char) * (new_len + 1));
 	if (!new_input)
 		return (NULL);
-	while (i < end && input[i])
+	while (i <= end && input[i])
 		new_input[j++] = input[i++];
 	new_input[j] = ' ';
 	j++;
@@ -62,27 +62,30 @@ char	*add_missing_spaces(char *input)
 		{
 			if (input[i] == '\'' || input[i] == '"')
 				i += quotes_offset(input + i, input[i]);
-			if (ft_strchr("><", input[i]) && i > 0)
+			if (ft_strchr("><", input[i]))
 			{
-				spaced = add_space(input, i);
-				free(input);
-				if (!spaced)
-					return (NULL);
-				input = spaced;
-				i += 2;
-				if (input[i] == input[i - 1])
-					i++;
-			}
-			else if (i > 0 && (input[i - 1] == '<' || input[i - 1] == '>') && !ft_strchr("><", input[i]))
-			{
-				spaced = add_space(input, i);
-				free(input);
-				if (!spaced)
-					return (NULL);
-				input = spaced;
-				i += 2;
-				if (input[i] == input[i - 1])
-					i++;
+				if (i > 0 && !char_is_whitespace(input[i - 1]))
+				{
+					spaced = add_space(input, i - 1);
+					free(input);
+					if (!spaced)
+						return (NULL);
+					input = spaced;
+					i += 1;
+					if (input[i] == input[i - 1])
+						i++;
+				}
+				else if (!ft_strchr("><", input[i + 1]))
+				{
+					spaced = add_space(input, i);
+					free(input);
+					if (!spaced)
+						return (NULL);
+					input = spaced;
+					i += 2;
+					if (input[i] == input[i - 1])
+						i++;
+				}
 			}
 			else
 				i++;
@@ -101,10 +104,11 @@ int 	lexer(t_mini *shell, char *line)
 	}
 	if (!valid_input(shell->input))
 	{
-		free(shell->input);
+		// free(shell->input);
 		return (FALSE);
 	}
 	shell->input = add_missing_spaces(shell->input);
+//	printf("after add_spaces: %s\n", shell->input);
 	if (!shell->input) // if there was a malloc fail
 	{
 		check_print("\nWE DON'T HAVE AN INPUT\n");

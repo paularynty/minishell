@@ -56,8 +56,9 @@ t_command	*create_command(char *cmd_str, int i)
 	if (!command)
 		return (NULL);
 	args = split_cmd_args(cmd_str);
-	// check_print("After split_cmd_args\n");
-	if (!args || !tokenize_args(command, args))
+	if (!args)
+		return (NULL);
+	if (!tokenize_args(command, args))
 	{
 		free_2d_array(args);
 		free(command);
