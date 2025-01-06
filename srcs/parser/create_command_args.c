@@ -15,7 +15,7 @@ static int	count_cmd_args(char *cmd_str)
 			break ;
 		args++;
 		if (cmd_str[i] == '"' || cmd_str[i] == '\'')
-			i += quote_offset(cmd_str + i, cmd_str[i]);
+			i += quotes_offset(cmd_str + i, cmd_str[i]);
 		while (cmd_str[i] && cmd_str[i] != '"' && cmd_str[i] != '\''
 			&& !char_is_whitespace(cmd_str[i]))
 			i++;
@@ -46,12 +46,12 @@ static int	count_arg_length(char *cmd_str, int i, bool *quotes)
 	{
 		if (cmd_str[i] == '"' || cmd_str[i] == '\'')
 		{
-			len += quote_offset(cmd_str + i, cmd_str[i]) - 2;
+			len += quotes_offset(cmd_str + i, cmd_str[i]) - 2;
 			*quotes = true;
-			i += quote_offset(cmd_str + i, cmd_str[i]);
-			// check_print("len after quote_offset: %d\n", len);
-			// check_print("i after quote_offset: %d\n", i);
-			// check_print("cmd_str pointer after quote_offset: %s\n", cmd_str + i);
+			i += quotes_offset(cmd_str + i, cmd_str[i]);
+			// check_print("len after quotes_offset: %d\n", len);
+			// check_print("i after quotes_offset: %d\n", i);
+			// check_print("cmd_str pointer after quotes_offset: %s\n", cmd_str + i);
 		}
 		else
 		{

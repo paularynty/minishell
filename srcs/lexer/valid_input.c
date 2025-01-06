@@ -8,7 +8,7 @@ int	backslash(t_mini *shell, const char *input)
 	while (input && input[i])
 	{
 		if (input[i] == '\'' || input[i] == '"')
-			i += quote_offset(input + i, input[i]);
+			i += quotes_offset(input + i, input[i]);
 		if (input[i] == '\\')
 		{
 			ft_putstr_fd("minishell: syntax error near unexpected token `\\'\n", 2);
@@ -87,7 +87,7 @@ int	valid_pipes(t_mini *shell, const char *input)
 	while (input[i])
 	{
 		if (input[i] == '\'' || input[i] == '"')
-			i += quote_offset(input + i, input[i]);
+			i += quotes_offset(input + i, input[i]);
 		pipes = 0;
 		while (input[i] && input[i] == '|')
 		{
@@ -111,7 +111,7 @@ int	closed_pipes(t_mini *shell, const char *input)
 	while (input[i])
 	{
 		if (input[i] == '\'' || input[i] == '"')
-			i += quote_offset(input + i, input[i]);
+			i += quotes_offset(input + i, input[i]);
 		if (input[i] == '|')
 		{
 			if (str_is_whitespace(input + i + 1))

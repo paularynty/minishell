@@ -77,7 +77,7 @@ void print_list(t_cmd *cmds)
  * We already have quotes opened, so offset is first initialized to 1.
  * 
  ******************************/
-int	quote_offset(const char *input, char quote)
+int	quotes_offset(const char *input, char quote)
 {
 	int	offset;
 
@@ -103,7 +103,7 @@ int	count_pipes(const char *input)
 	while (input && input[i])
 	{
 		if (input[i] == '\'' || input[i] == '"')
-			i += quote_offset(input + i, input[i]);
+			i += quotes_offset(input + i, input[i]);
 		else if (input[i] == '|')
 		{
 			pipes++;

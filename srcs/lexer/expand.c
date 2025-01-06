@@ -125,7 +125,7 @@ char	*expand_input(t_mini *shell, char *input)
 					if (input[i + 1] == '"')
 						i++;
 					else
-						i += quote_offset(input + i + 1, input[i + 1]);
+						i += quotes_offset(input + i + 1, input[i + 1]);
 				}
 				else
 					input = expand_variable(shell, input, &i);
@@ -133,7 +133,7 @@ char	*expand_input(t_mini *shell, char *input)
 					return (NULL);
 			}
 			else if (input[i] == '\'')
-				i += quote_offset(input + i, input[i]);
+				i += quotes_offset(input + i, input[i]);
 			else
 				i++;
 		}

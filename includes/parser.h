@@ -42,7 +42,7 @@ void	    print_list(t_cmd *cmds);
 //parser/free_cmd_contents.c
 void		free_commands(t_cmd *cmd);
 void		free_tokens(t_token *tokens);
-int			quote_offset(const char *input, char quote);
+int			quotes_offset(const char *input, char quote);
 
 //parser/create_command.c
 t_cmd		*create_command(char *cmd_str, int i);

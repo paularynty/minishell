@@ -60,7 +60,7 @@ t_cmd	*create_command(char *cmd_str, int i)
 	args = split_cmd_args(cmd_str);
 	if (!args)
 		return (NULL);
-	if (!tokenize_args(command, args))
+	if (!tokenize_args(cmd, args))
 	{
 		free_2d_array(args);
 		free(cmd);
