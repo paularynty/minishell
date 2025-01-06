@@ -55,7 +55,7 @@ int	builtin_exit(t_mini *shell, char **args)
 		return (exit_non_numeric(args));
 	if (args[2] != NULL)
 		return (exit_extra_args(shell));
-	else
+	if (args[1])
 		code = ft_atoi(args[1]);
 	return (code);
 }

@@ -1,5 +1,31 @@
 #include "minishell.h"
 
+/* If memory allocation for 2D pipe array fails at any point,
+free all previously pipes allocated. */
+void	free_pipes(t_mini *shell, int i)
+{
+	while (i > 0)
+	{
+		i--;
+		free(shell->pipes[i]);
+	}
+	free(shell->pipes);
+	shell->pipes = NULL;
+}
+
+void	close_all_pipes(t_mini *shell)
+{
+	int	i;
+
+	i = 0;
+	while (i < shell->cmd_count - 1)
+	{
+		close(shell->pipes[i][0]);
+		close(shell->pipes[i][1]);
+		i++;
+	}
+}
+
 static void	clean_tokens(t_token *tokens) 
 {
 	t_token	*temp;
@@ -41,22 +67,22 @@ void	clean_commands(t_cmd *cmd)
  * descriptors, unlinking heredocs, freeing memory, and releasing resources
  * before terminating the shell with the specified exit status.
  */
-// void	cleanup_failure(t_mini *shell, int i, int ex)
-// {
-// 	//close all pipes;
-// 	//unlink all heredocs;
-//	//if (cmd->cmds[i]->output_fd > 2)
-	//	close(cmd->cmds[i]->output_fd);
-//	//if (cmd->cmds[i]->input_fd > 2)
-	//	close(cmd->cmds[i]->input_fd);
-// 	//clean commands;
-// 	//free pids;
-// 	//if there is more than 1 command, ft_free_array for however many cmd->cmds arrays there are
-// 	//cleanup_shell(shell);
-// 	free(shell);
-// 	shell = NULL;
-// 	exit(ex);
-// }
+void	cleanup_failure(t_mini *shell, t_cmd *cmd, int ex)
+{
+	close_all_pipes(shell);
+	//unlink all heredocs;
+	if (cmd->output_fd > 2)
+		close(cmd->output_fd);
+	if (cmd->input_fd > 2)
+		close(cmd->input_fd);
+	//clean commands;
+	//free pids;
+	//if there is more than 1 command, ft_free_array for however many cmd->cmds arrays there are
+	//cleanup_shell(shell);
+	// free(shell);
+	// shell = NULL;
+	exit(ex);
+}
 
 /**
  * cleanup_success - Cleans up resources

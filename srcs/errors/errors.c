@@ -42,6 +42,7 @@ void	error_cmd(t_mini *shell, char *cmd, char *error_str, int ex)
 	ft_strlcat(buffer, "\n", sizeof(buffer));
 	ft_putstr_fd(buffer, STDERR_FILENO);
 	exit(shell->exit_code);
+
 }
 
 // //check for '/' character at end of directory, if yes, ex = 126, if not, ex = 1

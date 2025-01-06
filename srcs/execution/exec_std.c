@@ -38,7 +38,7 @@ int	reset_std(t_mini *shell, t_cmd *cmd)
 {
 	if (cmd->saved_stdin != -1 && cmd->saved_stdin != STDIN_FILENO)
 	{
-		if (dup2_close(cmd->saved_stdin, STDIN_FILENO))
+		if (!dup2_close(cmd->saved_stdin, STDIN_FILENO))
 		{
 			ft_putstr_fd("minishell: failed to restore stdin\n", 2);
 			shell->exit_code = 1;
@@ -49,7 +49,7 @@ int	reset_std(t_mini *shell, t_cmd *cmd)
 	}
 	if (cmd->saved_stdout != -1 && cmd->saved_stdout != STDOUT_FILENO)
 	{
-		if (dup2_close(cmd->saved_stdout, STDOUT_FILENO))
+		if (!dup2_close(cmd->saved_stdout, STDOUT_FILENO))
 		{
 			ft_putstr_fd("minishell: failed to restore stdout\n", 2);
 			shell->exit_code = 1;

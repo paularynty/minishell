@@ -104,7 +104,7 @@ char	*get_cmd_path(t_mini *shell, char *cmd);
 
 //execution/pipes.c
 void	close_unused_fds(t_mini *shell, int i);
-void	close_all_pipes(t_mini *shell, int i);
+void	close_fds_and_pipes(t_mini *shell, int i);
 int		fork_and_execute(t_mini *shell, t_cmd *cmd);
 int		init_pipeline(t_mini *shell);
 
@@ -131,6 +131,8 @@ void	signal_reset(void);
 void	signal_init(void);
 
 //utils/cleanup.c
+void	free_pipes(t_mini *shell, int i);
+void	cleanup_failure(t_mini *shell, t_cmd *cmd, int ex);
 void	clean_commands(t_cmd *cmd);
 void	cleanup_success(t_mini *shell);
 void	cleanup(t_mini *shell);

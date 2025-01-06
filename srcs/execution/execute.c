@@ -25,7 +25,7 @@ static void	exec_forked_cmd(t_mini *shell, t_cmd *cmd)
 	else
 		check_access(shell, cmd_path);
 	signal_reset();
-	// debug_print("sending to execve: %s\n", cmd->cmds[0]);
+	debug_print("sending to execve: %s %s\n", cmd->cmds[0], cmd->cmds[1]);
 	if (execve(cmd_path, cmd->cmds, shell->env) == -1)
 	{
 		free(cmd_path);
@@ -37,31 +37,26 @@ int	fork_and_execute(t_mini *shell, t_cmd *cmd)
 {
 	int	is_builtin;
 
-	// debug_print("cmd_i: %d\n", cmd->cmd_i);
 	is_builtin = builtins(cmd->cmds[0]);
 	signal_reset();
 	shell->pids[cmd->cmd_i] = fork();
 	if (shell->pids[cmd->cmd_i] == -1)
 	{
-		perror("fork failed");
+		perror("minishell: fork failed");
 		return (-1);
 	}
 	else if (shell->pids[cmd->cmd_i] == 0)
 	{
-		// debug_print("Child process %d created (PID: %d)\n", cmd->cmd_i, getpid());
 		close_unused_fds(shell, cmd->cmd_i);
 		if (!resolve_fds(shell, cmd))
 		{
-			debug_print("failed to resolve fds\n");
+			cleanup_failure(shell, cmd, shell->exit_code);
 			return (FALSE);
 		}
-		check_print("After resolving fd's\n");
-		check_print("Command nro %d's input_fd: %d\n", cmd->cmd_i, cmd->input_fd);
-		check_print("Command nro %d's output_fd: %d\n", cmd->cmd_i, cmd->output_fd);
 		if (!dup_input(shell, cmd, cmd->cmd_i))
-			debug_print("failed to dup input\n");
+			cleanup_failure(shell, cmd, shell->exit_code);
 		if (!dup_output(shell, cmd, cmd->cmd_i))
-			debug_print("failed to dup output\n");
+			cleanup_failure(shell, cmd, shell->exit_code);
 		if (builtins(cmd->cmds[0])) //check for builtin cmd in pipe
 			exec_forked_builtin(shell, cmd, is_builtin);
 		else
@@ -109,7 +104,7 @@ static int	exec_child(t_mini *shell, t_cmd *cmd)
 		signal_child();
 		if (fork_and_execute(shell, curr) == -1)
 			return (FALSE);
-		close_all_pipes(shell, curr->cmd_i);
+		close_fds_and_pipes(shell, curr->cmd_i);
 		curr = curr->next;
 	}
 	shell->exit_code = wait_for_children(shell);
@@ -118,8 +113,9 @@ static int	exec_child(t_mini *shell, t_cmd *cmd)
 }
 
 /*Checks if the command of the very first t_cmd node is a builtin.
-If it is a builtin and there is only one command, it is executed in the parent.
-Otherwise, we move onto exec_child to fork and execute commands as necessary.*/
+If it is a builtin and there is only one command, the command is 
+executed in the parent. Otherwise, we move onto exec_child to fork 
+and execute commands as necessary.*/
 int	execute(t_mini *shell, t_cmd *cmd)
 {
 	int			is_builtin;

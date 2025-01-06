@@ -37,13 +37,13 @@ int	matching_quotes(t_mini *shell, const char *str)
 	}
 	if (single % 2 != 0)
 	{
-		ft_putstr_fd("minishell: syntax error near unexpected token `''\n", 2);
+		ft_putstr_fd("minishell: unmatched `'' marks\n", 2);
 		shell->exit_code = 2;
 		return (FALSE);
 	}
 	if (doubleq % 2 != 0)
 	{
-		ft_putstr_fd("minishell: syntax error near unexpected token '\"'\n", 2);
+		ft_putstr_fd("minishell: unmatched '\"' marks\n", 2);
 		shell->exit_code = 2;
 		return (FALSE);
 	}

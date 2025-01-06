@@ -1,61 +1,20 @@
 #include "minishell.h"
 
-/*	Frees PID array. */
-// static void	free_pids(pid_t *pids)
-// {
-// 	size_t	i;
-
-// 	i = 0;
-// 	while (pids[i] >= 0)
-// 	{
-// 		free(pids[i]);
-// 		i--;
-// 	}
-// 	free(pids);
-// 	pids = NULL; //not sure if needed but adding this as muscle memory lmao
-// }
-
-// static void	close_all_pipes(int *fd)
-// {
-// 	if (!fd)
-// 		return ;
-// 	if (fd[0] >= 0)
-// 		close(fd[0]);
-// 	if (fd[1] >= 0)
-// 		close(fd[1]);
-// 	fd[0] = -1;
-// 	fd[1] = -1;
-// }
-
-// void	close_all(t_mini *shell, t_cmd *cmd)
-// {
-// 	if (cmd->input_fd >= 0)
-// 		close(cmd->input_fd);
-// 	if (cmd->output_fd >= 0)
-// 		close(cmd->output_fd);
-// 	close(shell->pipe[0]);
-// 	close(shell->pipe[1]);
-// }
-
-/* Frees pipes. */
-static void	free_pipes(t_mini *shell, int i)
-{
-	while (i > 0)
-	{
-		i--;
-		free(shell->pipes[i]);
-	}
-	free(shell->pipes);
-	shell->pipes = NULL;
-}
-
-/* Closes all pipes. (Should also set to -1?) */
-void	close_all_pipes(t_mini *shell, int i)
+/**
+ * close_fds_and_pipes - Closes file descriptors and pipes for a command.
+ *
+ * @shell: Pointer to the shell structure containing pipe array.
+ * @i: The index of the current command in the pipeline.
+ *
+ * Closes write ends of the pipe for the first command, read and write ends
+ * for middle commands, and read ends for the last command.
+ */
+void	close_fds_and_pipes(t_mini *shell, int i)
 {
 	if (shell->cmd_count > 1)
 	{
 		if (i == 0)
-			close(shell->pipes[i][1]); //singular pipe, close its write end
+			close(shell->pipes[i][1]);
 		else if (i < shell->cmd_count - 1)
 		{
 			close(shell->pipes[i - 1][0]);

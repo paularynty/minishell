@@ -95,7 +95,7 @@ void	heredoc_eof(int	line, char *delimiter)
 	free(line_str);
 }
 
-/* handles heredoc by writing STDIN into a pipe until delimeter is met, then return pipe read end. 
+/* handles heredoc by writing STDIN into a pipe until delimiter is met, then return pipe read end. 
 	No actual files are created. */
 int handle_heredoc(char *delimiter)
 {
