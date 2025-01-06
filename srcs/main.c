@@ -41,6 +41,8 @@ static void	minishell(t_mini *shell)
 			if (lexer(shell, input))
 			{
 				commands = tokenizer(shell, shell->input);
+				if (!commands)
+					continue ;
 				execute(shell, commands);
 			//		free_commands(commands); // I think freeing command list should be right after executing?
 			}
