@@ -38,7 +38,15 @@ static void	minishell(t_mini *shell)
 		if (*input)
 		{
 			add_history(input); //this could be moved somewhere in parsing/exec functions
-			if (!lexer(shell, input))
+			if (lexer(shell, input))
+			{
+				cmds = tokenizer(shell, shell->input);
+				if (!cmds)
+					continue ;
+				execute(shell, cmds);
+			//		free_commands(commands); // I think freeing command list should be right after executing?
+			}
+			else
 			{
 				if (input && *input)
 				{
@@ -46,8 +54,6 @@ static void	minishell(t_mini *shell)
 					continue ;
 				}
 			}
-			cmds = tokenizer(shell, shell->input);
-			execute(shell, cmds);
 			if (shell->exit_flag || shell->abort)
 				break ;
 		}

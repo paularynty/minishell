@@ -70,7 +70,10 @@ char	*expand_variable(t_mini *shell, char *input, int *i)
 		return (input);
 	key = ft_substr(input, *i + 1, end - *i - 1);
 	if (!key)
+	{
+		printf("expand variable returns NULL\n");
 		return (NULL);
+	}
 	value = get_variable(shell, key, ft_strlen(key));
 	free(key);
 	if (!value)
@@ -78,6 +81,7 @@ char	*expand_variable(t_mini *shell, char *input, int *i)
 	new_input = replace_segment(input, *i, end, value);
 	if (!new_input)
 		return (NULL);
+	free(input);
 	*i += ft_strlen(value);
 	free(value);
 	return (new_input);
