@@ -113,7 +113,7 @@ char	**split_cmd_args(char *cmd_str)
 		// check_print("Argument %d: %s\n", j, args[j]);
 		if (!args[j])
 		{
-			free_2d_array(args);
+			ft_free_array(&args);
 			return (NULL);
 		}
 		j++;

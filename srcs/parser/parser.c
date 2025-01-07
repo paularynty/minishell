@@ -35,14 +35,14 @@ t_cmd	*tokenizer(t_mini *shell, const char *input)
 		current_cmd = create_command(cmd_array[i], i);
 		if (!current_cmd)
 		{
-			free_2d_array(cmd_array);
-			free_commands(cmd);
+			ft_free_array(&cmd_array);
+			clean_commands(cmd);
 			return (NULL);
 		}
 		add_command(&cmd, current_cmd);
 		shell->cmd_count++;
 		i++;
 	}
-	free_2d_array(cmd_array);
+	ft_free_array(&cmd_array);
 	return (cmd);
 }

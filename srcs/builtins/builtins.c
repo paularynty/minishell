@@ -13,7 +13,7 @@ int	handle_builtin(int id, t_mini *shell, t_cmd *cmd)
 	else if (id == BUILTIN_ENV)
 		code = builtin_env(shell);
 	else if (id == BUILTIN_EXIT)
-		code = builtin_exit(shell, cmd->cmds);
+		code = builtin_exit(shell, cmd, cmd->cmds);
 	else if (id == BUILTIN_EXPORT)
 		code = builtin_export(shell, cmd);
 	else if (id == BUILTIN_PWD)

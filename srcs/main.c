@@ -1,17 +1,6 @@
 #include "minishell.h"
 
-sig_atomic_t	g_mrworldwide = 0;
-
-// static void	setup_terminal(void)
-// {
-// 	struct termios	term;
-
-// 	if (tcgetattr(STDIN_FILENO, &term) == -1)
-// 		exit(EXIT_FAILURE);
-// 	term.c_lflag &= ~ECHOCTL;
-// 	if (tcsetattr(STDIN_FILENO, TCSANOW, &term) == -1)
-// 		exit(EXIT_FAILURE);
-// }
+volatile sig_atomic_t	g_mrworldwide = 0;
 
 char	*setup_input(t_mini *shell)
 {
@@ -48,8 +37,6 @@ static void	minishell(t_mini *shell)
 			}
 			cmds = tokenizer(shell, shell->input);
 			execute(shell, cmds);
-			if (shell->exit_flag || shell->abort)
-				break ;
 		}
 		// free(shell->input);
 		shell->cmd_count = 0; // move to execute
@@ -90,7 +77,7 @@ static void	minishell(t_mini *shell)
 // 				break ;
 // 		}
 // 		// free(shell->input);
-// 		shell->cmd_count = 0; // move to execute
+		// shell->cmd_count = 0; // move to execute
 // 		// input = NULL;
 // 	}
 // 	//clean_commands(commands);
@@ -108,7 +95,7 @@ int	main(int argc, char **argv, char **env)
 	if (!setup(&shell, env))
 	{
 		ft_putstr_fd("minishell: initialization error", STDERR_FILENO);
-		cleanup(&shell);
+		// cleanup(&shell);
 		shell.exit_code = EXIT_FAILURE;
 	}
 	minishell(&shell);
@@ -117,7 +104,7 @@ int	main(int argc, char **argv, char **env)
 		ft_putstr_fd("minishell: aborting, critical error encountered\n", STDERR_FILENO);
 		shell.exit_code = EXIT_FAILURE;
 	}
-	rl_clear_history();
-	cleanup(&shell);
+	// rl_clear_history();
+	// cleanup(&shell);
 	return (shell.exit_code);
 }

@@ -90,12 +90,12 @@ static int	allocate_pids(t_mini *shell)
 	shell->pids = ft_calloc(shell->cmd_count, sizeof(pid_t));
 	if (!shell->pids)
 	{
-		// free and close everything and exit minishell (malloc failure);
+		perror("malloc\n");
+		shell->abort = 1;
 		return (FALSE);
 	}
 	return (TRUE);
 }
-
 
 /*Calls allocate_pids.
 Calls allocate_pipes() and create_pipes() if cmd_count > 1.

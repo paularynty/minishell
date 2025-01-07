@@ -49,7 +49,7 @@ int		builtin_cd(t_mini *shell, t_cmd *cmd);
 int		builtin_echo(char **cmd);
 
 //builtins/exit.c
-int		builtin_exit(t_mini *shell, char **args);
+int		builtin_exit(t_mini *shell, t_cmd *cmd, char **args);
 
 //builtins/export.c
 int		count_array_elements(char **array);
@@ -62,13 +62,14 @@ int		builtin_pwd(t_mini *shell);
 void	env_unset_variable(char **env, char *variable);
 int		builtin_unset(t_mini *shell, t_cmd *cmd);
 
-//environment/create_env.c
+//environment/env_utils.c
 char	*env_get_variable(char **env, char *key);
-int		env_set_variable(t_mini *shell, char *key, char *value);
 int		env_update_shlvl(t_mini *shell);
 char	**clone_env(char **env);
 
 //environment/env.c
+int		env_set_variable(t_mini *shell, char *key, char *value);
+int		env_find_index(char **env, char *key);
 int		builtin_env(t_mini *shell);
 
 //errors/errors.c
@@ -93,6 +94,7 @@ int		save_std(t_mini *shell, t_cmd *cmd);
 int		reset_std(t_mini *shell, t_cmd *cmd);
 
 //execution/exec_utils.c
+void	free_pids(pid_t *pids);
 bool	is_dir(char *path);
 int		check_access(t_mini *shell, char *cmd);
 int		wait_for_children(t_mini *shell);
@@ -135,7 +137,7 @@ void	free_pipes(t_mini *shell, int i);
 void	cleanup_failure(t_mini *shell, t_cmd *cmd, int ex);
 void	clean_commands(t_cmd *cmd);
 void	cleanup_success(t_mini *shell);
-void	cleanup(t_mini *shell);
+void	cleanup(t_mini *shell, t_cmd *cmd);
 
 //utils/prompt.c
 void	get_prompt(t_mini *shell, char *prompt, size_t size);

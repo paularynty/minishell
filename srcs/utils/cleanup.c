@@ -1,5 +1,11 @@
 #include "minishell.h"
 
+void	free_null(char **ptr)
+{
+	free(*ptr);
+	*ptr = NULL;
+}
+
 /* If memory allocation for 2D pipe array fails at any point,
 free all previously pipes allocated. */
 void	free_pipes(t_mini *shell, int i)
@@ -46,6 +52,7 @@ void	clean_commands(t_cmd *cmd)
 
 	while (cmd)
 	{
+		ft_free_array(&cmd->cmds);
 		clean_tokens(cmd->tokens);
 		cmd->tokens = NULL;
 		cmd->next = NULL;
@@ -69,6 +76,8 @@ void	clean_commands(t_cmd *cmd)
  */
 void	cleanup_failure(t_mini *shell, t_cmd *cmd, int ex)
 {
+	ft_free_array(&shell->env);
+	free_null(&shell->cwd);
 	close_all_pipes(shell);
 	//unlink all heredocs;
 	if (cmd->output_fd > 2)
@@ -76,11 +85,12 @@ void	cleanup_failure(t_mini *shell, t_cmd *cmd, int ex)
 	if (cmd->input_fd > 2)
 		close(cmd->input_fd);
 	//clean commands;
-	//free pids;
+	free(shell->pids);
 	//if there is more than 1 command, ft_free_array for however many cmd->cmds arrays there are
 	//cleanup_shell(shell);
 	// free(shell);
 	// shell = NULL;
+	// shell->cmd_count = 0;
 	exit(ex);
 }
 
@@ -112,14 +122,14 @@ void	cleanup_success(t_mini *shell)
 	}
 }
 
-void	cleanup(t_mini *shell)
+void	cleanup(t_mini *shell, t_cmd *cmd)
 {
-	ft_free_array(&shell->env);
+	if (shell->env)
+		ft_free_array(&shell->env);
+	clean_commands(cmd);
 	// ft_free_array(&shell->cmd);
 	// free(shell->input);
 	// shell->input = NULL;
-	free(shell->cwd);
-	shell->cwd = NULL;
+	free_null(&shell->cwd);
 	shell->heredoc = NULL;
-	// clean_commands(command);
 }

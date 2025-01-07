@@ -69,10 +69,10 @@ t_cmd	*create_command(char *cmd_str, int i)
 	if (!cmd->cmds)
 	{
 		free(cmd);
-		free_2d_array(args);
+		ft_free_array(&args);
 		return (NULL);
 	}
-	// free_2d_array(args);
 	cmd->next = NULL;
+	// ft_free_array(&args);
 	return (cmd);
 }

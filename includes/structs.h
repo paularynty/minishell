@@ -5,7 +5,7 @@
 //sig_atomic_t = atomic relative to signal handling
 //(we can also just pass around the exit code in the struct, 
 //let's decide on that later)
-extern int	g_mrworldwide;
+extern volatile sig_atomic_t	g_mrworldwide;
 
 typedef struct s_mini
 {

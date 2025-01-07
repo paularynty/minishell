@@ -1,5 +1,20 @@
 #include "minishell.h"
 
+/*	Frees PID array. */
+// void	free_pids(pid_t *pids)
+// {
+// 	size_t	i;
+
+// 	i = 0;
+// 	while (pids[i])
+// 	{
+// 		free(pids[i]);
+// 		i++;
+// 	}
+// 	free(pids);
+// 	pids = NULL; //not sure if needed but adding this as muscle memory lmao
+// }
+
 /*	Loops over shell->cmd_count and waits for all child processes 
 	matching pid[i] to die.
 	Upon unsuccessful waitpid() call, errno is assigned to shell->exit_code.*/

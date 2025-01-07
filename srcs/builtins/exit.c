@@ -41,7 +41,7 @@ static int	exit_extra_args(t_mini *shell)
 	return (1);
 }
 
-int	builtin_exit(t_mini *shell, char **args)
+int	builtin_exit(t_mini *shell, t_cmd *cmd, char **args)
 {
 	int	code;
 	
@@ -50,12 +50,18 @@ int	builtin_exit(t_mini *shell, char **args)
 	if (isatty(STDIN_FILENO) && shell->cmd_count == 1)
 		ft_putstr_fd("exit\n", STDERR_FILENO);
 	if (args[1] == NULL)
-		return (shell->exit_code);
+	{
+		rl_clear_history();
+		cleanup(shell, cmd);
+		exit(shell->exit_code);
+	}
 	if (!is_numeric(args[1]))
 		return (exit_non_numeric(args));
 	if (args[2] != NULL)
 		return (exit_extra_args(shell));
 	if (args[1])
 		code = ft_atoi(args[1]);
-	return (code);
+	rl_clear_history();
+	cleanup(shell, cmd);
+	exit(code);
 }
