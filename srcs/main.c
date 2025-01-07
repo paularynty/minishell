@@ -39,7 +39,7 @@ static void	minishell(t_mini *shell)
 			execute(shell, cmds);
 		}
 		// free(shell->input);
-		shell->cmd_count = 0; // move to execute
+		shell->cmd_count = 0;
 		// input = NULL;
 	}
 	//clean_commands(commands);
