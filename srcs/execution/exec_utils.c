@@ -62,20 +62,20 @@ bool	is_dir(char *path)
 	return (S_ISDIR(sb.st_mode));
 }
 
-int	check_access(t_mini *shell, char *cmd)
+void	check_access(t_mini *shell, char *cmd)
 {
 	if (!cmd)
 		error_cmd(shell, cmd, "command not found", 127);
 	if (access(cmd, F_OK) == -1)
 	{
-		if (strchr(cmd, '/'))
+		if (ft_strchr(cmd, '/'))
 			error_cmd(shell, cmd, "No such file or directory", 1);
 		else
 			error_cmd(shell, cmd, "command not found", 127);
 	}
 	if (is_dir(cmd) == true)
 		error_cmd(shell, cmd, "Is a directory", 126);
-	if (access(cmd, X_OK) == -1)
+	if (access(cmd, F_OK) == 0 && access(cmd, X_OK) == -1)
 		error_cmd(shell, cmd, "Permission denied", 1);
-	return (0);
+		// error_cmd(shell, cmd, "command not found", 127);
 }

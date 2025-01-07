@@ -126,7 +126,8 @@ void	cleanup(t_mini *shell, t_cmd *cmd)
 {
 	if (shell->env)
 		ft_free_array(&shell->env);
-	clean_commands(cmd);
+	if (cmd)
+		clean_commands(cmd);
 	// ft_free_array(&shell->cmd);
 	// free(shell->input);
 	// shell->input = NULL;

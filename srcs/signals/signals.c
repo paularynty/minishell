@@ -1,12 +1,18 @@
 #include "minishell.h"
 
-void	signal_heredoc(int signal)
+static void	signal_handler_heredoc(int signal)
 {
 	close(STDIN_FILENO);
 	g_mrworldwide = signal;
 }
 
-void	signal_ctrl_c(int signal)
+void	signal_heredoc(void)
+{
+	signal(SIGINT, signal_handler_heredoc);
+	signal(SIGQUIT, SIG_IGN);
+}
+
+void	signal_handler_sigint(int signal)
 {
 	if (signal == SIGINT)
 	{
@@ -40,6 +46,6 @@ void	signal_reset(void)
 
 void	signal_init(void)
 {
-	signal(SIGINT, signal_ctrl_c);
+	signal(SIGINT, signal_handler_sigint);
 	signal(SIGQUIT, SIG_IGN);
 }

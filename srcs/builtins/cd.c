@@ -25,7 +25,7 @@ static int	change_dir(char *dir)
 {
 	if (chdir(dir) == -1)
 	{
-		debug_print("check\n");
+		//debug_print("check\n");
 		error_builtin(CD, dir, NULL);
 		return (FALSE);
 	}

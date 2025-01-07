@@ -96,7 +96,7 @@ int		reset_std(t_mini *shell, t_cmd *cmd);
 //execution/exec_utils.c
 void	free_pids(pid_t *pids);
 bool	is_dir(char *path);
-int		check_access(t_mini *shell, char *cmd);
+void	check_access(t_mini *shell, char *cmd);
 int		wait_for_children(t_mini *shell);
 
 //execution/exec_path.c
@@ -114,7 +114,7 @@ int		init_pipeline(t_mini *shell);
 int		open_infile(t_mini *shell, char *infile);
 int		open_outfile(t_mini *shell, char *outfile);
 int		open_append_file(t_mini *shell, char *outfile);
-int		handle_heredoc(char *delimiter);
+int		handle_heredoc(t_mini *shell, char *delimiter);
 
 //redirect/redirect.c
 int		redirect_fd(int src_fd, int dest_fd);
@@ -125,9 +125,8 @@ int		resolve_output_fd(t_mini *shell, t_cmd *cmd, t_token *token);
 //setup/setup.c
 int		setup(t_mini *shell, char **env);
 
-//signals/signals.cvoid	signal_heredoc(int signal)
-void	signal_heredoc(int signal);
-void	signal_ctrl_c(int signal);
+//signals/signals.c
+void	signal_heredoc(void);
 void	signal_child(void);
 void	signal_reset(void);
 void	signal_init(void);

@@ -95,7 +95,7 @@ int	lexer(t_mini *shell, char *line)
 	shell->input = expand_input(shell, line);
 	if (!shell->input) // if there was a malloc fail
 	{
-		check_print("\nWE DON'T HAVE AN INPUT\n");
+		//check_print("\nWE DON'T HAVE AN INPUT\n");
 		return (FALSE);
 	}
 	if (!valid_input(shell, shell->input))
@@ -106,9 +106,9 @@ int	lexer(t_mini *shell, char *line)
 	shell->input = add_missing_spaces(shell->input);
 	if (!shell->input) // if there was a malloc fail
 	{
-		check_print("\nWE DON'T HAVE AN INPUT\n");
+		//check_print("\nWE DON'T HAVE AN INPUT\n");
 		return (FALSE);
 	}
-	check_print("expanded and spaced input: %s\n", shell->input);
+	//check_print("expanded and spaced input: %s\n", shell->input);
 	return (TRUE);
 }

@@ -59,6 +59,7 @@ SRCS			= $(SRCDIR)/main.c \
 				$(SRCDIR)/parser/parser.c \
 				$(SRCDIR)/parser/split_by_pipes.c \
 				$(SRCDIR)/redirect/file_handler.c \
+				$(SRCDIR)/redirect/heredoc.c \
 				$(SRCDIR)/redirect/redirect.c \
 				$(SRCDIR)/signals/signals.c \
 				$(SRCDIR)/setup/setup.c \
