@@ -36,7 +36,8 @@ static void	minishell(t_mini *shell)
 				}
 			}
 			cmds = tokenizer(shell, shell->input);
-			execute(shell, cmds);
+			if (cmds)
+				execute(shell, cmds);
 		}
 		// free(shell->input);
 		shell->cmd_count = 0;

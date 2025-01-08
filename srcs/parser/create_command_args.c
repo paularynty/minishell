@@ -76,8 +76,6 @@ static char	*extract_arg(char *cmd_str, int *i)
 	quotes = false;
 	len = count_arg_length(cmd_str, *i, &quotes);
 	// check_print("arg len: %d\n", len);
-	if (len <= 0)
-		return (NULL);
 	if (quotes)
 		arg = create_quoted_arg(cmd_str, i, len);
 	else

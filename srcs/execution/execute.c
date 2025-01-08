@@ -19,6 +19,7 @@ static void	exec_forked_cmd(t_mini *shell, t_cmd *cmd)
 {
 	char	*cmd_path;
 	
+	// printf("get_cmd_pathiin menee: |%s|\n", cmd->cmds[0]);
 	cmd_path = get_cmd_path(shell, cmd->cmds[0]);
 	if (!cmd_path)
 		check_access(shell, cmd->cmds[0]);
