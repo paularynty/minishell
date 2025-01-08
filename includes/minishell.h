@@ -132,11 +132,15 @@ void	signal_reset(void);
 void	signal_init(void);
 
 //utils/cleanup.c
-void	free_pipes(t_mini *shell, int i);
 void	cleanup_failure(t_mini *shell, t_cmd *cmd, int ex);
-void	clean_commands(t_cmd *cmd);
 void	cleanup_success(t_mini *shell);
 void	cleanup(t_mini *shell, t_cmd *cmd);
+
+//utils/cleanup_utils.c
+void	free_null(char **ptr);
+void	close_all_pipes(t_mini *shell);
+void	free_pipes(t_mini *shell, int i);
+void	clean_commands(t_cmd *cmd);
 
 //utils/prompt.c
 void	get_prompt(t_mini *shell, char *prompt, size_t size);

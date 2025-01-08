@@ -39,12 +39,12 @@ static t_token	*create_token(char *arg, char *prev)
 	if (!token->value)
 	{
 		free(token);
-		return (NULL); // (malloc failure)
+		perror("malloc\n");
+		return (NULL);
 	}
 	if (prev && *prev && (ft_strcmp(prev, ">") == 0
-		|| ft_strcmp(prev, ">>") == 0 || ft_strcmp(prev, "<") == 0
-		|| ft_strcmp(prev, "<<") == 0))
-
+			|| ft_strcmp(prev, ">>") == 0 || ft_strcmp(prev, "<") == 0
+			|| ft_strcmp(prev, "<<") == 0))
 	{
 		if (ft_strcmp(prev, "<<") != 0)
 			token->type = FILENAME;
@@ -57,10 +57,10 @@ static t_token	*create_token(char *arg, char *prev)
 	return (token);
 }
 
-int		tokenize_args(t_cmd *cmd, char **args)
+int	tokenize_args(t_cmd *cmd, char **args)
 {
-	int		i;
 	t_token	*new_token;
+	int		i;
 
 	i = 0;
 	while (args[i])
@@ -77,4 +77,3 @@ int		tokenize_args(t_cmd *cmd, char **args)
 	}
 	return (TRUE);
 }
-

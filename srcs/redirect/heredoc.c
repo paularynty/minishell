@@ -54,20 +54,21 @@ static void	heredoc_loop(t_mini *shell, char *line, char *lim, int *pipe_fd)
 	while (TRUE)
 	{
 		signal_heredoc();
-		write(STDOUT_FILENO, "> ", 2);
-		line = get_next_line(STDIN_FILENO);
+		line = readline("> ");
 		if (line == NULL)
 		{
 			heredoc_eof(shell, __LINE__, lim);
 			break ;
 		}
 		if (ft_strncmp(line, lim, ft_strlen(lim)) == 0
-			&& line[ft_strlen(lim)] == '\n')
+			&& line[ft_strlen(lim)] == '\0')
 		{
 			free(line);
 			break ;
 		}
 		write(pipe_fd[1], line, ft_strlen(line));
+		write(pipe_fd[1], "\n", 1);
+		rl_clear_history();
 		free(line);
 	}
 }

@@ -39,7 +39,10 @@ char	*add_missing_spaces(char *input)
 		while (input[i] && !char_is_whitespace(input[i]))
 		{
 			if (input[i] == '\'' || input[i] == '"')
+			{
 				i += quote_offset(input + i, input[i]);
+				continue ;
+			}
 			if (ft_strchr("><", input[i]) && i > 0)
 			{
 				spaced = add_space(input, i);
@@ -51,7 +54,7 @@ char	*add_missing_spaces(char *input)
 				if (input[i] == input[i - 1])
 					i++;
 			}
-			else if (i > 0 && (input[i - 1] == '<' || input[i - 1] == '>') && !ft_strchr("><", input[i]))
+			if (i > 0 && ft_strchr("><", input[i - 1]) && !ft_strchr("><", input[i]))
 			{
 				spaced = add_space(input, i);
 				free(input);
@@ -93,22 +96,20 @@ int 	valid_input(t_mini *shell, char *input)
 int	lexer(t_mini *shell, char *line)
 {
 	shell->input = expand_input(shell, line);
-	if (!shell->input) // if there was a malloc fail
+	if (!shell->input)
 	{
-		//check_print("\nWE DON'T HAVE AN INPUT\n");
+		ft_putstr_fd("malloc", STDERR_FILENO);
+		shell->abort = 1;
 		return (FALSE);
 	}
 	if (!valid_input(shell, shell->input))
-	{
-		// free(shell->input);
 		return (FALSE);
-	}
 	shell->input = add_missing_spaces(shell->input);
-	if (!shell->input) // if there was a malloc fail
+	if (!shell->input)
 	{
-		//check_print("\nWE DON'T HAVE AN INPUT\n");
+		ft_putstr_fd("malloc", STDERR_FILENO);
+		shell->abort = 1;
 		return (FALSE);
 	}
-	//check_print("expanded and spaced input: %s\n", shell->input);
 	return (TRUE);
 }

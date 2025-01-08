@@ -9,7 +9,7 @@ static void	signal_handler_heredoc(int signal)
 void	signal_heredoc(void)
 {
 	signal(SIGINT, signal_handler_heredoc);
-	signal(SIGQUIT, SIG_IGN);
+	signal(SIGQUIT, signal_handler_heredoc);
 }
 
 void	signal_handler_sigint(int signal)
@@ -29,7 +29,7 @@ static void	signal_handler_child(int signal)
 	if (signal == SIGINT)
 		printf("\n");
 	if (signal == SIGQUIT)
-		ft_putstr_fd("Quit (core dumped)\n", 2);
+		ft_putstr_fd("Quit (core dumped)\n", 2); 
 }
 
 void	signal_child(void)
