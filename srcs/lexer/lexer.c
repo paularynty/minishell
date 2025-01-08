@@ -54,7 +54,8 @@ char	*add_missing_spaces(char *input)
 				if (input[i] == input[i - 1])
 					i++;
 			}
-			if (i > 0 && ft_strchr("><", input[i - 1]) && !ft_strchr("><", input[i]))
+			if (i > 0 && ft_strchr("><", input[i - 1])
+				&& !ft_strchr("><", input[i]))
 			{
 				spaced = add_space(input, i);
 				free(input);
@@ -72,11 +73,21 @@ char	*add_missing_spaces(char *input)
 	return (input);
 }
 
-// This is the first argument validation check.
-// We check whether the prompt is empty/whitespace, contains uneven quotes or other errors we can handle immediately
-// without taking into account pipes. Upon occuring, we send correct error message, update add_history and return matching exit code.
-// Add exit_code / error message handling later.
-int 	valid_input(t_mini *shell, char *input)
+/**
+ * Validates the initial user input before parsing.
+ *
+ * @shell: Pointer to the shell structure.
+ * @input: The expanded input string (shell->input).
+ *
+ * - Checks if the input consists only of whitespace.
+ * - Validates that all quotes in the input are properly matched.
+ * - Ensures there are no improper backslashes in the input.
+ * - Verifies the correctness of input redirection syntax.
+ * - Confirms that all pipes are closed and valid.
+ * 
+ * Returns TRUE if the input is valid, FALSE if any validation fails.
+ * */
+int	valid_input(t_mini *shell, char *input)
 {
 	if (str_is_whitespace(input))
 		return (FALSE);

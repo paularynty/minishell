@@ -45,6 +45,7 @@ SRCS			= $(SRCDIR)/main.c \
 				$(SRCDIR)/execution/exec_std.c \
 				$(SRCDIR)/execution/exec_utils.c \
 				$(SRCDIR)/execution/pipes.c \
+				$(SRCDIR)/errors/errors_syntax.c \
 				$(SRCDIR)/errors/errors.c \
 				$(SRCDIR)/lexer/expand.c \
 				$(SRCDIR)/lexer/lexer.c \
@@ -60,6 +61,7 @@ SRCS			= $(SRCDIR)/main.c \
 				$(SRCDIR)/redirect/file_handler.c \
 				$(SRCDIR)/redirect/heredoc.c \
 				$(SRCDIR)/redirect/redirect.c \
+				$(SRCDIR)/signals/signal_handlers.c \
 				$(SRCDIR)/signals/signals.c \
 				$(SRCDIR)/setup/setup.c \
 				$(SRCDIR)/utils/cleanup_utils.c \

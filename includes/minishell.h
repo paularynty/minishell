@@ -63,6 +63,7 @@ void	env_unset_variable(char **env, char *variable);
 int		builtin_unset(t_mini *shell, t_cmd *cmd);
 
 //environment/env_utils.c
+void	remove_eq(t_mini *shell, char *arg);
 char	*env_get_variable(char **env, char *key);
 int		env_update_shlvl(t_mini *shell);
 char	**clone_env(char **env);
@@ -72,13 +73,15 @@ int		env_set_variable(t_mini *shell, char *key, char *value);
 int		env_find_index(char **env, char *key);
 int		builtin_env(t_mini *shell);
 
+//errors/errors_syntax.c
+void	error_quotes(t_mini *shell, char *str);
+void	error_syntax(t_mini *shell, char *str);
+
 //errors/errors.c
-void	error_file(t_mini *shell, char *file, char *error_str, int ex);
 void	error_builtin(char *builtin, char *str, char *error_str);
 void	error_cmd(t_mini *shell, char *cmd, char *error_str, int ex);
-// int		error_cmd(t_mini *shell, char *cmd);
 void	error_export(char *str);
-
+void	error_file(t_mini *shell, char *file, char *error_str, int ex);
 
 //execution/execute.c
 int		execute(t_mini *shell, t_cmd *cmd);
@@ -124,6 +127,11 @@ int		resolve_output_fd(t_mini *shell, t_cmd *cmd, t_token *token);
 
 //setup/setup.c
 int		setup(t_mini *shell, char **env);
+
+//signals/signal_handlers.c
+void	signal_handler_heredoc(int signal);
+void	signal_handler_sigint(int signal);
+void	signal_handler_child(int signal);
 
 //signals/signals.c
 void	signal_heredoc(void);

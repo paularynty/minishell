@@ -28,16 +28,6 @@ int	valid_export(char *str)
 	return (TRUE);
 }
 
-static void	remove_eq(t_mini *shell, char *arg)
-{
-	char	*ptr;
-
-	ptr = env_get_variable(shell->env, arg);
-	if (!ptr)
-		return ;
-	*(ptr - 1) = '\0';
-}
-
 static void	sort_export_table(char **env)
 {
 	size_t	i;

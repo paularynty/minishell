@@ -10,7 +10,8 @@ char	*get_variable(t_mini *shell, char *key, int key_len)
 	exp_var = NULL;
 	while (shell->env[i])
 	{
-		if (ft_strncmp(shell->env[i], key, key_len) == 0 && *(shell->env[i] + key_len) == '=')
+		if (ft_strncmp(shell->env[i], key, key_len) == 0
+			&& *(shell->env[i] + key_len) == '=')
 		{
 			env_len = ft_strlen(shell->env[i] + key_len + 1);
 			exp_var = ft_substr(shell->env[i], key_len + 1, env_len);
@@ -34,25 +35,16 @@ char	*replace_segment(char *input, int start, int end, char *replacement)
 	int		new_len;
 
 	input_len = ft_strlen(input);
-	// check_print("After strlen in replace_segment input_len: %d\n", input_len);
 	repl_len = ft_strlen(replacement);
-	// check_print("After strlen in replace_segment repl_len: %d\n", repl_len);
 	new_len = input_len - (end - start) + repl_len;
 	new_input = (char *)malloc(sizeof(char) * new_len + 1);
-	// check_print("After malloc in replace_segment input: %s\n", input);
 	if (!new_input)
 		return (NULL);
 	if (ft_strlcpy(new_input, input, start + 1) == 0)
 		return (NULL);
-	// check_print("After 1st strlcpy in replace_segment input: %s\n", input);
-	// check_print("After 1st strlcpy in replace_segment new_input: %s\n", new_input);
 	if (replacement)
 		ft_strlcpy(new_input + start, replacement, start + repl_len + 1);
-	// check_print("After 2nd strlcpy in replace_segment input: %s\n", input);
-	// check_print("After 2nd strlcpy in replace_segment new_input: %s\n", new_input);
 	ft_strlcpy(new_input + start + repl_len, input + end, new_len + 1);
-	// check_print("After 3rd strlcpy in replace_segment input: %s\n", input);
-	// check_print("After 3rd strlcpy in replace_segment new_input: %s\n", new_input);
 	return (new_input);
 }
 
@@ -64,7 +56,8 @@ char	*expand_variable(t_mini *shell, char *input, int *i)
 	char	*new_input;
 
 	end = *i + 1;
-	while (input[end] && !char_is_whitespace(input[end]) && input[end] != '"' && input[end] != '\'')
+	while (input[end] && !char_is_whitespace(input[end])
+		&& input[end] != '"' && input[end] != '\'')
 		end++;
 	if (end <= *i + 1)
 		return (input);

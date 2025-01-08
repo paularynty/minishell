@@ -15,9 +15,25 @@
 // 	pids = NULL; //not sure if needed but adding this as muscle memory lmao
 // }
 
-/*	Loops over shell->cmd_count and waits for all child processes 
-	matching pid[i] to die.
-	Upon unsuccessful waitpid() call, errno is assigned to shell->exit_code.*/
+/**
+ * wait_for_children - Waits for all child processes to terminate.
+ *
+ * @shell: Pointer to the shell structure.
+ *
+ * Loops over all child process IDs stored in `shell->pids` and waits for 
+ * each process to terminate using `waitpid()`. Updates the shell's 
+ * `exit_code` based on the exit status or termination signal of each 
+ * process:
+ * - If a child exits normally, the exit status is assigned to 
+ *   `shell->exit_code`.
+ * - If a child is terminated by a signal, assigns a signal-based 
+ *   exit code (e.g., `130` for SIGINT).
+ *
+ * On `waitpid()` failure, assigns `errno` to `shell->exit_code` and prints 
+ * an error message.
+ *
+ * Returns the final `shell->exit_code` after waiting for all children.
+ */
 int	wait_for_children(t_mini *shell)
 {
 	int		i;
@@ -53,15 +69,36 @@ int	wait_for_children(t_mini *shell)
 	return (shell->exit_code);
 }
 
+/**
+ * is_dir - Checks if a given path is a directory.
+ *
+ * @path: The file path to check.
+ *
+ * Uses `stat()` to retrieve the file status for the given path and checks 
+ * if the file mode indicates a directory using `S_ISDIR()`. Returns 
+ * `false` if the `stat()` call fails.
+ *
+ * Returns `true` if the path is a directory, or `false` otherwise.
+ */
 bool	is_dir(char *path)
 {
 	struct stat	sb;
 
-    if (stat(path, &sb) == -1)
+	if (stat(path, &sb) == -1)
 		return (false);
 	return (S_ISDIR(sb.st_mode));
 }
 
+/**
+ * check_access - Validates access permissions for a command.
+ *
+ * @shell: Pointer to the shell structure.
+ * @cmd: Command path to validate.
+ *
+ * Performs a series of checks on the given command to determine its 
+ * accessibility and validity. Upon encountering any error, calls
+ * `error_cmd()` with the corresponding error message and exit code.
+ * */
 void	check_access(t_mini *shell, char *cmd)
 {
 	if (!cmd)
@@ -76,6 +113,5 @@ void	check_access(t_mini *shell, char *cmd)
 	if (is_dir(cmd) == true)
 		error_cmd(shell, cmd, "Is a directory", 126);
 	if (access(cmd, F_OK) == 0 && access(cmd, X_OK) == -1)
-		error_cmd(shell, cmd, "Permission denied", 1);
-		// error_cmd(shell, cmd, "command not found", 127);
+		error_cmd(shell, cmd, "command not found", 127);
 }

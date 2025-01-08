@@ -1,39 +1,20 @@
 #include "minishell.h"
 
-// void	open_file(t_mini *shell, t_cmd *cmd)
-// {
-// 	if (first_or_second == FIRST)
-// 	{
-// 		if (open(cmd->input_fd, O_RDONLY) == -1)
-// 			exit_error(shell, cmd->input_fd);
-// 	}
-// 	if (first_or_second == SECOND)
-// 	{
-// 		if (open(cmd->output_fd, O_CREAT | O_WRONLY | O_TRUNC, 0644) == -1)
-// 			exit_error(shell, cmd->output_fd);
-// 	}
-// }
-
-// void	dup_close(t_mini *shell, t_cmd *cmd)
-// {
-// 	if (first_or_second == FIRST)
-// 	{
-// 		if (dup2(cmd->input_fd, STDIN_FILENO) == -1
-// 			|| dup2(shell->pipe_fd[1], STDOUT_FILENO) == -1)
-// 			exit_error(shell, "dup2 failed on first child");
-// 	}
-// 	else if (first_or_second == SECOND)
-// 	{
-// 		if (dup2(shell->pipe_fd[0], STDIN_FILENO) == -1
-// 			|| dup2(cmd->output_fd, STDOUT_FILENO) == -1)
-// 			exit_error(shell, "dup2 failed on second child");
-// 	}
-// 	close_all(shell, cmd);
-// }
-
+/**
+ * resolve_fds - Resolves file descriptors for input and output redirection.
+ *
+ * @shell: Pointer to the shell structure.
+ * @cmd: Pointer to the command structure.
+ *
+ * Processes input and output redirections specified in the command using 
+ * `process_redir()`. If no redirection is specified, sets the input file 
+ * descriptor to `STDIN_FILENO` and the output file descriptor to 
+ * `STDOUT_FILENO`.
+ *
+ * Returns TRUE on success or FALSE if redirection processing fails.
+ * */
 int	resolve_fds(t_mini *shell, t_cmd *cmd)
 {
-	// check_print("calling process_redir from resolve_fd's\n");
 	if (!process_redir(shell, cmd))
 		return (FALSE);
 	if (cmd->input_fd == -1)
@@ -43,6 +24,25 @@ int	resolve_fds(t_mini *shell, t_cmd *cmd)
 	return (TRUE);
 }
 
+/**
+ * dup_input - Duplicates and redirects the input file descriptor.
+ *
+ * @shell: Pointer to the shell structure.
+ * @cmd: Pointer to the command structure.
+ * @i: Index of the current command in the pipeline.
+ *
+ * Handles input redirection for a command:
+ * - If `cmd->input_fd` is not `STDIN_FILENO`, redirects it using `dup2()` 
+ *   and closes the previous input file descriptor.
+ * - Otherwise, if the command is part of a pipeline, redirects the read end 
+ *   of the pipe from the previous command to `STDIN_FILENO`.
+ * - Closes the corresponding pipe read end after duplication.
+ *
+ * Prints an error message and updates the shell's `exit_code` if the 
+ * redirection or duplication fails.
+ *
+ * Returns TRUE on success or FALSE on failure.
+ */
 int	dup_input(t_mini *shell, t_cmd *cmd, int i)
 {
 	if (cmd->input_fd != STDIN_FILENO)
@@ -68,8 +68,25 @@ int	dup_input(t_mini *shell, t_cmd *cmd, int i)
 	return (TRUE);
 }
 
-// Duplicates output to fd if there is a redirection or to write end of pipe
-// Redirection takes precedence over pipe
+/**
+ * dup_output - Duplicates and redirects the output file descriptor.
+ *
+ * @shell: Pointer to the shell structure.
+ * @cmd: Pointer to the command structure.
+ * @i: Index of the current command in the pipeline.
+ *
+ * Handles output redirection for a command:
+ * - If `cmd->output_fd` is not `STDOUT_FILENO`, redirects it using `dup2()` 
+ *   and closes the previous output file descriptor.
+ * - Otherwise, if the command is part of a pipeline, redirects the write 
+ *   end of the pipe to `STDOUT_FILENO`.
+ * - Closes the corresponding pipe write end after duplication.
+ *
+ * Prints an error message and updates the shell's `exit_code` if the 
+ * redirection or duplication fails.
+ *
+ * Returns TRUE on success or FALSE on failure.
+ */
 int	dup_output(t_mini *shell, t_cmd *cmd, int i)
 {
 	if (cmd->output_fd != STDOUT_FILENO)
@@ -95,7 +112,18 @@ int	dup_output(t_mini *shell, t_cmd *cmd, int i)
 	return (TRUE);
 }
 
-/*Duplicates old_fd to new_fd and closes old_fd.*/
+/**
+ * dup2_close - Duplicates a file descriptor and closes the old descriptor.
+ *
+ * @old_fd: File descriptor to duplicate.
+ * @new_fd: Target file descriptor for duplication.
+ *
+ * Uses `dup2()` to duplicate `old_fd` to `new_fd`. Closes `old_fd` after 
+ * successful duplication. If `old_fd` is invalid or the duplication fails, 
+ * closes `old_fd` and prints an error message to `stderr`.
+ *
+ * Returns TRUE on success or FALSE on failure.
+ */
 int	dup2_close(int old_fd, int new_fd)
 {
 	if (old_fd < 0)
