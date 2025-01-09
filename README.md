@@ -44,3 +44,8 @@ addition:
 in main.c we added check after tokenizer so we wont exec unintentionally
 
 in lexer.c add_missing_spaces is fixed, not even sure what did the trick.
+
+9.1.
+
+Add_missing_spaces() has been split up to helper functions to meet Norm standars,
+because of that created add_missing_spaces.c -file and appended it to Makefile srcs and to parser.h
