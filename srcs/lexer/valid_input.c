@@ -10,11 +10,7 @@ int	backslash(t_mini *shell, const char *input)
 		if (input[i] == '\'' || input[i] == '"')
 			i += quote_offset(input + i, input[i]);
 		if (input[i] == '\\')
-		{
-			ft_putstr_fd("minishell: syntax error near unexpected token `\\'\n", 2);
-			shell->exit_code = 2;
-			return (TRUE);
-		}
+			return (error_syntax(shell, "\\"), TRUE);
 		i++;
 	}
 	return (FALSE);
@@ -22,31 +18,23 @@ int	backslash(t_mini *shell, const char *input)
 
 int	matching_quotes(t_mini *shell, const char *str)
 {
-	int	single;
-	int	doubleq;
+	int	single_quote;
+	int	double_quote;
 
-	single = 0;
-	doubleq = 0;
+	single_quote = 0;
+	double_quote = 0;
 	while (*str)
 	{
-		if (*str == '\'' && doubleq % 2 == 0)
-			single++;
-		else if (*str == '"' && single % 2 == 0)
-			doubleq++;
+		if (*str == '\'' && double_quote % 2 == 0)
+			single_quote++;
+		else if (*str == '"' && single_quote % 2 == 0)
+			double_quote++;
 		str++;
 	}
-	if (single % 2 != 0)
-	{
-		ft_putstr_fd("minishell: unmatched `'' marks\n", 2);
-		shell->exit_code = 2;
-		return (FALSE);
-	}
-	if (doubleq % 2 != 0)
-	{
-		ft_putstr_fd("minishell: unmatched '\"' marks\n", 2);
-		shell->exit_code = 2;
-		return (FALSE);
-	}
+	if (single_quote % 2 != 0)
+		return (error_quotes(shell, "\'"), FALSE);
+	if (double_quote % 2 != 0)
+		return (error_quotes(shell, "\""), FALSE);
 	return (TRUE);
 }
 
@@ -67,11 +55,7 @@ int	valid_redirection(t_mini *shell, const char *input)
 			while (input[i] && input[i] == ' ')
 				i++;
 			if (!input[i] || input[i] == '\n' || ft_strchr("|><", input[i]))
-			{
-				ft_putstr_fd("minishell: syntax error near unexpected token `newline'\n", 2);
-				shell->exit_code = 2;
-				return (FALSE);
-			}
+				return (error_syntax(shell, "newline"), FALSE);
 		}
 		i++;
 	}
@@ -115,11 +99,7 @@ int	closed_pipes(t_mini *shell, const char *input)
 		if (input[i] == '|')
 		{
 			if (str_is_whitespace(input + i + 1))
-			{
-				ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
-				shell->exit_code = 2;
-				return (FALSE);
-			}
+				return (error_syntax(shell, "|"), FALSE);
 		}
 		i++;
 	}

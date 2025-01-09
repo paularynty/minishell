@@ -21,13 +21,13 @@ int	count_token_type(t_token *tokens, enum e_token_type type)
 	int	count;
 
 	count = 0;
-    while (tokens)
+	while (tokens)
 	{
-        if (tokens->type == type)
-            count++;
-        tokens = tokens->next;
-    }
-    return (count);
+		if (tokens->type == type)
+			count++;
+		tokens = tokens->next;
+	}
+	return (count);
 }
 
 /********************************
@@ -84,8 +84,8 @@ int	char_is_whitespace(char c)
 
 /********************************
  * 
- * This function is only used to print out the contents of the cmd_lists so we can see whether
- * data is stored as it should.
+ * This function is only used to print out the contents of the cmd_lists 
+ * so we can see whether data is stored as it should.
  * 
  ******************************/
 // void print_list(t_cmd *cmds)
@@ -105,7 +105,8 @@ int	char_is_whitespace(char c)
 //             check_print("  Tokens:\n");
 //             while (token)
 //             {
-//                 check_print("    [%d]: %s (type: %d)\n", i, token->value, token->type);
+//                 check_print("    [%d]: %s (type: %d)\n", i, token->value,
+//						token->type);
 //                 token = token->next; // Move to the next token
 //                 i++;
 //             }

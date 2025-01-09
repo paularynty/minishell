@@ -1,5 +1,15 @@
 #include "minishell.h"
 
+void	remove_eq(t_mini *shell, char *arg)
+{
+	char	*ptr;
+
+	ptr = env_get_variable(shell->env, arg);
+	if (!ptr)
+		return ;
+	*(ptr - 1) = '\0';
+}
+
 int	env_find_index(char **env, char *key)
 {
 	int		i;

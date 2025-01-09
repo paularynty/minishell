@@ -75,7 +75,7 @@ int	builtin_env(t_mini *shell)
 	if (!env_get_variable(shell->env, "PATH"))
 	{
 		error_builtin(ENV, NULL, "No such file or directory");
-		return (127);	
+		return (127);
 	}
 	while (shell->env && shell->env[i])
 	{

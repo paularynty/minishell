@@ -45,6 +45,7 @@ SRCS			= $(SRCDIR)/main.c \
 				$(SRCDIR)/execution/exec_std.c \
 				$(SRCDIR)/execution/exec_utils.c \
 				$(SRCDIR)/execution/pipes.c \
+				$(SRCDIR)/errors/errors_syntax.c \
 				$(SRCDIR)/errors/errors.c \
 				$(SRCDIR)/lexer/expand.c \
 				$(SRCDIR)/lexer/lexer.c \
@@ -55,13 +56,15 @@ SRCS			= $(SRCDIR)/main.c \
 				$(SRCDIR)/parser/create_command_args.c \
 				$(SRCDIR)/parser/create_quoted_arg.c \
 				$(SRCDIR)/parser/create_tokens.c \
-				$(SRCDIR)/parser/free_cmd_contents.c \
 				$(SRCDIR)/parser/parser.c \
 				$(SRCDIR)/parser/split_by_pipes.c \
 				$(SRCDIR)/redirect/file_handler.c \
+				$(SRCDIR)/redirect/heredoc.c \
 				$(SRCDIR)/redirect/redirect.c \
+				$(SRCDIR)/signals/signal_handlers.c \
 				$(SRCDIR)/signals/signals.c \
 				$(SRCDIR)/setup/setup.c \
+				$(SRCDIR)/utils/cleanup_utils.c \
 				$(SRCDIR)/utils/cleanup.c \
 				$(SRCDIR)/utils/prompt.c \
 				$(SRCDIR)/utils/utils.c \
@@ -77,7 +80,7 @@ $(LIBFT):
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	@mkdir -p $(dir $@)
-	@cc -c $(CFLAGS) $< -o $@
+	@cc -c -g $(CFLAGS) $< -o $@
 
 $(NAME): $(OBJS)
 	@cc $(CFLAGS) $(LDFLAGS) $(OBJS) $(LIBFT) -o $(NAME)

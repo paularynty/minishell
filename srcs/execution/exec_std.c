@@ -19,7 +19,8 @@ int	save_std(t_mini *shell, t_cmd *cmd)
 		if (cmd->saved_stdin == -1)
 		{
 			shell->exit_code = 1;
-			return (ft_putstr_fd("minishell: failed to save stdin\n", 2), FALSE);
+			ft_putstr_fd("minishell: failed to save stdin\n", 2);
+			return (FALSE);
 		}
 	}
 	if (cmd->output_fd != STDOUT_FILENO)
@@ -28,7 +29,8 @@ int	save_std(t_mini *shell, t_cmd *cmd)
 		if (cmd->saved_stdout == -1)
 		{
 			shell->exit_code = 1;
-			return (ft_putstr_fd("minishell: failed to save stdout\n", 2), FALSE);
+			ft_putstr_fd("minishell: failed to save stdout\n", 2);
+			return (FALSE);
 		}
 	}
 	return (TRUE);

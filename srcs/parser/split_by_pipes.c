@@ -40,11 +40,11 @@ static char	**allocate_cmd_array(int pipes)
 
 char	**split_by_pipes(const char *input)
 {
-	char **cmd;
-	int	 j;
-	int	 start;
-	int	 end;
-	int	 pipes;
+	char	**cmd;
+	int		j;
+	int		start;
+	int		end;
+	int		pipes;
 
 	pipes = count_pipes(input);
 	cmd = allocate_cmd_array(pipes);
@@ -58,7 +58,7 @@ char	**split_by_pipes(const char *input)
 		cmd[j] = ft_strndup(input + start, end - start);
 		if (!cmd[j])
 		{
-			free_2d_array(cmd);
+			ft_free_array(&cmd);
 			return (NULL);
 		}
 		j++;

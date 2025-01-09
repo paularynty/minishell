@@ -44,7 +44,7 @@ static int	exit_extra_args(t_mini *shell)
 int	builtin_exit(t_mini *shell, t_cmd *cmd, char **args)
 {
 	int	code;
-	
+
 	code = 0;
 	shell->exit_flag = TRUE;
 	if (isatty(STDIN_FILENO) && shell->cmd_count == 1)

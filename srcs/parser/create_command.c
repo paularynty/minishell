@@ -18,18 +18,28 @@ static t_cmd	*init_cmd(int i)
 	return (cmd);
 }
 
+static char	**allocate_cmd_array(t_cmd *cmd)
+{
+	int		count;
+	char	**cmd_array;
+
+	count = count_token_type(cmd->tokens, CMD);
+	cmd_array = (char **)malloc(sizeof(char *) * (count + 1));
+	if (!cmd_array)
+		return (NULL);
+	return (cmd_array);
+}
+
 /*Extracts tokens of CMD token type into cmd->cmds 2D array. */
 static char	**extract_cmd(t_cmd *cmd)
 {
 	t_token	*token;
 	char	**cmd_array;
-	int		count;
 	int		i;
 
 	if (!cmd || !cmd->tokens)
 		return (NULL);
-	count = count_token_type(cmd->tokens, CMD);
-	cmd_array = (char **)malloc(sizeof(char *) * (count + 1));
+	cmd_array = allocate_cmd_array(cmd);
 	if (!cmd_array)
 		return (NULL);
 	i = 0;
@@ -58,10 +68,11 @@ t_cmd	*create_command(char *cmd_str, int i)
 	if (!cmd)
 		return (NULL);
 	args = split_cmd_args(cmd_str);
-	// check_print("After split_cmd_args\n");
-	if (!args || !tokenize_args(cmd, args))
+	if (!args)
+		return (NULL);
+	if (!tokenize_args(cmd, args))
 	{
-		free_2d_array(args);
+		ft_free_array(&args);
 		free(cmd);
 		return (NULL);
 	}
@@ -73,6 +84,5 @@ t_cmd	*create_command(char *cmd_str, int i)
 		return (NULL);
 	}
 	cmd->next = NULL;
-	// ft_free_array(&args);
 	return (cmd);
 }

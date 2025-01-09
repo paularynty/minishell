@@ -42,7 +42,16 @@ void	error_cmd(t_mini *shell, char *cmd, char *error_str, int ex)
 	ft_strlcat(buffer, "\n", sizeof(buffer));
 	ft_putstr_fd(buffer, STDERR_FILENO);
 	exit(shell->exit_code);
+}
 
+void	error_export(char *str)
+{
+	char	buffer[1024];
+
+	ft_strlcpy(buffer, "minishell: export: `", sizeof(buffer) - 1);
+	ft_strlcat(buffer, str, sizeof(buffer) - 1);
+	ft_strlcat(buffer, "': not a valid identifier\n", sizeof(buffer) - 1);
+	ft_putstr_fd(buffer, STDERR_FILENO);
 }
 
 void	error_file(t_mini *shell, char *file, char *error_str, int ex)
@@ -60,15 +69,4 @@ void	error_file(t_mini *shell, char *file, char *error_str, int ex)
 		ft_strlcat(buffer, error_str, sizeof(buffer) - 1);
 	ft_strlcat(buffer, "\n", sizeof(buffer));
 	ft_putstr_fd(buffer, STDERR_FILENO);
-}
-
-void	error_export(char *str)
-{
-	char	buffer[1024];
-
-	ft_strlcpy(buffer, "minishell: export: `", sizeof(buffer) - 1);
-	ft_strlcat(buffer, str, sizeof(buffer) - 1);
-	ft_strlcat(buffer, "': not a valid identifier\n", sizeof(buffer) - 1);
-	ft_putstr_fd(buffer, STDERR_FILENO);
-
 }

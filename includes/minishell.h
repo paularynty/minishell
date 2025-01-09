@@ -63,6 +63,7 @@ void	env_unset_variable(char **env, char *variable);
 int		builtin_unset(t_mini *shell, t_cmd *cmd);
 
 //environment/env_utils.c
+void	remove_eq(t_mini *shell, char *arg);
 char	*env_get_variable(char **env, char *key);
 int		env_update_shlvl(t_mini *shell);
 char	**clone_env(char **env);
@@ -72,13 +73,15 @@ int		env_set_variable(t_mini *shell, char *key, char *value);
 int		env_find_index(char **env, char *key);
 int		builtin_env(t_mini *shell);
 
+//errors/errors_syntax.c
+void	error_quotes(t_mini *shell, char *str);
+void	error_syntax(t_mini *shell, char *str);
+
 //errors/errors.c
-void	error_file(t_mini *shell, char *file, char *error_str, int ex);
 void	error_builtin(char *builtin, char *str, char *error_str);
 void	error_cmd(t_mini *shell, char *cmd, char *error_str, int ex);
-// int		error_cmd(t_mini *shell, char *cmd);
 void	error_export(char *str);
-
+void	error_file(t_mini *shell, char *file, char *error_str, int ex);
 
 //execution/execute.c
 int		execute(t_mini *shell, t_cmd *cmd);
@@ -96,7 +99,7 @@ int		reset_std(t_mini *shell, t_cmd *cmd);
 //execution/exec_utils.c
 void	free_pids(pid_t *pids);
 bool	is_dir(char *path);
-int		check_access(t_mini *shell, char *cmd);
+void	check_access(t_mini *shell, char *cmd);
 int		wait_for_children(t_mini *shell);
 
 //execution/exec_path.c
@@ -114,7 +117,7 @@ int		init_pipeline(t_mini *shell);
 int		open_infile(t_mini *shell, char *infile);
 int		open_outfile(t_mini *shell, char *outfile);
 int		open_append_file(t_mini *shell, char *outfile);
-int		handle_heredoc(char *delimiter);
+int		handle_heredoc(t_mini *shell, char *delimiter);
 
 //redirect/redirect.c
 int		redirect_fd(int src_fd, int dest_fd);
@@ -125,19 +128,27 @@ int		resolve_output_fd(t_mini *shell, t_cmd *cmd, t_token *token);
 //setup/setup.c
 int		setup(t_mini *shell, char **env);
 
-//signals/signals.cvoid	signal_heredoc(int signal)
-void	signal_heredoc(int signal);
-void	signal_ctrl_c(int signal);
+//signals/signal_handlers.c
+void	signal_handler_heredoc(int signal);
+void	signal_handler_sigint(int signal);
+void	signal_handler_child(int signal);
+
+//signals/signals.c
+void	signal_heredoc(void);
 void	signal_child(void);
 void	signal_reset(void);
 void	signal_init(void);
 
 //utils/cleanup.c
-void	free_pipes(t_mini *shell, int i);
 void	cleanup_failure(t_mini *shell, t_cmd *cmd, int ex);
-void	clean_commands(t_cmd *cmd);
 void	cleanup_success(t_mini *shell);
 void	cleanup(t_mini *shell, t_cmd *cmd);
+
+//utils/cleanup_utils.c
+void	free_null(char **ptr);
+void	close_all_pipes(t_mini *shell);
+void	free_pipes(t_mini *shell, int i);
+void	clean_commands(t_cmd *cmd);
 
 //utils/prompt.c
 void	get_prompt(t_mini *shell, char *prompt, size_t size);
