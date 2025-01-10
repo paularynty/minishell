@@ -49,9 +49,9 @@ static int	count_arg_length(char *cmd_str, int i, bool *quotes)
 			len += quote_offset(cmd_str + i, cmd_str[i]) - 2;
 			*quotes = true;
 			i += quote_offset(cmd_str + i, cmd_str[i]);
-			// check_print("len after quote_offset: %d\n", len);
-			// check_print("i after quote_offset: %d\n", i);
-			// check_print("cmd_str pointer after quote_offset: %s\n", cmd_str + i);
+			// printf("len after quote_offset: %d\n", len);
+			// printf("i after quote_offset: %d\n", i);
+			// printf("cmd_str pointer after quote_offset: %s\n", cmd_str + i);
 		}
 		else
 		{
@@ -75,9 +75,12 @@ static char	*extract_arg(char *cmd_str, int *i)
 
 	quotes = false;
 	len = count_arg_length(cmd_str, *i, &quotes);
-	// check_print("arg len: %d\n", len);
+	// printf("arg len: %d\n", len);
 	if (quotes)
+	{	
+		// printf("we're creating a quoted arg\n");
 		arg = create_quoted_arg(cmd_str, i, len);
+	}
 	else
 		arg = ft_substr(cmd_str, *i, len);
 	// check_print("cmd[%d] after ft_substr: %s\n", *i, arg);
@@ -108,13 +111,14 @@ char	**split_cmd_args(char *cmd_str)
 			break ;
 		// check_print("before extract_arg\n");
 		args[j] = extract_arg(cmd_str, &i);
-		// check_print("Argument %d: %s\n", j, args[j]);
+		// printf("Argument %d: |%s|\n", j, args[j]);
 		if (!args[j])
 		{
 			ft_free_array(&args);
 			return (NULL);
 		}
 		j++;
+		i++;
 	}
 	args[j] = NULL;
 	return (args);

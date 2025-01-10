@@ -29,6 +29,7 @@ int	lexer(t_mini *shell, char *line)
 		check_print("\nWE DON'T HAVE AN INPUT\n");
 		return (FALSE);
 	}
+	// printf("after expand_input: |%s|\n", shell->input);
 	if (!valid_input(shell, shell->input))
 	{
 		// free(shell->input);

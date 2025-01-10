@@ -100,6 +100,70 @@ char	*expand_exit_code(t_mini *shell, char *input, int *i)
 	return (new_input);
 }
 
+// char	*expand_input(t_mini *shell, char *input)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	while (input[i])
+// 	{
+// 		if (input[i] == '$')
+// 		{
+// 			if (input[i + 1] == '"' || input[i + 1] == '\'')
+// 				return (input);
+// 			if (input[i + 1] != '$' && !char_is_whitespace(input[i + 1]))
+// 			{
+// 				if (input[i + 1] == '?')
+// 					input = expand_exit_code(shell, input, &i);
+// 				else if (input[i + 1] == '"' || input[i + 1] == '\'')
+// 				{
+// 					input = replace_segment(input, i, i + 1, NULL);
+// 					if (input[i + 1] == '"')
+// 						i++;
+// 					else
+// 						i += quote_offset(input + i + 1, input[i + 1]);
+// 				}
+// 				else
+// 					input = expand_variable(shell, input, &i);
+// 				if (!input)
+// 					return (NULL);
+// 			}
+// 			else if (input[i] == '\'')
+// 				i += quote_offset(input + i, input[i]);
+// 			else
+// 				i++;
+// 		}
+// 		i++;
+// 	}
+// 	return (input);
+// }
+
+char	*double_quotes_expand(t_mini *shell, char *input, int *i)
+{
+	(*i)++;
+	while (input[*i] && input[*i] != '"')
+	{
+		if (input[*i] == '$')
+		{
+			if (input[*i + 1] == '?')
+			{
+				input = expand_exit_code(shell, input, &(*i));
+				if (!input)
+					return (NULL);
+			}
+			else if (!char_is_whitespace(input[*i + 1]) && input[*i + 1] != '"')
+			{
+				input = expand_variable(shell, input, &(*i));
+				if (!input)
+					return (NULL);
+			}
+		}
+		(*i)++;
+	}
+	(*i)++;
+	return (input);
+}
+
 char	*expand_input(t_mini *shell, char *input)
 {
 	int	i;
@@ -107,33 +171,26 @@ char	*expand_input(t_mini *shell, char *input)
 	i = 0;
 	while (input[i])
 	{
+		if (input[i] == '"')
+			input = double_quotes_expand(shell, input, &i);
+	//	printf("i = %d\n", i);
+		if (input[i] == '\'')
+			i += quote_offset(input + i, input[i]);
 		if (input[i] == '$')
 		{
-			if (input[i + 1] == '"' || input[i + 1] == '\'')
-				return (input);
-			if (input[i + 1] != '$' && !char_is_whitespace(input[i + 1]))
-			{
-				if (input[i + 1] == '?')
-					input = expand_exit_code(shell, input, &i);
-				else if (input[i + 1] == '"' || input[i + 1] == '\'')
-				{
-					input = replace_segment(input, i, i + 1, NULL);
-					if (input[i + 1] == '"')
-						i++;
-					else
-						i += quote_offset(input + i + 1, input[i + 1]);
-				}
-				else
-					input = expand_variable(shell, input, &i);
-				if (!input)
-					return (NULL);
-			}
-			else if (input[i] == '\'')
-				i += quote_offset(input + i, input[i]);
+			if (char_is_whitespace(input[i + 1]) || input[i + 1] == '"' || input[i + 1] == '\'')
+				input = replace_segment(input, i, i + 1, NULL);
+			else if (input[i + 1] == '?')
+				input = expand_exit_code(shell, input, &i);
+			else
+				input = expand_variable(shell, input, &i);
+			if (!input)
+				return (NULL);
 			else
 				i++;
 		}
-		i++;
+		else
+			i++;
 	}
 	return (input);
 }
