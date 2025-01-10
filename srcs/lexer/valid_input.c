@@ -46,6 +46,8 @@ int	valid_redirection(t_mini *shell, const char *input)
 	i = 0;
 	while (input[i])
 	{
+		if (input[i] == '"' || input[i] == '\'')
+			i += quote_offset(input + i, input[i]);
 		if (input[i] == '>' || input[i] == '<')
 		{
 			redir = input[i];

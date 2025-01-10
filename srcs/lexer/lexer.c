@@ -36,7 +36,7 @@ int	lexer(t_mini *shell, char *line)
 	shell->input = expand_input(shell, line);
 	if (!shell->input)
 	{
-		ft_putstr_fd("malloc", STDERR_FILENO);
+		ft_putstr_fd("malloc\n", STDERR_FILENO);
 		shell->abort = 1;
 		return (FALSE);
 	}
@@ -45,7 +45,7 @@ int	lexer(t_mini *shell, char *line)
 	shell->input = add_missing_spaces(shell->input);
 	if (!shell->input)
 	{
-		ft_putstr_fd("malloc", STDERR_FILENO);
+		ft_putstr_fd("malloc\n", STDERR_FILENO);
 		shell->abort = 1;
 		return (FALSE);
 	}

@@ -18,7 +18,7 @@ char	*create_quoted_arg(char *str, int *i, int len)
 		{
 			j = *i;
 			(*i)++;
-			while (str[*i] && str[*i] != str[j] && !char_is_whitespace(str[*i]))
+			while (str[*i] && str[*i] != str[j])
 				arg[k++] = str[(*i)++];
 			if (str[*i] == str[j])
 				(*i)++;
