@@ -10,10 +10,10 @@ void	free_null(char **ptr)
 free all previously allocated pipes. */
 void	free_pipes(t_mini *shell, int i)
 {
-	while (i > 0)
+	while (i >= 0)
 	{
-		i--;
 		free(shell->pipes[i]);
+		i--;
 	}
 	free(shell->pipes);
 	shell->pipes = NULL;

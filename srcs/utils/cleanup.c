@@ -39,8 +39,10 @@ void	cleanup_failure(t_mini *shell, t_cmd *cmd, int ex)
 void	cleanup_success(t_mini *shell, t_cmd *cmd)
 {
 	int	i;
+	int	j;
 
 	i = shell->cmd_count - 2;
+	j = i;
 	if (shell->pids)
 	{
 		free(shell->pids);
@@ -54,13 +56,14 @@ void	cleanup_success(t_mini *shell, t_cmd *cmd)
 				close(shell->pipes[i][0]);
 		}
 	}
+	free_pipes(shell, j);
 	cleanup(shell, cmd);
 }
 
 void	cleanup(t_mini *shell, t_cmd *cmd)
 {
-	if (shell->env)
-		ft_free_array(&shell->env);
+	// if (shell->env)
+	// 	ft_free_array(&shell->env);
 	if (cmd)
 		clean_commands(cmd);
 	free_null(&shell->cwd);
