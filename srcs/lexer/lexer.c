@@ -42,6 +42,6 @@ int	lexer(t_mini *shell, char *line)
 		check_print("\nWE DON'T HAVE AN INPUT\n");
 		return (FALSE);
 	}
-	check_print("expanded and spaced input: %s\n", shell->input);
+	// check_print("expanded and spaced input: %s\n", shell->input);
 	return (TRUE);
 }
