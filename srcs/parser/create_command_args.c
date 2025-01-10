@@ -118,7 +118,6 @@ char	**split_cmd_args(char *cmd_str)
 			return (NULL);
 		}
 		j++;
-		i++;
 	}
 	args[j] = NULL;
 	return (args);

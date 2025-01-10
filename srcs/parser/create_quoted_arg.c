@@ -13,7 +13,7 @@ char	*create_quoted_arg(char *str, int *i, int len)
 		return (NULL);
 	while (str[*i] && char_is_whitespace(str[*i]))
 		(*i)++;
-	while (str[*i] && len && !char_is_whitespace(str[*i]))
+	while (str[*i] && !char_is_whitespace(str[*i]))
 	{
 		if (str[*i] == '"' || str[*i] == '\'')
 		{
