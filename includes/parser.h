@@ -8,6 +8,12 @@ typedef struct s_cmd t_cmd;
 typedef struct s_token t_token;
 // typedef enum e_token_type t_token_type;
 
+//lexer/add_missing_spaces.c
+char		*add_missing_spaces(char *input);
+char		*add_space(char *input, int end);
+void		move_i_past_whitespace(char *input, int *i);
+char		*spaces_to_input(char *input, int *i);
+
 //lexer/expansion.c
 char		*expand_exit_code(t_mini *shell, char *input, int *i);
 char		*expand_input(t_mini *shell, char *input);

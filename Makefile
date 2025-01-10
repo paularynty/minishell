@@ -47,6 +47,7 @@ SRCS			= $(SRCDIR)/main.c \
 				$(SRCDIR)/execution/pipes.c \
 				$(SRCDIR)/errors/errors_syntax.c \
 				$(SRCDIR)/errors/errors.c \
+				$(SRCDIR)/lexer/add_missing_spaces.c \
 				$(SRCDIR)/lexer/expand.c \
 				$(SRCDIR)/lexer/lexer.c \
 				$(SRCDIR)/lexer/lexer_utils.c \
