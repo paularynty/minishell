@@ -99,19 +99,19 @@ bool	is_dir(char *path)
  * accessibility and validity. Upon encountering any error, calls
  * `error_cmd()` with the corresponding error message and exit code.
  * */
-void	check_access(t_mini *shell, char *cmd)
+void	check_access(t_mini *shell, t_cmd *cmds, char *cmd)
 {
 	if (!cmd)
-		error_cmd(shell, cmd, "command not found", 127);
+		error_cmd(shell, cmds, cmd, "command not found", 127);
 	if (access(cmd, F_OK) == -1)
 	{
 		if (ft_strchr(cmd, '/'))
-			error_cmd(shell, cmd, "No such file or directory", 1);
+			error_cmd(shell, cmds, cmd, "No such file or directory", 1);
 		else
-			error_cmd(shell, cmd, "command not found", 127);
+			error_cmd(shell, cmds, cmd, "command not found", 127);
 	}
 	if (is_dir(cmd) == true)
-		error_cmd(shell, cmd, "Is a directory", 126);
+		error_cmd(shell, cmds, cmd, "Is a directory", 126);
 	if (access(cmd, F_OK) == 0 && access(cmd, X_OK) == -1)
-		error_cmd(shell, cmd, "command not found", 127);
+		error_cmd(shell, cmds, cmd, "command not found", 127);
 }

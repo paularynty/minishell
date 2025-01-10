@@ -106,7 +106,7 @@ int	char_is_whitespace(char c)
 //             while (token)
 //             {
 //                 check_print("    [%d]: %s (type: %d)\n", i, token->value,
-//						token->type);
+// 						token->type);
 //                 token = token->next; // Move to the next token
 //                 i++;
 //             }

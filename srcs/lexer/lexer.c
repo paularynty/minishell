@@ -43,6 +43,7 @@ int	lexer(t_mini *shell, char *line)
 	if (!valid_input(shell, shell->input))
 		return (FALSE);
 	shell->input = add_missing_spaces(shell->input);
+	// debug_print("%s\n", shell->input);
 	if (!shell->input)
 	{
 		ft_putstr_fd("malloc\n", STDERR_FILENO);

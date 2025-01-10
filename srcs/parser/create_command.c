@@ -22,8 +22,10 @@ static char	**allocate_cmd_array(t_cmd *cmd)
 {
 	int		count;
 	char	**cmd_array;
+	t_token	*token;
 
-	count = count_token_type(cmd->tokens, CMD);
+	token = cmd->tokens;
+	count = count_token_type(token, CMD);
 	cmd_array = (char **)malloc(sizeof(char *) * (count + 1));
 	if (!cmd_array)
 		return (NULL);
@@ -55,6 +57,7 @@ static char	**extract_cmd(t_cmd *cmd)
 		}
 		token = token->next;
 	}
+	debug_print("|%s| |%s|\n", cmd_array[0], cmd_array[1]);
 	cmd_array[i] = NULL;
 	return (cmd_array);
 }

@@ -43,6 +43,8 @@ int 		count_token_type(t_token *tokens, enum e_token_type type);
 int			char_is_whitespace(char c);
 void		free_2d_array(char **array);
 int			count_pipes(const char *input);
+void 		print_list(t_cmd *cmds);
+
 
 //parser/free_cmd_contents.c
 int			quote_offset(const char *input, char quote);

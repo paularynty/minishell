@@ -39,7 +39,7 @@ char	*get_full_path(char **env_path, char *cmd)
 	return (NULL);
 }
 
-char	*get_cmd_path(t_mini *shell, char *cmd)
+char	*get_cmd_path(t_mini *shell, t_cmd *cmds, char *cmd)
 {
 	char	*cmd_path;
 	char	**env_path;
@@ -51,7 +51,7 @@ char	*get_cmd_path(t_mini *shell, char *cmd)
 		if (access(cmd, F_OK) == 0)
 			return (cmd);
 		else
-			error_cmd(shell, cmd, "No such file or directory", 127);
+			error_cmd(shell, cmds, cmd, "No such file or directory", 127);
 	}
 	env_path = get_env_path(shell->env);
 	if (!env_path)

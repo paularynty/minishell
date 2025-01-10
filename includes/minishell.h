@@ -23,14 +23,14 @@
 # include "structs.h"
 # include "../libft/libft.h"
 
-//# define DEBUG
+// # define DEBUG
 #ifdef DEBUG 
 # define debug_print(...) fprintf(stderr, __VA_ARGS__)
 #else
 # define debug_print(...) ((void)0)
 #endif
 
-//# define CHECK
+// # define CHECK
 #ifdef CHECK
 # define check_print(...) printf( __VA_ARGS__)
 #else
@@ -79,7 +79,7 @@ void	error_syntax(t_mini *shell, char *str);
 
 //errors/errors.c
 void	error_builtin(char *builtin, char *str, char *error_str);
-void	error_cmd(t_mini *shell, char *cmd, char *error_str, int ex);
+void	error_cmd(t_mini *shell, t_cmd *cmds, char *cmd, char *error_str, int ex);
 void	error_export(char *str);
 void	error_file(t_mini *shell, char *file, char *error_str, int ex);
 
@@ -99,13 +99,13 @@ int		reset_std(t_mini *shell, t_cmd *cmd);
 //execution/exec_utils.c
 void	free_pids(pid_t *pids);
 bool	is_dir(char *path);
-void	check_access(t_mini *shell, char *cmd);
+void	check_access(t_mini *shell, t_cmd *cmds, char *cmd);
 int		wait_for_children(t_mini *shell);
 
 //execution/exec_path.c
 char	**get_env_path(char **env);
 char	*get_full_path(char **env_path, char *cmd);
-char	*get_cmd_path(t_mini *shell, char *cmd);
+char	*get_cmd_path(t_mini *shell, t_cmd *cmds, char *cmd);
 
 //execution/pipes.c
 void	close_unused_fds(t_mini *shell, int i);

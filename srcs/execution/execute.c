@@ -39,17 +39,24 @@ static void	exec_forked_cmd(t_mini *shell, t_cmd *cmd)
 {
 	char	*cmd_path;
 	
-	cmd_path = get_cmd_path(shell, cmd->cmds[0]);
+	cmd_path = get_cmd_path(shell, cmd, cmd->cmds[0]);
+	debug_print("%s\n", cmd_path);
 	if (!cmd_path)
-		check_access(shell, cmd->cmds[0]);
+	{
+		debug_print("check 1\n");
+		check_access(shell, cmd, cmd->cmds[0]);
+	}
 	else
-		check_access(shell, cmd_path);
+	{
+		debug_print("check 2\n");
+		check_access(shell, cmd, cmd_path);
+	}
 	signal_reset();
-	debug_print("sending to execve: %s %s\n", cmd->cmds[0], cmd->cmds[1]);
+	debug_print("sending to execve: |%s| |%s|\n", cmd->cmds[0], cmd->cmds[1]);
 	if (execve(cmd_path, cmd->cmds, shell->env) == -1)
 	{
 		free(cmd_path);
-		error_cmd(shell, cmd->cmds[0], strerror(errno), errno);
+		error_cmd(shell, cmd, cmd->cmds[0], strerror(errno), errno);
 	}
 }
 

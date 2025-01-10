@@ -50,7 +50,7 @@ char	*spaces_to_input(char *input, int *i)
 	}
 	input = spaced;
 	// printf("%s, i = %d\n", input + i, i);
-	*i += 2;
+	*i += 1;
 	// printf("%s, i = %d\n", input + i, i);
 	if (input[*i] == input[*i - 1])
 		(*i)++;
@@ -79,6 +79,7 @@ char	*add_missing_spaces(char *input)
 				if (!input) // malloc fail
 					return (NULL);
 				// printf("after 2nd if statement %s, i = %d\n", input, i);
+				// printf("after 2nd if statement the pointer is %s, i = %d\n", input + i, i);
 			}
 			else
 				i++;
