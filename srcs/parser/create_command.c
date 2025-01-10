@@ -86,6 +86,7 @@ t_cmd	*create_command(char *cmd_str, int i)
 		ft_free_array(&args);
 		return (NULL);
 	}
+	free_2d_array(args);
 	cmd->next = NULL;
 	return (cmd);
 }

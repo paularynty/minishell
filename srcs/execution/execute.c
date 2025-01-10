@@ -145,6 +145,7 @@ static int	exec_parent(t_mini *shell, t_cmd *cmd, int is_builtin)
 		if (!reset_std(shell, cmd))
 			return (FALSE);
 	}
+	cleanup_success(shell, cmd);
 	return (TRUE);
 }
 
@@ -182,7 +183,7 @@ static int	exec_child(t_mini *shell, t_cmd *cmd)
 	}
 	shell->exit_code = wait_for_children(shell);
 	signal_init();
-	cleanup_success(shell);
+	cleanup_success(shell, cmd);
 	return (TRUE);
 }
 

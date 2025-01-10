@@ -13,16 +13,13 @@
  */
 void	cleanup_failure(t_mini *shell, t_cmd *cmd, int ex)
 {
-	ft_free_array(&shell->env);
-	free_null(&shell->cwd);
 	close_all_pipes(shell);
-	//unlink all heredocs;
 	if (cmd->output_fd > 2)
 		close(cmd->output_fd);
 	if (cmd->input_fd > 2)
 		close(cmd->input_fd);
-	clean_commands(cmd);
 	free(shell->pids);
+	cleanup(shell, cmd);
 	//if there is more than 1 command, ft_free_array for however many cmd->cmds arrays there are
 	//cleanup_shell(shell);
 	// free(shell);
@@ -39,7 +36,7 @@ void	cleanup_failure(t_mini *shell, t_cmd *cmd, int ex)
  * @i: Index of the current command being executed.
  * @exit_status: Exit status code to terminate the shell with.
  */
-void	cleanup_success(t_mini *shell)
+void	cleanup_success(t_mini *shell, t_cmd *cmd)
 {
 	int	i;
 
@@ -57,6 +54,7 @@ void	cleanup_success(t_mini *shell)
 				close(shell->pipes[i][0]);
 		}
 	}
+	cleanup(shell, cmd);
 }
 
 void	cleanup(t_mini *shell, t_cmd *cmd)

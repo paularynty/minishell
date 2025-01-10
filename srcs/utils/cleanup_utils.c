@@ -39,10 +39,9 @@ static void	clean_tokens(t_token *tokens)
 	while (tokens)
 	{
 		temp = tokens->next;
-		free(tokens->next);
 		free(tokens->value);
-		tokens->next = NULL;
 		tokens->value = NULL;
+		free(tokens);
 		tokens = temp;
 	}
 }
@@ -54,13 +53,39 @@ void	clean_commands(t_cmd *cmd)
 	while (cmd)
 	{
 		temp = cmd->next;
-		ft_free_array(&cmd->cmds);
 		clean_tokens(cmd->tokens);
 		cmd->tokens = NULL;
+		ft_free_array(&cmd->cmds);
 		free(cmd);
 		cmd = temp;
 	}
 }
+
+// void	clean_commands(t_cmd *cmd)
+// {
+// 	t_cmd	*temp;
+
+// 	temp = NULL;
+// 	if (!cmd->next)
+// 	{
+// 		clean_tokens(cmd->tokens);
+// 		cmd->tokens = NULL;
+// 		ft_free_array(&cmd->cmds);
+// 		free(cmd);
+// 	}
+// 	else
+// 	{
+// 		while (cmd)
+// 		{
+// 			temp = cmd->next;
+// 			clean_tokens(cmd->tokens);
+// 			cmd->tokens = NULL;
+// 			ft_free_array(&cmd->cmds);
+// 			free(cmd);
+// 			cmd = temp;
+// 		}
+// 	}
+// }
 
 // static void	clean_tokens(t_token *tokens)
 // {
