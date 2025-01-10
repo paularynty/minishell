@@ -111,7 +111,17 @@ void	check_access(t_mini *shell, t_cmd *cmds, char *cmd)
 			error_cmd(shell, cmds, cmd, "command not found", 127);
 	}
 	if (is_dir(cmd) == true)
-		error_cmd(shell, cmds, cmd, "Is a directory", 126);
+	{
+		if (ft_strchr(cmd, '/'))
+			error_cmd(shell, cmds, cmd, "Is a directory", 126);
+		else
+			error_cmd(shell, cmds, cmd, "command not found", 127);
+	}
 	if (access(cmd, F_OK) == 0 && access(cmd, X_OK) == -1)
-		error_cmd(shell, cmds, cmd, "command not found", 127);
+	{
+		if (ft_strchr(cmd, '/'))
+			error_cmd(shell, cmds, cmd, "Permission denied", 126);
+		else
+			error_cmd(shell, cmds, cmd, "command not found", 127);
+	}
 }

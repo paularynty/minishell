@@ -141,7 +141,7 @@ void	signal_init(void);
 
 //utils/cleanup.c
 void	cleanup_failure(t_mini *shell, t_cmd *cmd, int ex);
-void	cleanup_success(t_mini *shell);
+void	cleanup_success(t_mini *shell, t_cmd *cmd);
 void	cleanup(t_mini *shell, t_cmd *cmd);
 
 //utils/cleanup_utils.c
