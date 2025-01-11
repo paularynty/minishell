@@ -99,7 +99,7 @@ bool	is_dir(char *path)
  * accessibility and validity. Upon encountering any error, calls
  * `error_cmd()` with the corresponding error message and exit code.
  * */
-void	check_access(t_mini *shell, t_cmd *cmds, char *cmd)
+void	check_access(t_mini *shell, t_cmd *cmds, char *cmd) // here cmds is starting from head
 {
 	if (!cmd)
 		error_cmd(shell, cmds, cmd, "command not found", 127);
