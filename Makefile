@@ -40,6 +40,7 @@ SRCS			= $(SRCDIR)/main.c \
 				$(SRCDIR)/environment/env_utils.c \
 				$(SRCDIR)/environment/env.c \
 				$(SRCDIR)/execution/execute.c \
+				$(SRCDIR)/execution/exec_child.c \
 				$(SRCDIR)/execution/dup_close.c \
 				$(SRCDIR)/execution/exec_path.c \
 				$(SRCDIR)/execution/exec_std.c \

@@ -34,9 +34,8 @@ static int	exit_non_numeric(char **args)
 	return (2);
 }
 
-static int	exit_extra_args(t_mini *shell)
+static int	exit_extra_args(void)
 {
-	shell->exit_flag = FALSE;
 	error_builtin(EXIT, NULL, "too many arguments");
 	return (1);
 }
@@ -46,7 +45,6 @@ int	builtin_exit(t_mini *shell, t_cmd *cmd, char **args)
 	int	code;
 
 	code = 0;
-	shell->exit_flag = TRUE;
 	if (isatty(STDIN_FILENO) && shell->cmd_count == 1)
 		ft_putstr_fd("exit\n", STDERR_FILENO);
 	if (args[1] == NULL)
@@ -58,7 +56,7 @@ int	builtin_exit(t_mini *shell, t_cmd *cmd, char **args)
 	if (!is_numeric(args[1]))
 		return (exit_non_numeric(args));
 	if (args[2] != NULL)
-		return (exit_extra_args(shell));
+		return (exit_extra_args());
 	if (args[1])
 		code = ft_atoi(args[1]);
 	rl_clear_history();

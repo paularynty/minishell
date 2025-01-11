@@ -57,7 +57,6 @@ static char	**extract_cmd(t_cmd *cmd)
 		}
 		token = token->next;
 	}
-	debug_print("|%s| |%s|\n", cmd_array[0], cmd_array[1]);
 	cmd_array[i] = NULL;
 	return (cmd_array);
 }
