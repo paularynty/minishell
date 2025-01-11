@@ -3,39 +3,33 @@
 
 //standard headers
 # include <errno.h>
-# include <string.h> //for strerror
-# include <stdlib.h> //for malloc, free
-# include <unistd.h> //write, dup, dup2
-# include <fcntl.h> //for O_RDONLY etc.
-# include <stdio.h> // for printf
-# include <signal.h> //for signal, SIGINT, SIGQUIT
-# include <limits.h>
+# include <stdlib.h>
+# include <fcntl.h>
+# include <signal.h>
 # include <stdbool.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/wait.h>
 # include <sys/stat.h>
-# include <termios.h> //for tcgetattr, tcsetattr
 
-//own headers
 # include "defines.h"
 # include "parser.h"
 # include "structs.h"
 # include "../libft/libft.h"
 
-// # define DEBUG
-#ifdef DEBUG 
-# define debug_print(...) fprintf(stderr, __VA_ARGS__)
-#else
-# define debug_print(...) ((void)0)
-#endif
+// // # define DEBUG
+// #ifdef DEBUG 
+// # define debug_print(...) fprintf(stderr, __VA_ARGS__)
+// #else
+// # define debug_print(...) ((void)0)
+// #endif
 
-// # define CHECK
-#ifdef CHECK
-# define check_print(...) printf( __VA_ARGS__)
-#else
-# define check_print(...) ((void)0)
-#endif
+// // # define CHECK
+// #ifdef CHECK
+// # define check_print(...) printf( __VA_ARGS__)
+// #else
+// # define check_print(...) ((void)0)
+// #endif
 
 //builtins/builtins.c
 int		handle_builtin(int id, t_mini *shell, t_cmd *cmd);
@@ -86,18 +80,21 @@ void	error_file(t_mini *shell, char *file, char *error_str, int ex);
 //execution/execute.c
 int		execute(t_mini *shell, t_cmd *cmd);
 
-//execution/exec_dup_close.c
-int		resolve_fds(t_mini *shell, t_cmd *cmd);
+//execution/dup_close.c
+int		configure_fds(t_mini *shell, t_cmd *cmd);
 int		dup_input(t_mini *shell, t_cmd *cmd, int i);
 int		dup_output(t_mini *shell, t_cmd *cmd, int i);
 int		dup2_close(int old_fd, int new_fd);
+
+//execution/exec_child.c
+int		exec_child(t_mini *shell, t_cmd *cmd);
 
 //execution/exec_std.c
 int		save_std(t_mini *shell, t_cmd *cmd);
 int		reset_std(t_mini *shell, t_cmd *cmd);
 
 //execution/exec_utils.c
-void	free_pids(pid_t *pids);
+// void	free_pids(pid_t *pids);
 bool	is_dir(char *path);
 void	check_access(t_mini *shell, t_cmd *cmds, char *cmd);
 int		wait_for_children(t_mini *shell);
@@ -121,9 +118,9 @@ int		handle_heredoc(t_mini *shell, char *delimiter);
 
 //redirect/redirect.c
 int		redirect_fd(int src_fd, int dest_fd);
-int		process_redir(t_mini *shell, t_cmd *cmd);
-int		resolve_input_fd(t_mini *shell, t_cmd *cmd, t_token *token);
-int		resolve_output_fd(t_mini *shell, t_cmd *cmd, t_token *token);
+int		handle_redirection(t_mini *shell, t_cmd *cmd);
+int		resolve_input(t_mini *shell, t_cmd *cmd, t_token *token);
+int		resolve_output(t_mini *shell, t_cmd *cmd, t_token *token);
 
 //setup/setup.c
 int		setup(t_mini *shell, char **env);

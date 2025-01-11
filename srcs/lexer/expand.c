@@ -27,7 +27,7 @@ char	*get_variable(t_mini *shell, char *key, int key_len)
 	return (exp_var);
 }
 
-char	*replace_segment(char *input, int start, int end, char *replacement)
+char	*replace_segment(char *input, int start, int end, char *repl)
 {
 	char	*new_input;
 	int		input_len;
@@ -35,15 +35,15 @@ char	*replace_segment(char *input, int start, int end, char *replacement)
 	int		new_len;
 
 	input_len = ft_strlen(input);
-	repl_len = ft_strlen(replacement);
+	repl_len = ft_strlen(repl);
 	new_len = input_len - (end - start) + repl_len;
 	new_input = (char *)malloc(sizeof(char) * new_len + 1);
 	if (!new_input)
 		return (NULL);
 	if (ft_strlcpy(new_input, input, start + 1) == 0)
 		return (NULL);
-	if (replacement)
-		ft_strlcpy(new_input + start, replacement, start + repl_len + 1);
+	if (repl)
+		ft_strlcpy(new_input + start, repl, start + repl_len + 1);
 	ft_strlcpy(new_input + start + repl_len, input + end, new_len + 1);
 	return (new_input);
 }

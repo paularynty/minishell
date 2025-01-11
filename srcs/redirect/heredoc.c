@@ -39,16 +39,6 @@ static int	heredoc_eof(t_mini *shell, int line, char *lim)
 	return (TRUE);
 }
 
-static int	create_heredoc_pipe(int *pipe_fd)
-{
-	if (pipe(pipe_fd) == -1)
-	{
-		perror("pipe failed");
-		return (FALSE);
-	}
-	return (TRUE);
-}
-
 static void	heredoc_loop(t_mini *shell, char *line, char *lim, int *pipe_fd)
 {
 	while (TRUE)
@@ -92,8 +82,11 @@ int	handle_heredoc(t_mini *shell, char *lim)
 	char	*line;
 
 	line = NULL;
-	if (!create_heredoc_pipe(pipe_fd))
+	if (pipe(pipe_fd) == -1)
+	{
+		perror("pipe failed");
 		return (FALSE);
+	}
 	heredoc_loop(shell, line, lim, pipe_fd);
 	close(pipe_fd[1]);
 	return (pipe_fd[0]);

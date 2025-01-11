@@ -7,9 +7,7 @@ int	builtin_echo(char **cmd)
 
 	i = 1;
 	newline = TRUE;
-	if (!cmd[1])
-		return (1);
-	if (ft_strncmp(cmd[1], "-n", 2) == 0)
+	while (cmd[i] && ft_strncmp(cmd[i], "-n", 2) == 0)
 	{
 		newline = FALSE;
 		i++;

@@ -11,9 +11,14 @@
  * descriptors, unlinking heredocs, freeing memory, and releasing resources
  * before terminating the shell with the specified exit status.
  */
-void	cleanup_failure(t_mini *shell, t_cmd *cmd, int ex)
+void	cleanup_failure(t_mini *shell, t_cmd *cmd, int exit_status)
 {
+	int	i;
+
+	i = shell->cmd_count - 2;
 	close_all_pipes(shell);
+	if (shell->pipes)
+		free_pipes(shell, i);
 	if (cmd->output_fd > 2)
 		close(cmd->output_fd);
 	if (cmd->input_fd > 2)
@@ -25,7 +30,7 @@ void	cleanup_failure(t_mini *shell, t_cmd *cmd, int ex)
 	// free(shell);
 	// shell = NULL;
 	// shell->cmd_count = 0;
-	exit(ex);
+	exit(exit_status);
 }
 
 /**
@@ -67,5 +72,4 @@ void	cleanup(t_mini *shell, t_cmd *cmd)
 	if (cmd)
 		clean_commands(cmd);
 	free_null(&shell->cwd);
-	shell->heredoc = NULL;
 }

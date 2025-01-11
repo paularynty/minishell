@@ -55,11 +55,11 @@ void	error_export(char *str)
 	ft_putstr_fd(buffer, STDERR_FILENO);
 }
 
-void	error_file(t_mini *shell, char *file, char *error_str, int ex)
+void	error_file(t_mini *shell, char *file, char *error_str, int exit_status)
 {
 	char	buffer[1024];
 
-	shell->exit_code = ex;
+	shell->exit_code = exit_status;
 	ft_strlcpy(buffer, "minishell: ", sizeof(buffer) - 1);
 	if (file && file[0] != '\0')
 	{

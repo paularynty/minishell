@@ -1,21 +1,21 @@
 #include "minishell.h"
 
 /**
- * resolve_fds - Resolves file descriptors for input and output redirection.
+ * configure_fds - Resolves file descriptors for input and output redirection.
  *
  * @shell: Pointer to the shell structure.
  * @cmd: Pointer to the command structure.
  *
  * Processes input and output redirections specified in the command using 
- * `process_redir()`. If no redirection is specified, sets the input file 
+ * `handle_redirection()`. If no redirection is specified, sets the input file 
  * descriptor to `STDIN_FILENO` and the output file descriptor to 
  * `STDOUT_FILENO`.
  *
  * Returns TRUE on success or FALSE if redirection processing fails.
  * */
-int	resolve_fds(t_mini *shell, t_cmd *cmd)
+int	configure_fds(t_mini *shell, t_cmd *cmd)
 {
-	if (!process_redir(shell, cmd))
+	if (!handle_redirection(shell, cmd))
 		return (FALSE);
 	if (cmd->input_fd == -1)
 		cmd->input_fd = STDIN_FILENO;

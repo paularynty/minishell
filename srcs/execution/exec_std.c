@@ -36,6 +36,20 @@ int	save_std(t_mini *shell, t_cmd *cmd)
 	return (TRUE);
 }
 
+/**
+ * reset_std - Restores the standard input and output file descriptors.
+ *
+ * @shell: Pointer to the shell structure.
+ * @cmd: Pointer to the command structure.
+ *
+ * Restores the original standard input (`STDIN_FILENO`) and output 
+ * (`STDOUT_FILENO`) file descriptors that were saved in `cmd->saved_stdin` 
+ * and `cmd->saved_stdout`. If restoration using `dup2_close()` fails, logs an 
+ * error message and sets the shell's exit code to 1. Ensures that the saved 
+ * file descriptors are invalidated after restoration.
+ *
+ * Returns TRUE on success, or FALSE on failure.
+ */
 int	reset_std(t_mini *shell, t_cmd *cmd)
 {
 	if (cmd->saved_stdin != -1 && cmd->saved_stdin != STDIN_FILENO)
