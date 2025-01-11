@@ -62,7 +62,6 @@ static void	minishell(t_mini *shell)
 				execute(shell, cmds);
 			}
 		}
-		shell->cmd_count = 0;
 	}
 }
 

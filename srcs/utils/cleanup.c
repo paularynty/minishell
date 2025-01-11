@@ -60,8 +60,8 @@ void	cleanup_success(t_mini *shell, t_cmd *cmd)
 			if (shell->pipes[i][0] > 0)
 				close(shell->pipes[i][0]);
 		}
+		free_pipes(shell, j);
 	}
-	free_pipes(shell, j);
 	cleanup(shell, cmd);
 	shell->cmd_count = 0;
 }
