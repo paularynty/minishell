@@ -7,7 +7,7 @@ int	handle_builtin(int id, t_mini *shell, t_cmd *cmd)
 	signal_reset();
 	code = 0;
 	if (id == BUILTIN_CD)
-		code = builtin_cd(shell, cmd);
+		code = builtin_cd(shell, cmd->cmds);
 	if (id == BUILTIN_ECHO)
 		code = builtin_echo(cmd->cmds);
 	else if (id == BUILTIN_ENV)
@@ -15,7 +15,7 @@ int	handle_builtin(int id, t_mini *shell, t_cmd *cmd)
 	else if (id == BUILTIN_EXIT)
 		code = builtin_exit(shell, cmd, cmd->cmds);
 	else if (id == BUILTIN_EXPORT)
-		code = builtin_export(shell, cmd);
+		code = builtin_export(shell, cmd->cmds);
 	else if (id == BUILTIN_PWD)
 		code = builtin_pwd(shell);
 	else if (id == BUILTIN_UNSET)

@@ -17,19 +17,19 @@
 # include "structs.h"
 # include "../libft/libft.h"
 
-// // # define DEBUG
-// #ifdef DEBUG 
-// # define debug_print(...) fprintf(stderr, __VA_ARGS__)
-// #else
-// # define debug_print(...) ((void)0)
-// #endif
+# define DEBUG
+#ifdef DEBUG 
+# define debug_print(...) fprintf(stderr, __VA_ARGS__)
+#else
+# define debug_print(...) ((void)0)
+#endif
 
-// // # define CHECK
-// #ifdef CHECK
-// # define check_print(...) printf( __VA_ARGS__)
-// #else
-// # define check_print(...) ((void)0)
-// #endif
+# define CHECK
+#ifdef CHECK
+# define check_print(...) printf( __VA_ARGS__)
+#else
+# define check_print(...) ((void)0)
+#endif
 
 //builtins/builtins.c
 int		handle_builtin(int id, t_mini *shell, t_cmd *cmd);
@@ -37,17 +37,17 @@ int		builtins(char *line);
 
 //builtins/cd.c
 int		update_pwd(t_mini *shell);
-int		builtin_cd(t_mini *shell, t_cmd *cmd);
+int		builtin_cd(t_mini *shell, char **args);
 
 //builtins/echo.c
-int		builtin_echo(char **cmd);
+int		builtin_echo(char **args);
 
 //builtins/exit.c
 int		builtin_exit(t_mini *shell, t_cmd *cmd, char **args);
 
 //builtins/export.c
 int		count_array_elements(char **array);
-int		builtin_export(t_mini *shell, t_cmd *cmd);
+int		builtin_export(t_mini *shell, char **args);
 
 //builtins/pwd.c
 int		builtin_pwd(t_mini *shell);

@@ -1,21 +1,21 @@
 #include "minishell.h"
 
-int	builtin_echo(char **cmd)
+int	builtin_echo(char **args)
 {
 	int	i;
 	int	newline;
 
 	i = 1;
 	newline = TRUE;
-	while (cmd[i] && ft_strncmp(cmd[i], "-n", 2) == 0)
+	while (args[i] && ft_strncmp(args[i], "-n", 2) == 0)
 	{
 		newline = FALSE;
 		i++;
 	}
-	while (cmd[i])
+	while (args[i])
 	{
-		printf("%s", cmd[i]);
-		if (cmd[i + 1] != NULL)
+		printf("%s", args[i]);
+		if (args[i + 1] != NULL)
 			printf(" ");
 		i++;
 	}

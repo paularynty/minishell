@@ -106,10 +106,7 @@ static int	cd_home(t_mini *shell)
 	}
 	old_pwd = getcwd(shell->cwd, sizeof(cwd));
 	if (!old_pwd)
-	{
-		ft_putstr_fd("Getcwd for oldpwd failed\n", 2);
 		return (FALSE);
-	}
 	return (change_dir(home));
 }
 
@@ -131,24 +128,26 @@ static int	cd_home(t_mini *shell)
  *
  * Returns 0 on success or 1 on failure.
  */
-int	builtin_cd(t_mini *shell, t_cmd *cmd)
+int	builtin_cd(t_mini *shell, char **args)
 {
-	if (cmd->cmds[2])
-	{
-		error_builtin(CD, NULL, "too many arguments");
-		return (1);
-	}
-	if (!cmd->cmds[1])
+	int	i;
+	
+	i = 0;
+	while (args[i])
+		i++;
+	if (i > 2)
+		return (error_builtin(CD, NULL, "too many arguments"), 1);
+	if (!args[1])
 	{
 		if (!cd_home(shell))
 			return (1);
 	}
-	else if (ft_strncmp(cmd->cmds[1], "-\0", 2) == 0)
+	if (ft_strncmp(args[1], "-\0", 2) == 0)
 	{
 		if (!cd_oldpwd(shell))
 			return (1);
 	}
-	else if (!change_dir(cmd->cmds[1]))
+	else if (!change_dir(args[1]))
 		return (1);
 	if (!update_pwd(shell))
 		return (1);

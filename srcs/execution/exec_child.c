@@ -14,7 +14,6 @@
  */
 static void	exec_forked_builtin(t_mini *shell, t_cmd *cmd, int is_builtin)
 {
-	// handle_builtin(is_builtin, shell, cmd);
 	if (handle_builtin(is_builtin, shell, cmd) > 0)
 		cleanup_failure(shell, cmd, shell->exit_code);
 	cleanup_success(shell, cmd);
