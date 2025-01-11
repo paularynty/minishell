@@ -87,6 +87,17 @@ int	valid_pipes(t_mini *shell, const char *input)
 	return (TRUE);
 }
 
+// int	str_only_quotes_or_wp(const char *str) // this is probably unnecessary
+// {
+// 	while (*str)
+// 	{
+// 		if (*str != 32 && (*str < 9 || *str > 13) && *str != '"' && *str != '\'')
+// 			return (FALSE);
+// 		str++;
+// 	}
+// 	return (TRUE);
+// }
+
 int	closed_pipes(t_mini *shell, const char *input)
 {
 	int	i;
@@ -94,6 +105,10 @@ int	closed_pipes(t_mini *shell, const char *input)
 
 	i = 0;
 	open = 0;
+	while (input[i] && char_is_whitespace(input[i]))
+		i++;
+	if (input[i] == '|')
+		return (error_syntax(shell, "|"), FALSE);
 	while (input[i])
 	{
 		if (input[i] == '\'' || input[i] == '"')
