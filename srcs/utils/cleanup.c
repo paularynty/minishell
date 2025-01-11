@@ -63,6 +63,7 @@ void	cleanup_success(t_mini *shell, t_cmd *cmd)
 	}
 	free_pipes(shell, j);
 	cleanup(shell, cmd);
+	shell->cmd_count = 0;
 }
 
 void	cleanup(t_mini *shell, t_cmd *cmd)

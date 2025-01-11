@@ -107,7 +107,7 @@ char	*get_cmd_path(t_mini *shell, t_cmd *cmds, char *cmd);
 //execution/pipes.c
 void	close_unused_fds(t_mini *shell, int i);
 void	close_fds_and_pipes(t_mini *shell, int i);
-int		fork_and_execute(t_mini *shell, t_cmd *cmd);
+int		fork_and_execute(t_mini *shell, t_cmd *cmd, t_cmd *head);
 int		init_pipeline(t_mini *shell);
 
 //redirect/file_handler.c

@@ -12,12 +12,12 @@
  * function; these actions must be managed externally. Exits the process with 
  * `EXIT_SUCCESS` after the built-in command execution.
  */
-static void	exec_forked_builtin(t_mini *shell, t_cmd *cmd, int is_builtin)
+static void	exec_forked_builtin(t_mini *shell, t_cmd *cmd, t_cmd *head, int is_builtin)
 {
 	// handle_builtin(is_builtin, shell, cmd);
 	if (handle_builtin(is_builtin, shell, cmd) > 0)
-		cleanup_failure(shell, cmd, shell->exit_code);
-	cleanup_success(shell, cmd);
+		cleanup_failure(shell, head, shell->exit_code); // modified cmd -> head
+	cleanup_success(shell, head); // modified cmd -> head
 	exit(EXIT_SUCCESS);
 }
 
@@ -33,20 +33,20 @@ static void	exec_forked_builtin(t_mini *shell, t_cmd *cmd, int is_builtin)
  * On failure, handles errors, cleans up resources, and exits with an 
  * appropriate error code. If `execve` succeeds, the process exits with `EXIT_SUCCESS`.
  */
-static void	exec_forked_cmd(t_mini *shell, t_cmd *cmd)
+static void	exec_forked_cmd(t_mini *shell, t_cmd *cmd, t_cmd *head) // added head for potential cleanup
 {
 	char	*cmd_path;
 
 	cmd_path = get_cmd_path(shell, cmd, cmd->cmds[0]);
 	if (!cmd_path)
-		check_access(shell, cmd, cmd->cmds[0]);
+		check_access(shell, head, cmd->cmds[0]); // modified cmd -> head for potential cleanup
 	else
-		check_access(shell, cmd, cmd_path);
+		check_access(shell, head, cmd_path); // modified cmd -> head for potential cleanup
 	signal_reset();
 	if (execve(cmd_path, cmd->cmds, shell->env) == -1)
 	{
 		free(cmd_path);
-		error_cmd(shell, cmd, cmd->cmds[0], strerror(errno), errno);
+		error_cmd(shell, head, cmd->cmds[0], strerror(errno), errno);
 	}
 }
 
@@ -68,7 +68,7 @@ static void	exec_forked_cmd(t_mini *shell, t_cmd *cmd)
  *
  * Returns TRUE on success or -1 on fork failure.
  */
-int	fork_and_execute(t_mini *shell, t_cmd *cmd)
+int	fork_and_execute(t_mini *shell, t_cmd *cmd, t_cmd *head) // added head (for potential cleanup)
 {
 	int	is_builtin;
 
@@ -86,17 +86,17 @@ int	fork_and_execute(t_mini *shell, t_cmd *cmd)
 		close_unused_fds(shell, cmd->cmd_i);
 		if (!configure_fds(shell, cmd))
 		{
-			cleanup_failure(shell, cmd, shell->exit_code);
+			cleanup_failure(shell, head, shell->exit_code); // modified cmd -> head
 			return (FALSE);
 		}
 		if (!dup_input(shell, cmd, cmd->cmd_i))
-			cleanup_failure(shell, cmd, shell->exit_code);
+			cleanup_failure(shell, head, shell->exit_code); // modified cmd -> head
 		if (!dup_output(shell, cmd, cmd->cmd_i))
-			cleanup_failure(shell, cmd, shell->exit_code);
+			cleanup_failure(shell, head, shell->exit_code); // modified cmd -> head
 		if (builtins(cmd->cmds[0]))
-			exec_forked_builtin(shell, cmd, is_builtin);
+			exec_forked_builtin(shell, cmd, head, is_builtin); // added head to the function call
 		else
-			exec_forked_cmd(shell, cmd);
+			exec_forked_cmd(shell, cmd, head); // added head to the function call
 	}
 	return (TRUE);
 }
@@ -128,7 +128,7 @@ int	exec_child(t_mini *shell, t_cmd *cmd)
 	curr = cmd;
 	while (curr)
 	{
-		if (fork_and_execute(shell, curr) == -1)
+		if (fork_and_execute(shell, curr, cmd) == -1)
 			return (FALSE);
 		close_fds_and_pipes(shell, curr->cmd_i);
 		curr = curr->next;
