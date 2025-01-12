@@ -76,6 +76,20 @@ int	resolve_input(t_mini *shell, t_cmd *cmd, t_token *token)
 	return (TRUE);
 }
 
+int	resolve_input_child(t_mini *shell, t_cmd *cmd, t_token *token)
+{
+	if (cmd->input_fd != -1)
+	{
+		close(cmd->input_fd);
+		cmd->input_fd = -1;
+	}
+	if (token->type == REDIR_IN)
+		cmd->input_fd = open_infile(shell, token->next->value);
+	if (cmd->input_fd == -2)
+		return (FALSE);
+	return (TRUE);
+}
+
 /**
  * resolve_output - Resolves the output file descriptor for a command.
  *
@@ -131,7 +145,7 @@ int	handle_redirection(t_mini *shell, t_cmd *cmd)
 	token = cmd->tokens;
 	while (token)
 	{
-		if (token->type == REDIR_IN || token->type == HEREDOC)
+		if (token->type == REDIR_IN) // heredoc ehto poistuu
 		{
 			if (!resolve_input(shell, cmd, token))
 			{
@@ -148,6 +162,37 @@ int	handle_redirection(t_mini *shell, t_cmd *cmd)
 			}
 		}
 		token = token->next;
+	}
+	return (TRUE);
+}
+
+int	handle_redirection_child(t_mini *shell, t_cmd *cmd)
+{
+	t_token	*token;
+	int		i;
+
+	token = cmd->tokens;
+	i = 0;
+	while (token)
+	{
+		if (token->type == REDIR_IN && i >= cmd->heredoc_i)
+		{
+			if (!resolve_input(shell, cmd, token))
+			{
+				close_extra_fd(cmd->output_fd);
+				return (FALSE);
+			}
+		}
+		else if (i >= cmd->heredoc_i && (token->type == REDIR_OUT || token->type == REDIR_APPEND))
+		{
+			if (!resolve_output(shell, cmd, token))
+			{
+				close_extra_fd(cmd->input_fd);
+				return (FALSE);
+			}
+		}
+		token = token->next;
+		i++;
 	}
 	return (TRUE);
 }

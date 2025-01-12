@@ -114,3 +114,4 @@ int	handle_heredoc(t_mini *shell, char *lim)
 	close(pipe_fd[1]);
 	return (pipe_fd[0]);
 }
+

@@ -14,6 +14,7 @@ static t_cmd	*init_cmd(int i)
 	cmd->saved_stdin = -1;
 	cmd->saved_stdout = -1;
 	cmd->cmd_i = i;
+	cmd->heredoc_i = 0;
 	cmd->next = NULL;
 	return (cmd);
 }

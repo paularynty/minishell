@@ -125,6 +125,7 @@ typedef struct s_cmd
 	int				output_fd;
 	int				saved_stdin;
 	int				saved_stdout;
+	int				heredoc_i;
 	int				cmd_i;
 	struct s_cmd	*next;
 }	t_cmd;

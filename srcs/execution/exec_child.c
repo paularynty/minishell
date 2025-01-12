@@ -119,6 +119,30 @@ int	fork_and_execute(t_mini *shell, t_cmd *cmd, t_cmd *head) // added head (for 
  * Returns TRUE on success or FALSE if an error occurs during initialization, 
  * execution, or cleanup.
  */
+
+int	resolve_heredoc(t_mini *shell, t_cmd *cmd)
+{
+	t_token	*token;
+
+	token = cmd->tokens;
+	while (token)
+	{
+		if (token->type == HEREDOC)
+		{
+			if (cmd->input_fd != -1)
+			{
+				close(cmd->input_fd);
+				cmd->input_fd = -1;
+			}
+			cmd->input_fd = handle_heredoc(shell, token->next->value);
+			if (cmd->input_fd == -1)
+				return (FALSE); // pipe_error
+		}
+		token = token->next;
+		cmd->heredoc_i++;
+	}
+}
+
 int	exec_child(t_mini *shell, t_cmd *cmd)
 {
 	t_cmd	*curr;
@@ -128,8 +152,10 @@ int	exec_child(t_mini *shell, t_cmd *cmd)
 	curr = cmd;
 	while (curr)
 	{
+		// if (!resolve_heredoc(shell, curr))
+		// 	return (FALSE); // cleanup && return
 		if (fork_and_execute(shell, curr, cmd) == -1)
-			return (FALSE);
+			return (FALSE); // cleanup && return
 		close_fds_and_pipes(shell, curr->cmd_i);
 		curr = curr->next;
 	}
