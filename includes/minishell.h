@@ -81,6 +81,7 @@ void	error_file(t_mini *shell, char *file, char *error_str, int ex);
 int		execute(t_mini *shell, t_cmd *cmd);
 
 //execution/dup_close.c
+int		configure_fds_child(t_mini *shell, t_cmd *cmd);
 int		configure_fds(t_mini *shell, t_cmd *cmd);
 int		dup_input(t_mini *shell, t_cmd *cmd, int i);
 int		dup_output(t_mini *shell, t_cmd *cmd, int i);
@@ -117,7 +118,9 @@ int		open_append_file(t_mini *shell, char *outfile);
 int		handle_heredoc(t_mini *shell, char *delimiter);
 
 //redirect/redirect.c
+void	close_extra_fd(int fd);
 int		redirect_fd(int src_fd, int dest_fd);
+int		handle_redirection_child(t_mini *shell, t_cmd *cmd);
 int		handle_redirection(t_mini *shell, t_cmd *cmd);
 int		resolve_input(t_mini *shell, t_cmd *cmd, t_token *token);
 int		resolve_output(t_mini *shell, t_cmd *cmd, t_token *token);

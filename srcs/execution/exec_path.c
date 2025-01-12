@@ -84,7 +84,7 @@ char	*get_cmd_path(t_mini *shell, t_cmd *cmds, char *cmd)
 	char	*cmd_path;
 	char	**env_path;
 
-	if (*cmd == '\0')
+	if (!cmd || *cmd == '\0')
 		return (NULL);
 	if (ft_strchr(cmd, '/'))
 	{

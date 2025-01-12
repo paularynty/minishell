@@ -10,7 +10,7 @@
  * If so, it closes the file descriptor to release resources.
  * 
  */
-static void	close_extra_fd(int fd)
+void	close_extra_fd(int fd)
 {
 	if (fd > 2)
 		close(fd);
@@ -173,17 +173,18 @@ int	handle_redirection_child(t_mini *shell, t_cmd *cmd)
 
 	token = cmd->tokens;
 	i = 0;
+	// printf("heredo_i: %d\n", cmd->heredoc_i);
 	while (token)
 	{
 		if (token->type == REDIR_IN && i >= cmd->heredoc_i)
 		{
-			if (!resolve_input(shell, cmd, token))
+			if (!resolve_input_child(shell, cmd, token))
 			{
 				close_extra_fd(cmd->output_fd);
 				return (FALSE);
 			}
 		}
-		else if (i >= cmd->heredoc_i && (token->type == REDIR_OUT || token->type == REDIR_APPEND))
+		else if (token->type == REDIR_OUT || token->type == REDIR_APPEND)
 		{
 			if (!resolve_output(shell, cmd, token))
 			{
