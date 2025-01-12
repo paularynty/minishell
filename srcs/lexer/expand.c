@@ -57,7 +57,7 @@ char	*expand_variable(t_mini *shell, char *input, int *i)
 
 	end = *i + 1;
 	while (input[end] && !char_is_whitespace(input[end]) && input[end] != '$'
-		&& input[end] != '"' && input[end] != '\'')
+		&& input[end] != '/' && input[end] != '"' && input[end] != '\'')
 	{
 		// printf("|%s|\n", input + end);
 		// printf("|%c|\n", input[end]);
