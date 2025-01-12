@@ -125,6 +125,15 @@ int		resolve_output(t_mini *shell, t_cmd *cmd, t_token *token);
 //setup/setup.c
 int		setup(t_mini *shell, char **env);
 
+//setup/signals_new.c
+void	handle_sigint(int signal);
+void	handle_heredoc_sig(int signal);
+void	init_sig(void *func);
+void	ignore_sig(void);
+void	signal_handling_child(void);
+void	heredoc_signal(void *func);
+void	exit_signal(t_cmd *cmd, int exit_status);
+
 //signals/signal_handlers.c
 void	signal_handler_heredoc(int signal);
 void	signal_handler_sigint(int signal);

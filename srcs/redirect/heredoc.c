@@ -43,7 +43,7 @@ static void	heredoc_loop(t_mini *shell, char *line, char *lim, int *pipe_fd)
 {
 	while (TRUE)
 	{
-		signal_heredoc();
+		// signal_heredoc();
 		line = readline("> ");
 		if (line == NULL)
 		{

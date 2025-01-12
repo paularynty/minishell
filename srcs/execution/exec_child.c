@@ -36,12 +36,13 @@ static void	exec_forked_cmd(t_mini *shell, t_cmd *cmd, t_cmd *head) // added hea
 {
 	char	*cmd_path;
 
+	// signal_handling_child();
 	cmd_path = get_cmd_path(shell, cmd, cmd->cmds[0]);
 	if (!cmd_path)
 		check_access(shell, head, cmd->cmds[0]); // modified cmd -> head for potential cleanup
 	else
 		check_access(shell, head, cmd_path); // modified cmd -> head for potential cleanup
-	signal_reset();
+	// signal_reset();
 	if (execve(cmd_path, cmd->cmds, shell->env) == -1)
 	{
 		free(cmd_path);
@@ -72,7 +73,8 @@ int	fork_and_execute(t_mini *shell, t_cmd *cmd, t_cmd *head) // added head (for 
 	int	is_builtin;
 
 	is_builtin = builtins(cmd->cmds[0]);
-	signal_reset();
+	// signal_reset();
+	signal_handling_child();
 	shell->pids[cmd->cmd_i] = fork();
 	if (shell->pids[cmd->cmd_i] == -1)
 	{
@@ -81,7 +83,7 @@ int	fork_and_execute(t_mini *shell, t_cmd *cmd, t_cmd *head) // added head (for 
 	}
 	else if (shell->pids[cmd->cmd_i] == 0)
 	{
-		signal_child();
+		// signal_child();
 		close_unused_fds(shell, cmd->cmd_i);
 		if (!configure_fds(shell, cmd))
 		{
@@ -97,6 +99,7 @@ int	fork_and_execute(t_mini *shell, t_cmd *cmd, t_cmd *head) // added head (for 
 		else
 			exec_forked_cmd(shell, cmd, head); // added head to the function call
 	}
+	// ignore_sig();
 	return (TRUE);
 }
 
@@ -134,6 +137,6 @@ int	exec_child(t_mini *shell, t_cmd *cmd)
 	}
 	shell->exit_code = wait_for_children(shell);
 	cleanup_success(shell, cmd);
-	signal_init();
+	// signal_init();
 	return (TRUE);
 }

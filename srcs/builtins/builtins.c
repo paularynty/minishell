@@ -4,7 +4,7 @@ int	handle_builtin(int id, t_mini *shell, t_cmd *cmd)
 {
 	int	code;
 
-	signal_reset();
+	// signal_reset();
 	code = 0;
 	if (id == BUILTIN_CD)
 		code = builtin_cd(shell, cmd->cmds);

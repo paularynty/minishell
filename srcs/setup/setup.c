@@ -19,6 +19,6 @@ int	setup(t_mini *shell, char **env)
 		return (FALSE);
 	if (!env_update_shlvl(shell))
 		return (FALSE);
-	signal_init();
+	// signal_init();
 	return (TRUE);
 }

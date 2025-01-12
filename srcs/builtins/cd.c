@@ -72,7 +72,6 @@ static int	cd_oldpwd(t_mini *shell)
 		error_builtin(CD, NULL, "OLDPWD not set");
 		return (FALSE);
 	}
-	printf("%s\n", new_pwd);
 	if (!change_dir(new_pwd))
 		return (FALSE);
 	if (!env_set_variable(shell, "OLDPWD", old_pwd))
@@ -137,15 +136,18 @@ int	builtin_cd(t_mini *shell, char **args)
 		i++;
 	if (i > 2)
 		return (error_builtin(CD, NULL, "too many arguments"), 1);
-	if (!args[1])
+	else if (i == 1)
 	{
-		if (!cd_home(shell))
-			return (1);
-	}
-	if (ft_strncmp(args[1], "-\0", 2) == 0)
-	{
-		if (!cd_oldpwd(shell))
-			return (1);
+		if (args[i] == NULL)
+		{
+			if (!cd_home(shell))
+				return (1);
+		}
+		else if (ft_strncmp(args[i], "-\0", 2) == 0)
+		{
+			if (!cd_oldpwd(shell))
+				return (1);
+		}
 	}
 	else if (!change_dir(args[1]))
 		return (1);
