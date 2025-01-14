@@ -3,25 +3,6 @@
 volatile sig_atomic_t	g_mrworldwide = 0;
 
 //THIS IS FOR LARGE MINISHELL TESTER, REPLACE THIS SETUP_INPUT WITH THE ONE BELOW BEFORE RUNNING THE TESTER
-// static char	*setup_input(t_mini *shell)
-// {
-// 	char	*input;
-// 	char	prompt[1024];
-
-// 	input = NULL;
-// 	get_prompt(shell, prompt, sizeof(prompt));
-// 	if (isatty(fileno(stdin)))
-// 		input = readline(prompt);
-// 	else
-// 	{
-// 		char	*line;
-// 		line = get_next_line(fileno(stdin));
-// 		input = ft_strtrim(line, "\n");
-// 		free(line);
-// 	}
-// 	return (input);
-// }
-
 static char	*setup_input(t_mini *shell)
 {
 	char	*input;
@@ -29,9 +10,28 @@ static char	*setup_input(t_mini *shell)
 
 	input = NULL;
 	get_prompt(shell, prompt, sizeof(prompt));
-	input = readline(prompt);
+	if (isatty(fileno(stdin)))
+		input = readline(prompt);
+	else
+	{
+		char	*line;
+		line = get_next_line(fileno(stdin));
+		input = ft_strtrim(line, "\n");
+		free(line);
+	}
 	return (input);
 }
+
+// static char	*setup_input(t_mini *shell)
+// {
+// 	char	*input;
+// 	char	prompt[1024];
+
+// 	input = NULL;
+// 	get_prompt(shell, prompt, sizeof(prompt));
+// 	input = readline(prompt);
+// 	return (input);
+// }
 
 static void	minishell(t_mini *shell)
 {
@@ -43,7 +43,10 @@ static void	minishell(t_mini *shell)
 		//reset_signals();
 		input = setup_input(shell);
 		if (input == NULL)
+		{
+			// ft_putstr_fd("exit\n", STDERR_FILENO);
 			break ;
+		}
 		if (*input)
 		{
 			add_history(input); //this could be moved somewhere in parsing/exec functions
@@ -69,6 +72,7 @@ int	main(int argc, char **argv, char **env)
 
 	(void)argc;
 	(void)argv;
+	sig_init(&handle_sigint);
 	if (!setup(&shell, env))
 	{
 		ft_putstr_fd("minishell: initialization error", STDERR_FILENO);

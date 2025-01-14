@@ -41,13 +41,15 @@ int	wait_for_children(t_mini *shell)
 	int		signum;
 
 	i = 0;
+	status = 0;
 	while (i < shell->cmd_count)
 	{
-		if (waitpid(shell->pids[i], &status, 0) == -1)
-		{
-			perror("waitpid failed");
-			shell->exit_code = errno;
-		}
+		waitpid(shell->pids[i], &status, 0);
+		// if (waitpid(shell->pids[i], &status, 0) == -1)
+		// {
+		// 	perror("waitpid failed");
+		// 	shell->exit_code = errno;
+		// }
 		if (WIFEXITED(status))
 		{
 			if (g_mrworldwide == 1)

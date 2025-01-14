@@ -1,25 +1,123 @@
 #include "minishell.h"
 
-void	signal_heredoc(void)
+// void	signal_handler_heredoc(int signal)
+// {
+// 	close(STDIN_FILENO);
+// 	g_mrworldwide = signal;
+// }
+
+void	handle_child(int signal)
 {
-	signal(SIGINT, signal_handler_heredoc);
-	signal(SIGQUIT, signal_handler_heredoc);
+	if (signal == SIGINT)
+		printf("\n");
+	if (signal == SIGQUIT)
+		ft_putstr_fd("Quit (core dumped)\n", 2);
 }
 
-void	signal_child(void)
+void	handle_sigint(int signal)
 {
-	signal(SIGINT, signal_handler_child);
-	signal(SIGQUIT, signal_handler_child);
+	if (signal == SIGINT)
+	{
+		g_mrworldwide = 130;
+		printf("\n");
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
+	}
 }
 
-void	signal_reset(void)
+void	handle_heredoc_sig(int signal)
 {
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
+	if (signal == SIGINT)
+	{
+		close(STDIN_FILENO);
+		g_mrworldwide = 130;
+		printf("\n");
+		// rl_replace_line("\n", 0);
+		// rl_done = 1;
+		return ;
+	}
 }
 
-void	signal_init(void)
+void	sig_init(void *func)
 {
-	signal(SIGINT, signal_handler_sigint);
-	signal(SIGQUIT, SIG_IGN);
+	struct sigaction	sigint;
+	struct sigaction	sigquit;
+
+	sigint.sa_handler = func;
+	sigint.sa_flags = SA_SIGINFO;
+	sigemptyset(&sigint.sa_mask);
+	sigaction(SIGINT, &sigint, NULL);
+	sigquit.sa_handler = SIG_IGN;
+	sigquit.sa_flags = SA_SIGINFO;
+	sigemptyset(&sigquit.sa_mask);
+	sigaction(SIGQUIT, &sigquit, NULL);
+}
+
+void	sig_ignore(void)
+{
+	struct sigaction	sigint;
+	struct sigaction	sigquit;
+
+	sigint.sa_handler = SIG_IGN;
+	sigint.sa_flags = SA_SIGINFO;
+	sigemptyset(&sigint.sa_mask);
+	sigaction(SIGINT, &sigint, NULL);
+	sigquit.sa_handler = SIG_IGN;
+	sigquit.sa_flags = SA_SIGINFO;
+	sigemptyset(&sigquit.sa_mask);
+	sigaction(SIGQUIT, &sigquit, NULL);
+}
+
+void	sig_child(void *func)
+{
+	struct sigaction	sigint;
+	struct sigaction	sigquit;
+
+	sigint.sa_handler = func;
+	sigint.sa_flags = SA_SIGINFO;
+	sigemptyset(&sigint.sa_mask);
+	sigaction(SIGINT, &sigint, NULL);
+	sigquit.sa_handler = func;
+	sigquit.sa_flags = SA_SIGINFO;
+	sigemptyset(&sigquit.sa_mask);
+	sigaction(SIGQUIT, &sigquit, NULL);
+}
+
+void	sig_reset(void)
+{
+	struct sigaction	sigint;
+	struct sigaction	sigquit;
+
+	sigint.sa_handler = SIG_DFL;
+	sigint.sa_flags = SA_SIGINFO;
+	sigemptyset(&sigint.sa_mask);
+	sigaction(SIGINT, &sigint, NULL);
+	sigquit.sa_handler = SIG_DFL;
+	sigquit.sa_flags = SA_SIGINFO;
+	sigemptyset(&sigquit.sa_mask);
+	sigaction(SIGQUIT, &sigquit, NULL);
+}
+
+void	sig_heredoc(void *func)
+{
+	struct sigaction	sigint;
+	struct sigaction	sigquit;
+
+	sigint.sa_handler = func;
+	sigint.sa_flags = SA_SIGINFO;
+	sigemptyset(&sigint.sa_mask);
+	sigaction(SIGINT, &sigint, NULL);
+	sigquit.sa_handler = SIG_IGN;
+	sigquit.sa_flags = SA_SIGINFO;
+	sigemptyset(&sigquit.sa_mask);
+	sigaction(SIGQUIT, &sigquit, NULL);
+}
+
+void	exit_signal(t_cmd *cmd, int exit_status)
+{
+	clean_commands(cmd);
+	rl_clear_history();
+	ft_putendl_fd("exit", STDERR_FILENO);
+	exit(exit_status);
 }

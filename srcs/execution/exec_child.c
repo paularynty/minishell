@@ -14,7 +14,6 @@
  */
 static void	exec_forked_builtin(t_mini *shell, t_cmd *cmd, t_cmd *head, int is_builtin)
 {
-	// handle_builtin(is_builtin, shell, cmd);
 	if (handle_builtin(is_builtin, shell, cmd) > 0)
 		cleanup_failure(shell, head, shell->exit_code); // modified cmd -> head
 	cleanup_success(shell, head); // modified cmd -> head
@@ -37,6 +36,7 @@ static void	exec_forked_cmd(t_mini *shell, t_cmd *cmd, t_cmd *head) // added hea
 {
 	char	*cmd_path;
 
+
 	// printf("cmd: %s\n", cmd->cmds[0]);
 	cmd_path = get_cmd_path(shell, cmd, cmd->cmds[0]);
 	// printf("cmd path: %s\n", cmd_path);
@@ -44,7 +44,6 @@ static void	exec_forked_cmd(t_mini *shell, t_cmd *cmd, t_cmd *head) // added hea
 		check_access(shell, head, cmd->cmds[0]); // modified cmd -> head for potential cleanup
 	else
 		check_access(shell, head, cmd_path); // modified cmd -> head for potential cleanup
-	signal_reset();
 	if (execve(cmd_path, cmd->cmds, shell->env) == -1)
 	{
 		free(cmd_path);
@@ -75,7 +74,7 @@ int	fork_and_execute(t_mini *shell, t_cmd *cmd, t_cmd *head) // added head (for 
 	int	is_builtin;
 
 	is_builtin = builtins(cmd->cmds[0]);
-	signal_reset();
+	// sig_reset();
 	shell->pids[cmd->cmd_i] = fork();
 	if (shell->pids[cmd->cmd_i] == -1)
 	{
@@ -84,7 +83,6 @@ int	fork_and_execute(t_mini *shell, t_cmd *cmd, t_cmd *head) // added head (for 
 	}
 	else if (shell->pids[cmd->cmd_i] == 0)
 	{
-		signal_child();
 		close_unused_fds(shell, cmd->cmd_i);
 		if (!configure_fds_child(shell, cmd))
 		{
@@ -161,12 +159,12 @@ int	exec_child(t_mini *shell, t_cmd *cmd)
 			return (FALSE); // cleanup && return
 		if (fork_and_execute(shell, curr, cmd) == -1)
 			return (FALSE); // cleanup && return
+		sig_child(&handle_child);
 		close_extra_fd(curr->input_fd);
 		close_fds_and_pipes(shell, curr->cmd_i);
 		curr = curr->next;
 	}
 	shell->exit_code = wait_for_children(shell);
 	cleanup_success(shell, cmd);
-	signal_init();
 	return (TRUE);
 }

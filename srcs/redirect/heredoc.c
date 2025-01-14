@@ -67,7 +67,7 @@ static void    heredoc_loop(t_mini *shell, char *line, char *lim, int *pipe_fd)
 	write(STDOUT_FILENO, "> ", 2);
     while (TRUE)
     {
-        signal_heredoc();
+        sig_heredoc(&handle_heredoc_sig);
         line = get_next_line(STDIN_FILENO);
         if (line == NULL)
         {
