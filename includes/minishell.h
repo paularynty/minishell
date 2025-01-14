@@ -36,7 +36,6 @@ int		handle_builtin(int id, t_mini *shell, t_cmd *cmd);
 int		builtins(char *line);
 
 //builtins/cd.c
-int		update_pwd(t_mini *shell);
 int		builtin_cd(t_mini *shell, char **args);
 
 //builtins/echo.c

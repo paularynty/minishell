@@ -10,12 +10,12 @@ static int	env_add_variable(t_mini *shell, char *variable)
 		i++;
 	new = ft_calloc(1, (i + 2) * sizeof(char *));
 	if (!new)
-		return (0);
+		return (FALSE);
 	ft_memcpy(new, shell->env, i * sizeof(char *));
 	new[i] = variable;
 	free(shell->env);
 	shell->env = new;
-	return (1);
+	return (TRUE);
 }
 
 char	*env_get_variable(char **env, char *key)
