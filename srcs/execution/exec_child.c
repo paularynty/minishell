@@ -37,7 +37,9 @@ static void	exec_forked_cmd(t_mini *shell, t_cmd *cmd, t_cmd *head) // added hea
 {
 	char	*cmd_path;
 
+	// printf("cmd: %s\n", cmd->cmds[0]);
 	cmd_path = get_cmd_path(shell, cmd, cmd->cmds[0]);
+	// printf("cmd path: %s\n", cmd_path);
 	if (!cmd_path)
 		check_access(shell, head, cmd->cmds[0]); // modified cmd -> head for potential cleanup
 	else
@@ -84,7 +86,7 @@ int	fork_and_execute(t_mini *shell, t_cmd *cmd, t_cmd *head) // added head (for 
 	{
 		signal_child();
 		close_unused_fds(shell, cmd->cmd_i);
-		if (!configure_fds(shell, cmd))
+		if (!configure_fds_child(shell, cmd))
 		{
 			cleanup_failure(shell, head, shell->exit_code); // modified cmd -> head
 			return (FALSE);
@@ -97,6 +99,33 @@ int	fork_and_execute(t_mini *shell, t_cmd *cmd, t_cmd *head) // added head (for 
 			exec_forked_builtin(shell, cmd, head, is_builtin); // added head to the function call
 		else
 			exec_forked_cmd(shell, cmd, head); // added head to the function call
+	}
+	return (TRUE);
+}
+
+static int	resolve_heredoc(t_mini *shell, t_cmd *cmd)
+{
+	t_token	*token;
+	int		i;
+
+	token = cmd->tokens;
+	i = 0;
+	while (token)
+	{
+		if (token->type == HEREDOC)
+		{
+			if (cmd->input_fd != -1)
+			{
+				close(cmd->input_fd);
+				cmd->input_fd = -1;
+			}
+			cmd->input_fd = handle_heredoc(shell, token->next->value);
+			if (cmd->input_fd == -1)
+				return (FALSE); // pipe_error
+			cmd->heredoc_i = i;
+		}
+		token = token->next;
+		i++;
 	}
 	return (TRUE);
 }
@@ -128,8 +157,11 @@ int	exec_child(t_mini *shell, t_cmd *cmd)
 	curr = cmd;
 	while (curr)
 	{
+		if (!resolve_heredoc(shell, curr))
+			return (FALSE); // cleanup && return
 		if (fork_and_execute(shell, curr, cmd) == -1)
-			return (FALSE);
+			return (FALSE); // cleanup && return
+		close_extra_fd(curr->input_fd);
 		close_fds_and_pipes(shell, curr->cmd_i);
 		curr = curr->next;
 	}

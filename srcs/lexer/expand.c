@@ -174,7 +174,7 @@ char	*expand_input(t_mini *shell, char *input)
 		// printf("i = %d\n", i);
 		if (input[i] == '\'')
 			i += quote_offset(input + i, input[i]);
-		if (input[i] == '$' && input[i + 1] && input[i + 1] != '$')
+		if (input[i] == '$' && input[i + 1] && input[i + 1] != '$' && input[i + 1] != '/')
 		{
 			if (char_is_whitespace(input[i + 1]) || input[i + 1] == '"' || input[i + 1] == '\'')
 				input = replace_segment(input, i, i + 1, NULL);
