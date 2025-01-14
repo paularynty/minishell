@@ -63,7 +63,6 @@ SRCS			= $(SRCDIR)/main.c \
 				$(SRCDIR)/redirect/file_handler.c \
 				$(SRCDIR)/redirect/heredoc.c \
 				$(SRCDIR)/redirect/redirect.c \
-				$(SRCDIR)/signals/signal_handlers.c \
 				$(SRCDIR)/signals/signals_new.c \
 				$(SRCDIR)/signals/signals.c \
 				$(SRCDIR)/setup/setup.c \

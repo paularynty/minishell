@@ -20,6 +20,6 @@ void	signal_reset(void)
 
 void	signal_init(void)
 {
-	signal(SIGINT, signal_handler_sigint);
+	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, SIG_IGN);
 }
