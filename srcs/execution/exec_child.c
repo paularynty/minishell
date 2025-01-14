@@ -37,6 +37,8 @@ static void	exec_forked_cmd(t_mini *shell, t_cmd *cmd, t_cmd *head) // added hea
 {
 	char	*cmd_path;
 
+	if (!cmd->cmds || !cmd->cmds[0])
+		cleanup_failure(shell, head, 0);
 	// printf("cmd: %s\n", cmd->cmds[0]);
 	cmd_path = get_cmd_path(shell, cmd, cmd->cmds[0]);
 	// printf("cmd path: %s\n", cmd_path);
