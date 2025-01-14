@@ -58,26 +58,31 @@ char	*expand_variable(t_mini *shell, char *input, int *i)
 	end = *i + 1;
 	while (input[end] && !char_is_whitespace(input[end]) && input[end] != '$'
 		&& input[end] != '/' && input[end] != '"' && input[end] != '\'')
-	{
-		// printf("|%s|\n", input + end);
-		// printf("|%c|\n", input[end]);
-		// printf("%d\n", end);
 		end++;
-	}
 	if (end <= *i + 1)
 		return (input);
 	key = ft_substr(input, *i + 1, end - *i - 1);
 	if (!key)
+	{
+		free(input);
 		return (NULL);
+	}
 	value = get_variable(shell, key, ft_strlen(key));
 	free(key);
 	if (!value)
+	{
+		free(input);
 		return (NULL);
+	}
 	new_input = replace_segment(input, *i, end, value);
 	if (!new_input)
+	{
+		free(input);
 		return (NULL);
+	}
 	*i += ft_strlen(value);
 	free(value);
+	free(input);
 	return (new_input);
 }
 
@@ -171,7 +176,6 @@ char	*expand_input(t_mini *shell, char *input)
 	{
 		if (input[i] == '"')
 			input = double_quotes_expand(shell, input, &i);
-		// printf("i = %d\n", i);
 		if (input[i] == '\'')
 			i += quote_offset(input + i, input[i]);
 		if (input[i] == '$' && input[i + 1] && input[i + 1] != '$' && input[i + 1] != '/')
@@ -183,8 +187,6 @@ char	*expand_input(t_mini *shell, char *input)
 			else
 			{
 				input = expand_variable(shell, input, &i);
-				// printf("expanded version = %s\n", input);
-				// printf("expanded version = %s\n", input + i);
 				continue ;
 			}
 			if (!input)
