@@ -93,7 +93,7 @@ char	*expand_exit_code(t_mini *shell, char *input, int *i)
 	free(input);
 	if (!new_input)
 		return (NULL);
-	*i += ft_strlen(value);
+	*i += ft_strlen(value) - 1;
 	free(value);
 	return (new_input);
 }

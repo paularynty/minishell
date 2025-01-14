@@ -33,6 +33,8 @@ int	valid_input(t_mini *shell, char *input)
 
 int	lexer(t_mini *shell, char *line)
 {
+	if (!valid_input(shell, line))
+		return (FALSE);
 	shell->input = expand_input(shell, line);
 	if (!shell->input)
 	{
@@ -40,8 +42,8 @@ int	lexer(t_mini *shell, char *line)
 		shell->abort = 1;
 		return (FALSE);
 	}
-	if (!valid_input(shell, shell->input))
-		return (FALSE);
+	// if (!valid_input(shell, shell->input))
+	// 	return (FALSE);
 	shell->input = add_missing_spaces(shell->input);
 	// debug_print("%s\n", shell->input);
 	if (!shell->input)

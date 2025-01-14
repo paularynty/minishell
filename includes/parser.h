@@ -65,6 +65,6 @@ char		*create_quoted_arg(char *str, int *i, int len);
 char		**split_by_pipes(const char *input);
 
 //parser/parser.c
-t_cmd		*tokenizer(t_mini *shell, const char *input);
+t_cmd		*tokenizer(t_mini *shell, char *input);
 
 #endif
