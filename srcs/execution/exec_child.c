@@ -106,8 +106,10 @@ int	fork_and_execute(t_mini *shell, t_cmd *cmd, t_cmd *head) // added head (for 
 static int	resolve_heredoc(t_mini *shell, t_cmd *cmd)
 {
 	t_token	*token;
+	int		i;
 
 	token = cmd->tokens;
+	i = 0;
 	while (token)
 	{
 		if (token->type == HEREDOC)
@@ -120,9 +122,10 @@ static int	resolve_heredoc(t_mini *shell, t_cmd *cmd)
 			cmd->input_fd = handle_heredoc(shell, token->next->value);
 			if (cmd->input_fd == -1)
 				return (FALSE); // pipe_error
-			cmd->heredoc_i++;
+			cmd->heredoc_i = i;
 		}
 		token = token->next;
+		i++;
 	}
 	return (TRUE);
 }
