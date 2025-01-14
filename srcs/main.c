@@ -30,6 +30,8 @@ static char	*setup_input(t_mini *shell)
 	input = NULL;
 	get_prompt(shell, prompt, sizeof(prompt));
 	input = readline(prompt);
+	if (input && *input)
+		add_history(input);
 	return (input);
 }
 
@@ -46,7 +48,7 @@ static void	minishell(t_mini *shell)
 			break ;
 		if (*input)
 		{
-			add_history(input); //this could be moved somewhere in parsing/exec functions
+			// add_history(input); //this could be moved somewhere in parsing/exec functions
 			if (!lexer(shell, input))
 			{
 				if (input && *input)
@@ -62,6 +64,32 @@ static void	minishell(t_mini *shell)
 		shell->cmd_count = 0;
 	}
 }
+
+// static void	minishell(t_mini *shell)
+// {
+// 	char	*input;
+// 	t_cmd	*cmds;
+
+// 	while (TRUE)
+// 	{
+// 		//reset_signals();
+// 		input = setup_input(shell);
+// 		if (input == NULL)
+// 			break ;
+// 		if (*input)
+// 		{
+// 			if (lexer(shell, input))
+// 			{
+// 				cmds = tokenizer(shell, shell->input);
+// 				if (cmds)
+// 					execute(shell, cmds);
+// 			}
+// 			else if (input && *input)
+// 				free(input);
+// 		}
+// 		shell->cmd_count = 0;
+// 	}
+// }
 
 int	main(int argc, char **argv, char **env)
 {
