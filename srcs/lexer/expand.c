@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 11:52:10 by sniemela          #+#    #+#             */
-/*   Updated: 2025/01/16 15:14:02 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/01/16 16:11:15 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,48 @@ char	*double_quotes_expand(t_mini *shell, char *input, int i)
 	return (input);
 }
 
+char	*handle_quotes(t_mini *shell, char *input, int *i)
+{
+	if (input[*i] == '"')
+	{
+		input = double_quotes_expand(shell, input, *i);
+		if (!input)
+			return (NULL);
+		*i += quote_offset(input + *i, input[*i]);
+	}
+	else if (input[*i] == '\'')
+		*i += quote_offset(input + *i, input[*i]);
+	return (input);
+}
+
+char	*wp_or_exit_code(t_mini *shell, char *input, int *i)
+{
+	if (char_is_whitespace(input[*i + 1]))
+	{
+		(*i)++;
+		return (input);
+	}
+	else if (input[*i + 1] == '?')
+		input = expand_exit_code(shell, input, &(*i));
+	return (input);
+}
+
+/*
+TOMORROW (FRIDAY 17th) I WILL UNITE THESE TWO:
+	else if (char_is_quote(inp[i + 1]))
+	{
+		inp = replace_segment(inp, i, i + 1, NULL);
+		continue ;
+	}
+	else	
+	{
+		inp = expand_variable(shell, inp, &i);
+		continue ;
+	}
+TO A FUNCTION "expand_or_replace()" which call either of those 
+functions (I do this to save lines / because of norm)
+*/
+
 char	*expand_input(t_mini *shell, char *inp) 
 {
 	int	i;
@@ -141,50 +183,70 @@ char	*expand_input(t_mini *shell, char *inp)
 	i = 0;
 	while (inp[i])
 	{
-		// printf("beginning the loop here\n");
-		if (inp[i] == '"')
+		if (char_is_quote(inp[i]))
 		{
-			// printf("input: |%s|, input pointer: |%s|\n", inp, inp + i);
-			inp = double_quotes_expand(shell, inp, i);
-			// printf("after doublequote expand\ninput: |%s|, input pointer: |%s|\n", inp, inp + i);
-			i += quote_offset(inp + i, inp[i]);
-			// printf("after doublequote offset\n");
-			// printf("input: |%s|, input pointer: |%s|\n", inp, inp + i);
+			inp = handle_quotes(shell, inp, &i);	
 			continue ;
 		}
-		if (inp[i] == '\'')
-			i += quote_offset(inp + i, inp[i]);
-		// printf("input: |%s|, input pointer: |%s|\n", inp, inp + i);
 		if (inp[i] == '$' && inp[i + 1] && !ft_strchr("$/", inp[i + 1]))
 		{
-			// printf("input: |%s|, input pointer: |%s|\n", inp, inp + i);
-			if (char_is_whitespace(inp[i + 1]))
-			{
-				// printf("wegohere\n");
-				inp = replace_segment(inp, i, i + 1, NULL);
-			}
+			if (char_is_whitespace(inp[i + 1]) || inp[i + 1] == '?')
+				inp = wp_or_exit_code(shell, inp, &i);
 			else if (char_is_quote(inp[i + 1]))
 			{
-				// printf("we replace $ and \" with non\n");
-				// printf("input: |%s|, input pointer: |%s|\n", inp, inp + i);
 				inp = replace_segment(inp, i, i + 1, NULL);
-				// printf("input: |%s|, input pointer: |%s|\n", inp, inp + i);
 				continue ;
 			}
-			else if (inp[i + 1] == '?')
-				inp = expand_exit_code(shell, inp, &i);
 			else
 			{
 				inp = expand_variable(shell, inp, &i);
 				continue ;
 			}
-			if (!inp)
-				return (NULL);
-			else
-				i++;
 		}
 		else
 			i++;
 	}
 	return (inp);
 }
+
+// char	*expand_input(t_mini *shell, char *inp) 
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	while (inp[i])
+// 	{
+// 		if (inp[i] == '"')
+// 		{
+// 			inp = double_quotes_expand(shell, inp, i);
+// 			i += quote_offset(inp + i, inp[i]);
+// 			continue ;
+// 		}
+// 		if (inp[i] == '\'')
+// 			i += quote_offset(inp + i, inp[i]);
+// 		if (inp[i] == '$' && inp[i + 1] && !ft_strchr("$/", inp[i + 1]))
+// 		{
+// 			if (char_is_whitespace(inp[i + 1]))
+// 				inp = replace_segment(inp, i, i + 1, NULL);
+// 			else if (char_is_quote(inp[i + 1]))
+// 			{
+// 				inp = replace_segment(inp, i, i + 1, NULL);
+// 				continue ;
+// 			}
+// 			else if (inp[i + 1] == '?')
+// 				inp = expand_exit_code(shell, inp, &i);
+// 			else
+// 			{
+// 				inp = expand_variable(shell, inp, &i);
+// 				continue ;
+// 			}
+// 			if (!inp)
+// 				return (NULL);
+// 			else
+// 				i++;
+// 		}
+// 		else
+// 			i++;
+// 	}
+// 	return (inp);
+// }
