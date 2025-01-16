@@ -16,7 +16,7 @@ char		*spaces_to_input(char *input, int *i);
 
 //lexer/expansion.c
 char		*expand_exit_code(t_mini *shell, char *input, int *i);
-char		*expand_input(t_mini *shell, char *input);
+char		*expand_input(t_mini *shell, char *inp);
 char		*expand_variable(t_mini *shell, char *input, int *i);
 char		*get_variable(t_mini *shell, char *key, int key_len);
 char		*replace_segment(char *input, int start, int end, char *repl);
@@ -26,6 +26,8 @@ int			valid_input(t_mini *shell, char *input);
 int			lexer(t_mini *shell, char *line);
 
 //lexer/lexer_utils.c
+int			char_is_quote(char c);
+int			char_is_whitespace(char c);
 int			str_is_whitespace(const char *str);
 void		error_pipes(t_mini *shell, int pipes);
 
@@ -40,7 +42,6 @@ int			backslash(t_mini *shell, const char *input);
 
 //parser/parser_utils.c
 int			count_token_type(t_token *tokens, enum e_token_type type);
-int			char_is_whitespace(char c);
 void		free_2d_array(char **array);
 int			count_pipes(const char *input);
 // void 		print_list(t_cmd *cmds);

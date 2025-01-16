@@ -35,7 +35,8 @@ char	*spaces_to_input(char *input, int *i)
 {
 	char	*spaced;
 
-	if (!char_is_whitespace(input[*i - 1]) && !(ft_strchr("><", input[*i - 1]) && ft_strchr("><", input[*i])))
+	if (!char_is_whitespace(input[*i - 1]) && !(ft_strchr("><", input[*i - 1])
+			&& ft_strchr("><", input[*i])))
 		spaced = add_space(input, *i);
 	else
 	{
@@ -45,13 +46,11 @@ char	*spaces_to_input(char *input, int *i)
 	free(input);
 	if (!spaced)
 	{
-		perror("malloc"); // or strerror?
+		perror("malloc");
 		return (NULL);
 	}
 	input = spaced;
-	// printf("%s, i = %d\n", input + i, i);
 	*i += 1;
-	// printf("%s, i = %d\n", input + i, i);
 	if (input[*i] == input[*i - 1])
 		(*i)++;
 	return (input);
@@ -67,19 +66,17 @@ char	*add_missing_spaces(char *input)
 		move_i_past_whitespace(input, &i);
 		while (input[i] && !char_is_whitespace(input[i]))
 		{
-			if ((input[i] == '\'' || input[i] == '"') && !ft_strchr("><", input[i - 1]))
+			if (char_is_quote(input[i]) && !ft_strchr("><", input[i - 1]))
 			{
 				i += quote_offset(input + i, input[i]);
 				continue ;
 			}
-			// printf("before 2nd if statement %s, i = %d\n", input + i, i);
-			if (i > 0 && (ft_strchr("><", input[i]) || ft_strchr("><", input[i - 1])))
+			if (i > 0 && (ft_strchr("><", input[i])
+					|| ft_strchr("><", input[i - 1])))
 			{
 				input = spaces_to_input(input, &i);
-				if (!input) // malloc fail
+				if (!input)
 					return (NULL);
-				// printf("after 2nd if statement %s, i = %d\n", input, i);
-				// printf("after 2nd if statement the pointer is %s, i = %d\n", input + i, i);
 			}
 			else
 				i++;
@@ -87,61 +84,3 @@ char	*add_missing_spaces(char *input)
 	}
 	return (input);
 }
-
-/****************************************
- * 										*
- * 										*
- * 	OLD VERSION OF ADD_MISSING_SPACES	*
- * 										*
- * 										*
- * **************************************/
-// char	*add_missing_spaces(char *input)
-// {
-// 	char	*spaced;
-// 	int		i;
-
-// 	i = 0;
-// 	spaced = NULL;
-// 	while (input && input[i])
-// 	{
-// 		while (input[i] && char_is_whitespace(input[i]))
-// 			i++;
-// 		while (input[i] && !char_is_whitespace(input[i]))
-// 		{
-// 			if (input[i] == '\'' || input[i] == '"')
-// 			{
-// 				i += quote_offset(input + i, input[i]);
-// 				continue ;
-// 			}
-// 			// printf("%s, i = %d\n", input + i, i);
-// 			if (ft_strchr("><", input[i]) && i > 0)
-// 			{
-// 				spaced = add_space(input, i);
-// 				free(input);
-// 				if (!spaced)
-// 					return (NULL);
-// 				input = spaced;
-// 				// printf("%s, i = %d\n", input + i, i);
-// 				i += 2;
-// 				// printf("%s, i = %d\n", input + i, i);
-// 				if (input[i] == input[i - 1])
-// 					i++;
-// 			}
-// 			if (i > 0 && ft_strchr("><", input[i - 1]) && !ft_strchr("><", input[i]))
-// 			{
-// 				spaced = add_space(input, i);
-// 				free(input);
-// 				if (!spaced)
-// 					return (NULL);
-// 				input = spaced;
-// 				// printf("%s, i = %d\n", input + i, i);
-// 				i += 2;
-// 				if (input[i] == input[i - 1])
-// 					i++;
-// 			}
-// 			else
-// 				i++;
-// 		}
-// 	}
-// 	return (input);
-// }
