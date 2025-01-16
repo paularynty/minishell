@@ -7,7 +7,7 @@ int	handle_builtin(int id, t_mini *shell, t_cmd *cmd)
 	sig_reset();
 	code = 0;
 	if (id == BUILTIN_CD)
-		code = builtin_cd(shell, cmd);
+		code = builtin_cd(shell, cmd->cmds);
 	if (id == BUILTIN_ECHO)
 		code = builtin_echo(cmd->cmds);
 	else if (id == BUILTIN_ENV)

@@ -23,7 +23,7 @@ int		builtins(char *line);
 
 //builtins/cd.c
 int		update_pwd(t_mini *shell);
-int		builtin_cd(t_mini *shell, t_cmd *cmd);
+int		builtin_cd(t_mini *shell, char **args);
 
 //builtins/echo.c
 int		builtin_echo(char **cmd);
@@ -63,10 +63,17 @@ void	error_cmd(t_mini *shell, t_cmd *cmds, char *cmd, char *error_str);
 void	error_export(char *str);
 void	error_file(t_mini *shell, char *file, char *error_str, int ex);
 
-//execution/execute.c
-int		execute(t_mini *shell, t_cmd *cmd);
+//execution/access.c
+bool	is_dir(char *path);
+void	check_access(t_mini *shell, t_cmd *cmds, char *cmd);
 
-//execution/dup_close.c
+//execution/close_fds_pipes.c
+void	close_extra_fd(int fd);
+void	close_unused_fds(t_mini *shell, int i);
+void	close_fds_and_pipes(t_mini *shell, int i);
+void	close_all_pipes(t_mini *shell);
+
+//execution/dup.c
 int		configure_fds_child(t_mini *shell, t_cmd *cmd);
 int		configure_fds(t_mini *shell, t_cmd *cmd);
 int		dup_input(t_mini *shell, t_cmd *cmd, int i);
@@ -77,22 +84,19 @@ int		dup2_close(int old_fd, int new_fd);
 int		wait_for_children(t_mini *shell);
 int		exec_child(t_mini *shell, t_cmd *cmd);
 
-//execution/exec_std.c
-int		save_std(t_mini *shell, t_cmd *cmd);
-int		reset_std(t_mini *shell, t_cmd *cmd);
-
-//execution/access.c
-bool	is_dir(char *path);
-void	check_access(t_mini *shell, t_cmd *cmds, char *cmd);
-
 //execution/exec_path.c
 char	**get_env_path(char **env);
 char	*get_full_path(char **env_path, char *cmd);
 char	*get_cmd_path(t_mini *shell, t_cmd *cmds, char *cmd);
 
+//execution/exec_std.c
+int		save_std(t_mini *shell, t_cmd *cmd);
+int		reset_std(t_mini *shell, t_cmd *cmd);
+
+//execution/execute.c
+int		execute(t_mini *shell, t_cmd *cmd);
+
 //execution/pipes.c
-void	close_unused_fds(t_mini *shell, int i);
-void	close_fds_and_pipes(t_mini *shell, int i);
 int		fork_and_execute(t_mini *shell, t_cmd *cmd, t_cmd *head);
 int		init_pipeline(t_mini *shell);
 
@@ -102,7 +106,6 @@ int		resolve_input_child(t_mini *shell, t_cmd *cmd,
 			t_token *token, int redir_i);
 
 //redirect/parent/redirect_parent.c
-void	close_extra_fd(int fd);
 int		redirect_fd(int src_fd, int dest_fd);
 int		resolve_input(t_mini *shell, t_cmd *cmd, t_token *token);
 int		resolve_output(t_mini *shell, t_cmd *cmd, t_token *token);
@@ -140,7 +143,6 @@ void	cleanup_success_exit(t_mini *shell, t_cmd *cmd);
 
 //utils/cleanup_utils.c
 void	free_null(char **ptr);
-void	close_all_pipes(t_mini *shell);
 void	free_pipes(t_mini *shell, int i);
 void	clean_commands(t_cmd *cmd);
 

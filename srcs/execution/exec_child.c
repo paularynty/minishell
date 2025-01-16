@@ -54,7 +54,8 @@ int	wait_for_children(t_mini *shell)
  * function; these actions must be managed externally. Exits the process with 
  * `EXIT_SUCCESS` after the built-in command execution.
  */
-static void	exec_forked_builtin(t_mini *shell, t_cmd *cmd, t_cmd *head, int is_builtin)
+static void	exec_forked_builtin(t_mini *shell, t_cmd *cmd,
+	t_cmd *head, int is_builtin)
 {
 	if (handle_builtin(is_builtin, shell, cmd) > 0)
 		cleanup_failure_child(shell, head, shell->exit_code);
@@ -72,7 +73,7 @@ static void	exec_forked_builtin(t_mini *shell, t_cmd *cmd, t_cmd *head, int is_b
  * its accessibility. If the command path is valid, resets signal handlers 
  * and attempts to execute the command using `execve`. 
  * On failure, handles errors, cleans up resources, and exits with an 
- * appropriate error code. If `execve` succeeds, the process exits with `EXIT_SUCCESS`.
+ * appropriate error code.
  */
 static void	exec_forked_cmd(t_mini *shell, t_cmd *cmd, t_cmd *head)
 {
@@ -80,9 +81,7 @@ static void	exec_forked_cmd(t_mini *shell, t_cmd *cmd, t_cmd *head)
 
 	if (!cmd->cmds || !cmd->cmds[0])
 		cleanup_failure_child(shell, head, 0);
-	// printf("cmd: %s\n", cmd->cmds[0]);
 	cmd_path = get_cmd_path(shell, cmd, cmd->cmds[0]);
-	// printf("cmd path: %s\n", cmd_path);
 	if (!cmd_path)
 		check_access(shell, head, cmd->cmds[0]);
 	else

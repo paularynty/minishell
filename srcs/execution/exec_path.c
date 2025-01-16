@@ -1,12 +1,12 @@
 #include "minishell.h"
 
 /**
- * get_env_path - Retrieves the `PATH` environment variable as an array of paths.
+ * get_env_path - Retrieves the `PATH` environment variable.
  *
  * @env: Array of environment variables.
  *
  * Searches through the environment variable list to find the `PATH` variable. 
- * If found, splits its value into an array of directory paths using `ft_split()` 
+ * If found, splits its value into an array of directory paths using `ft_split()`
  * and returns the array. If `PATH` is not found or memory allocation fails, 
  * returns `NULL` and sets `errno` to `ENOENT`.
  *

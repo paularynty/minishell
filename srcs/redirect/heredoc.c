@@ -97,28 +97,28 @@ int	resolve_heredoc(t_mini *shell, t_cmd *cmd)
 // 		free(line);
 // 	}
 // }
-static void    heredoc_loop(t_mini *shell, char *line, char *lim, int *pipe_fd)
+static void	heredoc_loop(t_mini *shell, char *line, char *lim, int *pipe_fd)
 {
 	write(STDOUT_FILENO, "> ", 2);
-    while (TRUE)
-    {
-        sig_heredoc(&sig_handler_heredoc);
-        line = get_next_line(STDIN_FILENO);
-        if (line == NULL)
-        {
-            heredoc_eof(shell, __LINE__, lim);
-            break ;
-        }
-        if (ft_strncmp(line, lim, ft_strlen(lim)) == 0
-            && line[ft_strlen(lim)] == '\n')
-        {
-            free(line);
-            break ;
-        }
-        write(pipe_fd[1], line, ft_strlen(line));
-        free(line);
+	while (TRUE)
+	{
+		sig_heredoc(&sig_handler_heredoc);
+		line = get_next_line(STDIN_FILENO);
+		if (line == NULL)
+		{
+			heredoc_eof(shell, __LINE__, lim);
+			break ;
+		}
+		if (ft_strncmp(line, lim, ft_strlen(lim)) == 0
+			&& line[ft_strlen(lim)] == '\n')
+		{
+			free(line);
+			break ;
+		}
+		write(pipe_fd[1], line, ft_strlen(line));
+		free(line);
 		write(STDOUT_FILENO, "> ", 2);
-    }
+	}
 }
 
 /**
@@ -152,4 +152,3 @@ int	handle_heredoc(t_mini *shell, char *lim)
 	close(pipe_fd[1]);
 	return (pipe_fd[0]);
 }
-

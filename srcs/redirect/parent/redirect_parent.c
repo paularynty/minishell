@@ -1,22 +1,6 @@
 #include "minishell.h"
 
 /**
- * Closes a file descriptor if it is not a standard one.
- *
- * @fd: The file descriptor to be closed.
- *
- * Checks if the given file descriptor is greater than 2 (i.e., not 
- * `STDIN_FILENO`, `STDOUT_FILENO`, or `STDERR_FILENO`). 
- * If so, it closes the file descriptor to release resources.
- * 
- */
-void	close_extra_fd(int fd)
-{
-	if (fd > 2)
-		close(fd);
-}
-
-/**
  * redirect_fd - Redirects a file descriptor to another.
  *
  * @src_fd: The source file descriptor to be redirected.

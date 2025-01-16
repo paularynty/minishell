@@ -7,7 +7,6 @@ int	open_infile(t_mini *shell, char *infile)
 	int	input_fd;
 
 	input_fd = open(infile, O_RDONLY);
-	// printf("TASSA OLLAAN input fd on avattu %d\n", input_fd);
 	if (input_fd == -1)
 	{
 		if (access(infile, F_OK) == -1)

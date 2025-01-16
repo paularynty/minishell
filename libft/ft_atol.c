@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 21:05:08 by prynty            #+#    #+#             */
-/*   Updated: 2025/01/16 21:11:49 by prynty           ###   ########.fr       */
+/*   Updated: 2025/01/17 00:34:13 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,5 @@ long	ft_atol(char *str)
 		nbr = nbr * 10 + *str - '0';
 		str++;
 	}
-	return (int)(sign * nbr);
+	return ((int)(sign * nbr));
 }

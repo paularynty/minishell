@@ -1,6 +1,5 @@
 #include "minishell.h"
 
-//check correct exit codes for builtins
 void	error_builtin(char *builtin, char *str, char *error_str)
 {
 	char	buffer[1024];
