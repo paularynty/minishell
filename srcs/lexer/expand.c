@@ -56,30 +56,21 @@ char	*expand_variable(t_mini *shell, char *input, int *i)
 	char	*new_input;
 
 	end = *i + 1;
-	while (input[end] && !char_is_whitespace(input[end]) && input[end] != '$'
-		&& input[end] != '/' && input[end] != '"' && input[end] != '\'')
+	while (input[end] && !char_is_whitespace(input[end])
+		&& !ft_strchr("$?\"'/", input[end]))
 		end++;
 	if (end <= *i + 1)
 		return (input);
 	key = ft_substr(input, *i + 1, end - *i - 1);
 	if (!key)
-	{
-		free(input);
-		return (NULL);
-	}
+		return (free(input), NULL);
 	value = get_variable(shell, key, ft_strlen(key));
 	free(key);
 	if (!value)
-	{
-		free(input);
-		return (NULL);
-	}
+		return (free(input), NULL);
 	new_input = replace_segment(input, *i, end, value);
 	if (!new_input)
-	{
-		free(input);
-		return (NULL);
-	}
+		return (free(input), NULL);
 	*i += ft_strlen(value);
 	free(value);
 	free(input);
@@ -103,93 +94,79 @@ char	*expand_exit_code(t_mini *shell, char *input, int *i)
 	return (new_input);
 }
 
-// char	*expand_input(t_mini *shell, char *input)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (input[i])
-// 	{
-// 		if (input[i] == '$')
-// 		{
-// 			if (input[i + 1] == '"' || input[i + 1] == '\'')
-// 				return (input);
-// 			if (input[i + 1] != '$' && !char_is_whitespace(input[i + 1]))
-// 			{
-// 				if (input[i + 1] == '?')
-// 					input = expand_exit_code(shell, input, &i);
-// 				else if (input[i + 1] == '"' || input[i + 1] == '\'')
-// 				{
-// 					input = replace_segment(input, i, i + 1, NULL);
-// 					if (input[i + 1] == '"')
-// 						i++;
-// 					else
-// 						i += quote_offset(input + i + 1, input[i + 1]);
-// 				}
-// 				else
-// 					input = expand_variable(shell, input, &i);
-// 				if (!input)
-// 					return (NULL);
-// 			}
-// 			else if (input[i] == '\'')
-// 				i += quote_offset(input + i, input[i]);
-// 			else
-// 				i++;
-// 		}
-// 		i++;
-// 	}
-// 	return (input);
-// }
-
-char	*double_quotes_expand(t_mini *shell, char *input, int *i)
+char	*double_quotes_expand(t_mini *shell, char *input, int i)
 {
-	(*i)++;
-	while (input[*i] && input[*i] != '"')
+	(i)++;
+	while (input[i] && input[i] != '"')
 	{
-		if (input[*i] == '$')
+		if (input[i] == '$')
 		{
-			if (input[*i + 1] == '?')
+			if (input[i + 1] == '?')
 			{
-				input = expand_exit_code(shell, input, &(*i));
+				input = expand_exit_code(shell, input, &i);
 				if (!input)
 					return (NULL);
 			}
-			else if (!char_is_whitespace(input[*i + 1]) && input[*i + 1] != '"')
+			else if (!char_is_whitespace(input[i + 1])
+				&& input[i + 1] != '"')
 			{
-				input = expand_variable(shell, input, &(*i));
+				input = expand_variable(shell, input, &i);
 				if (!input)
 					return (NULL);
 			}
 		}
-		(*i)++;
+		else
+			i++;
 	}
-	(*i)++;
+	i++;
 	return (input);
 }
 
-char	*expand_input(t_mini *shell, char *input)
+char	*expand_input(t_mini *shell, char *inp) 
 {
 	int	i;
 
 	i = 0;
-	while (input[i])
+	while (inp[i])
 	{
-		if (input[i] == '"')
-			input = double_quotes_expand(shell, input, &i);
-		if (input[i] == '\'')
-			i += quote_offset(input + i, input[i]);
-		if (input[i] == '$' && input[i + 1] && input[i + 1] != '$' && input[i + 1] != '/')
+		// printf("beginning the loop here\n");
+		if (inp[i] == '"')
 		{
-			if (char_is_whitespace(input[i + 1]) || input[i + 1] == '"' || input[i + 1] == '\'')
-				input = replace_segment(input, i, i + 1, NULL);
-			else if (input[i + 1] == '?')
-				input = expand_exit_code(shell, input, &i);
-			else
+			// printf("input: |%s|, input pointer: |%s|\n", inp, inp + i);
+			inp = double_quotes_expand(shell, inp, i);
+			// printf("after doublequote expand\ninput: |%s|, input pointer: |%s|\n", inp, inp + i);
+			i += quote_offset(inp + i, inp[i]);
+			// printf("after doublequote offset\n");
+			// printf("input: |%s|, input pointer: |%s|\n", inp, inp + i);
+			continue ;
+		}
+		if (inp[i] == '\'')
+			i += quote_offset(inp + i, inp[i]);
+		// printf("input: |%s|, input pointer: |%s|\n", inp, inp + i);
+		if (inp[i] == '$' && inp[i + 1] && !ft_strchr("$/", inp[i + 1]))
+		{
+			// printf("input: |%s|, input pointer: |%s|\n", inp, inp + i);
+			if (char_is_whitespace(inp[i + 1]))
 			{
-				input = expand_variable(shell, input, &i);
+				// printf("wegohere\n");
+				inp = replace_segment(inp, i, i + 1, NULL);
+			}
+			else if (char_is_quote(inp[i + 1]))
+			{
+				// printf("we replace $ and \" with non\n");
+				// printf("input: |%s|, input pointer: |%s|\n", inp, inp + i);
+				inp = replace_segment(inp, i, i + 1, NULL);
+				// printf("input: |%s|, input pointer: |%s|\n", inp, inp + i);
 				continue ;
 			}
-			if (!input)
+			else if (inp[i + 1] == '?')
+				inp = expand_exit_code(shell, inp, &i);
+			else
+			{
+				inp = expand_variable(shell, inp, &i);
+				continue ;
+			}
+			if (!inp)
 				return (NULL);
 			else
 				i++;
@@ -197,5 +174,5 @@ char	*expand_input(t_mini *shell, char *input)
 		else
 			i++;
 	}
-	return (input);
+	return (inp);
 }
