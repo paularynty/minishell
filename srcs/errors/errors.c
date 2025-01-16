@@ -23,12 +23,10 @@ void	error_builtin(char *builtin, char *str, char *error_str)
 	ft_putstr_fd(buffer, STDERR_FILENO);
 }
 
-//check for '/' character at end of directory, if yes, ex = 126, if not, ex = 1
-void	error_cmd(t_mini *shell, t_cmd *cmds, char *cmd, char *error_str, int ex)
+void	error_cmd(t_mini *shell, t_cmd *head, char *cmd, char *error_str)
 {
 	char	buffer[1024];
 
-	shell->exit_code = ex;
 	ft_strlcpy(buffer, "minishell: ", sizeof(buffer) - 1);
 	if (cmd)
 	{
@@ -41,8 +39,7 @@ void	error_cmd(t_mini *shell, t_cmd *cmds, char *cmd, char *error_str, int ex)
 		ft_strlcat(buffer, error_str, sizeof(buffer) - 1);
 	ft_strlcat(buffer, "\n", sizeof(buffer));
 	ft_putstr_fd(buffer, STDERR_FILENO);
-	cleanup_failure(shell, cmds, ex);
-	exit(shell->exit_code);
+	cleanup_failure_child(shell, head, shell->exit_code);
 }
 
 void	error_export(char *str)

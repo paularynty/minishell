@@ -1,29 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free_array.c                                    :+:      :+:    :+:   */
+/*   ft_atol.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/07 17:24:45 by prynty            #+#    #+#             */
-/*   Updated: 2025/01/16 21:56:56 by prynty           ###   ########.fr       */
+/*   Created: 2025/01/16 21:05:08 by prynty            #+#    #+#             */
+/*   Updated: 2025/01/16 21:11:49 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_free_array(char ***str)
+long	ft_atol(char *str)
 {
-	size_t	i;
+	long int	nbr;
+	int			sign;
 
-	if (!str || !*str)
-		return ;
-	i = 0;
-	while ((*str)[i] != NULL)
+	nbr = 0;
+	sign = 1;
+	while (ft_isspace(str))
+		str++;
+	if (*str == '+' || *str == '-')
 	{
-		free((*str)[i]);
-		i++;
+		if (*str == '-')
+			sign = (-1);
+		str++;
 	}
-	free(*str);
-	*str = NULL;
+	while (ft_isdigit((int)*str))
+	{
+		nbr = nbr * 10 + *str - '0';
+		str++;
+	}
+	return (int)(sign * nbr);
 }

@@ -1,15 +1,5 @@
 #include "minishell.h"
 
-//if just export, you add to pending list, which is different from env
-//you can export multiple vars in a single command
-
-//TO DO:
-//check for valid export
-//when adding new export variable, put it in alphabetical order
-//when calling export [arg], give prompt back if successful
-//and only print export if it's a standalone command
-//need to be able to export multiple variables
-
 int	valid_export(char *str)
 {
 	if (*str == '\0' || *str == '=' || ft_isdigit(*str))
@@ -95,10 +85,10 @@ static int	print_export_vars(char **env)
 		}
 		i++;
 	}
-	return (TRUE);
+	return (0);
 }
 
-int	builtin_export(t_mini *shell, t_cmd *cmd)
+int	builtin_export(t_mini *shell, char **args)
 {
 	int		i;
 	int		code;
@@ -110,13 +100,13 @@ int	builtin_export(t_mini *shell, t_cmd *cmd)
 	if (!temp)
 		return (-1);
 	sort_export_table(temp);
-	if (cmd->cmds[1] == NULL)
+	if (!args[1])
 		return (print_export_vars(temp));
-	while (cmd->cmds[i])
+	while (args[i])
 	{
-		if (!export_variable(shell, cmd->cmds[i]))
+		if (!export_variable(shell, args[i]))
 		{
-			error_export(cmd->cmds[i]);
+			error_export(args[i]);
 			code = 1;
 		}
 		i++;

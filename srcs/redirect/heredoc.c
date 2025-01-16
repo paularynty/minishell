@@ -39,17 +39,52 @@ static int	heredoc_eof(t_mini *shell, int line, char *lim)
 	return (TRUE);
 }
 
+int	resolve_heredoc(t_mini *shell, t_cmd *cmd)
+{
+	t_token	*token;
+	int		i;
+
+	token = cmd->tokens;
+	i = 0;
+	while (token)
+	{
+		if (token->type == HEREDOC)
+		{
+			if (cmd->input_fd != -1)
+			{
+				close(cmd->input_fd);
+				cmd->input_fd = -1;
+			}
+			cmd->input_fd = handle_heredoc(shell, token->next->value);
+			if (cmd->input_fd == -1)
+				return (FALSE);
+			cmd->heredoc_i = i;
+		}
+		token = token->next;
+		i++;
+	}
+	return (TRUE);
+}
+
+// static int	empty(void)
+// {
+// 	return (0);
+// }
+
 // static void	heredoc_loop(t_mini *shell, char *line, char *lim, int *pipe_fd)
 // {
+// 	rl_done = 0;
+// 	rl_event_hook = empty;
 // 	while (TRUE)
 // 	{
-// 		signal_heredoc();
 // 		line = readline("> ");
 // 		if (line == NULL)
 // 		{
 // 			heredoc_eof(shell, __LINE__, lim);
 // 			break ;
 // 		}
+// 		// else if (rl_done == 1)
+// 		// 	break ;
 // 		if (ft_strncmp(line, lim, ft_strlen(lim)) == 0
 // 			&& line[ft_strlen(lim)] == '\0')
 // 		{
@@ -67,7 +102,7 @@ static void    heredoc_loop(t_mini *shell, char *line, char *lim, int *pipe_fd)
 	write(STDOUT_FILENO, "> ", 2);
     while (TRUE)
     {
-        signal_heredoc();
+        sig_heredoc(&sig_handler_heredoc);
         line = get_next_line(STDIN_FILENO);
         if (line == NULL)
         {
@@ -110,7 +145,10 @@ int	handle_heredoc(t_mini *shell, char *lim)
 		perror("pipe failed");
 		return (FALSE);
 	}
+	sig_heredoc(&sig_handler_heredoc);
 	heredoc_loop(shell, line, lim, pipe_fd);
+	sig_reset();
+	sig_init(&sig_handler_sigint);
 	close(pipe_fd[1]);
 	return (pipe_fd[0]);
 }

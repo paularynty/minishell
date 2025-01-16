@@ -4,7 +4,7 @@ int	handle_builtin(int id, t_mini *shell, t_cmd *cmd)
 {
 	int	code;
 
-	signal_reset();
+	sig_reset();
 	code = 0;
 	if (id == BUILTIN_CD)
 		code = builtin_cd(shell, cmd);
@@ -15,11 +15,11 @@ int	handle_builtin(int id, t_mini *shell, t_cmd *cmd)
 	else if (id == BUILTIN_EXIT)
 		code = builtin_exit(shell, cmd, cmd->cmds);
 	else if (id == BUILTIN_EXPORT)
-		code = builtin_export(shell, cmd);
+		code = builtin_export(shell, cmd->cmds);
 	else if (id == BUILTIN_PWD)
 		code = builtin_pwd(shell);
 	else if (id == BUILTIN_UNSET)
-		code = builtin_unset(shell, cmd);
+		code = builtin_unset(shell, cmd->cmds);
 	shell->exit_code = code;
 	return (code);
 }

@@ -3,25 +3,6 @@
 volatile sig_atomic_t	g_mrworldwide = 0;
 
 //THIS IS FOR LARGE MINISHELL TESTER, REPLACE THIS SETUP_INPUT WITH THE ONE BELOW BEFORE RUNNING THE TESTER
-// static char	*setup_input(t_mini *shell)
-// {
-// 	char	*input;
-// 	char	prompt[1024];
-
-// 	input = NULL;
-// 	get_prompt(shell, prompt, sizeof(prompt));
-// 	if (isatty(fileno(stdin)))
-// 		input = readline(prompt);
-// 	else
-// 	{
-// 		char	*line;
-// 		line = get_next_line(fileno(stdin));
-// 		input = ft_strtrim(line, "\n");
-// 		free(line);
-// 	}
-// 	return (input);
-// }
-
 static char	*setup_input(t_mini *shell)
 {
 	char	*input;
@@ -29,11 +10,31 @@ static char	*setup_input(t_mini *shell)
 
 	input = NULL;
 	get_prompt(shell, prompt, sizeof(prompt));
-	input = readline(prompt);
-	if (input && *input)
-		add_history(input);
+	if (isatty(fileno(stdin)))
+		input = readline(prompt);
+	else
+	{
+		char	*line;
+		line = get_next_line(fileno(stdin));
+		input = ft_strtrim(line, "\n");
+		free(line);
+	}
+	add_history(input);
 	return (input);
 }
+
+// static char	*setup_input(t_mini *shell)
+// {
+// 	char	*input;
+// 	char	prompt[1024];
+
+// 	input = NULL;
+// 	get_prompt(shell, prompt, sizeof(prompt));
+// 	input = readline(prompt);
+// 	if (input && *input)
+// 		add_history(input);
+// 	return (input);
+// }
 
 static void	minishell(t_mini *shell)
 {
@@ -42,13 +43,12 @@ static void	minishell(t_mini *shell)
 
 	while (TRUE)
 	{
-		//reset_signals();
+		sig_init(&sig_handler_sigint);
 		input = setup_input(shell);
 		if (input == NULL)
 			break ;
 		if (*input)
 		{
-			// add_history(input); //this could be moved somewhere in parsing/exec functions
 			if (!lexer(shell, input))
 			{
 				if (input && *input)
@@ -99,16 +99,16 @@ int	main(int argc, char **argv, char **env)
 	(void)argv;
 	if (!setup(&shell, env))
 	{
-		ft_putstr_fd("minishell: initialization error", STDERR_FILENO);
-		// cleanup(&shell); //need to check how to clean commands here if cmd is not yet initialized in main
-		shell.exit_code = EXIT_FAILURE;
+		ft_putstr_fd("minishell: initialization error\n", STDERR_FILENO);
+		ft_free_array(&shell.env);
+		exit(EXIT_FAILURE);
 	}
 	minishell(&shell);
 	if (shell.abort)
 	{
-		ft_putstr_fd("minishell: aborting, critical error encountered\n", STDERR_FILENO);
+		ft_putstr_fd("minishell: critical error, aborting\n", STDERR_FILENO);
 		//cleanup(&shell); //is this needed?
-		shell.exit_code = EXIT_FAILURE;
+		exit(EXIT_FAILURE);
 	}
 	return (shell.exit_code);
 }

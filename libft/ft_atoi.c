@@ -6,9 +6,11 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:57:07 by prynty            #+#    #+#             */
-/*   Updated: 2024/04/26 10:23:13 by prynty           ###   ########.fr       */
+/*   Updated: 2025/01/16 21:09:28 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "libft.h"
 
 int	ft_atoi(const char *str)
 {

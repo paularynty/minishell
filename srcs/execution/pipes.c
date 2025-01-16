@@ -176,11 +176,7 @@ int	init_pipeline(t_mini *shell)
 		if (!allocate_pipes(shell))
 			return (FALSE);
 		if (!create_pipes(shell))
-		{
-			free(shell->pids);
-			// close all open fds, free everything, and determine exit code
 			return (FALSE);
-		}
 	}
 	return (TRUE);
 }
