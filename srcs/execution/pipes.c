@@ -74,18 +74,16 @@ static int	allocate_pipes(t_mini *shell)
  *
  * Allocates an array to store the process IDs (PIDs) for each command 
  * in the pipeline. The size of the array is equal to the number of commands 
- * (`cmd_count`). If memory allocation fails, sets `shell->abort` to 1 
- * and prints an error message.
+ * (`cmd_count`).
  *
- * Returns TRUE on success or FALSE on allocation failure.
+ * Returns TRUE on success or FALSE on memory allocation failure.
  */
 static int	allocate_pids(t_mini *shell)
 {
 	shell->pids = ft_calloc(shell->cmd_count, sizeof(pid_t));
 	if (!shell->pids)
 	{
-		perror("malloc\n");
-		shell->abort = 1;
+		ft_putstr_fd("minishell: memory allocation failed\n", 2);
 		return (FALSE);
 	}
 	return (TRUE);

@@ -54,7 +54,7 @@ int	resolve_input(t_mini *shell, t_cmd *cmd, t_token *token)
 	if (token->type == REDIR_IN)
 		cmd->input_fd = open_infile(shell, token->next->value);
 	else if (token->type == HEREDOC)
-		cmd->input_fd = handle_heredoc(shell, token->next->value);
+		cmd->input_fd = handle_heredoc(token->next->value);
 	if (cmd->input_fd == -2)
 		return (FALSE);
 	return (TRUE);

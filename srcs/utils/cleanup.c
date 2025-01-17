@@ -16,14 +16,16 @@ void	cleanup_failure(t_mini *shell, t_cmd *cmd)
 	int	i;
 
 	i = shell->cmd_count - 2;
-	close_all_pipes(shell);
 	if (shell->pipes)
+	{
+		close_all_pipes(shell);
 		free_pipes(shell, i);
+	}
+	free(shell->pids);
 	if (cmd->output_fd > 2)
 		close(cmd->output_fd);
 	if (cmd->input_fd > 2)
 		close(cmd->input_fd);
-	free(shell->pids);
 	if (cmd)
 		clean_commands(cmd);
 	free_null(&shell->cwd);
@@ -72,26 +74,38 @@ void	cleanup_failure_child(t_mini *shell, t_cmd *cmd, int exit_status)
 void	cleanup_success(t_mini *shell, t_cmd *cmd)
 {
 	int	i;
-	int	j;
 
 	i = shell->cmd_count - 2;
-	j = i;
 	if (shell->pids)
 	{
 		free(shell->pids);
 		shell->pids = NULL;
 	}
-	if (shell->cmd_count > 1 && shell->pipes)
-	{
-		if (shell->pipes[i][0] != -1)
-		{
-			if (shell->pipes[i][0] > 0)
-				close(shell->pipes[i][0]);
-		}
-	}
-	free_pipes(shell, j);
+	close_all_pipes(shell);
+	if (shell->pipes)
+		free_pipes(shell, i);
 	if (cmd)
 		clean_commands(cmd);
+	// free_null(&shell->cwd);
+	shell->cmd_count = 0;
+}
+
+void	cleanup_success_child(t_mini *shell, t_cmd *cmd)
+{
+	int	i;
+
+	i = shell->cmd_count - 2;
+	if (shell->pids)
+	{
+		free(shell->pids);
+		shell->pids = NULL;
+	}
+	close_all_pipes(shell);
+	if (shell->pipes)
+		free_pipes(shell, i);
+	if (cmd)
+		clean_commands(cmd);
+	ft_free_array(&shell->env);
 	free_null(&shell->cwd);
 	shell->cmd_count = 0;
 }
@@ -124,8 +138,8 @@ void	cleanup_success_exit(t_mini *shell, t_cmd *cmd)
 			if (shell->pipes[i][0] > 0)
 				close(shell->pipes[i][0]);
 		}
+		free_pipes(shell, j);
 	}
-	free_pipes(shell, j);
 	if (cmd)
 		clean_commands(cmd);
 	free_null(&shell->cwd);

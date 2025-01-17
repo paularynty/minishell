@@ -59,7 +59,7 @@ static void	exec_forked_builtin(t_mini *shell, t_cmd *cmd,
 {
 	if (handle_builtin(is_builtin, shell, head, cmd->cmds) > 0)
 		cleanup_failure_child(shell, head, shell->exit_code);
-	cleanup_success(shell, head);
+	cleanup_success_child(shell, head);
 	exit(EXIT_SUCCESS);
 }
 
@@ -122,7 +122,7 @@ int	fork_and_execute(t_mini *shell, t_cmd *cmd, t_cmd *head)
 	if (shell->pids[cmd->cmd_i] == -1)
 	{
 		perror("minishell: fork failed");
-		return (-1);
+		return (FALSE);
 	}
 	else if (shell->pids[cmd->cmd_i] == 0)
 	{
@@ -168,10 +168,13 @@ int	exec_child(t_mini *shell, t_cmd *cmd)
 	curr = cmd;
 	while (curr)
 	{
-		if (!resolve_heredoc(shell, curr))
-			return (FALSE);
-		if (fork_and_execute(shell, curr, cmd) == -1)
-			return (FALSE);
+		if (!resolve_heredoc(curr)
+			|| (!fork_and_execute(shell, curr, cmd)))
+		{
+			close_extra_fd(curr->input_fd);
+			close_fds_and_pipes(shell, curr->cmd_i);
+			break ;
+		}
 		sig_child(&sig_handler_child);
 		close_extra_fd(curr->input_fd);
 		close_fds_and_pipes(shell, curr->cmd_i);

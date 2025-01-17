@@ -46,7 +46,7 @@ char	*spaces_to_input(char *input, int *i)
 	free(input);
 	if (!spaced)
 	{
-		perror("malloc");
+		ft_putstr_fd("minishell: memory allocation failed\n", 2);
 		return (NULL);
 	}
 	input = spaced;
