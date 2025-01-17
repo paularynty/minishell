@@ -6,7 +6,6 @@
 typedef struct s_mini	t_mini;
 typedef struct s_cmd	t_cmd;
 typedef struct s_token	t_token;
-// typedef enum e_token_type t_token_type;
 
 //lexer/add_missing_spaces.c
 char	*add_missing_spaces(char *input);

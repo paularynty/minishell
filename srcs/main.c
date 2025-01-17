@@ -105,5 +105,7 @@ int	main(int argc, char **argv, char **env)
 		exit(EXIT_FAILURE);
 	}
 	minishell(&shell);
+	ft_free_array(&shell.env);
+	free_null(&shell.cwd);
 	return (shell.exit_code);
 }

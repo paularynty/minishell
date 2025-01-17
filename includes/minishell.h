@@ -1,7 +1,6 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-//standard headers
 # include <errno.h>
 # include <stdlib.h>
 # include <fcntl.h>

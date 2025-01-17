@@ -49,17 +49,17 @@ int	env_find_index(char **env, char *key)
 int	env_update_shlvl(t_mini *shell)
 {
 	char	*shlvl;
-	int		temp;
+	long	temp;
 
 	shlvl = env_get_variable(shell->env, "SHLVL");
 	if (!shlvl)
 		return (FALSE);
 	temp = ft_atol(shlvl) + 1;
-	if (temp >= 1000)
+	if (temp >= 1000 || temp < 0)
 	{
 		ft_putstr_fd("minishell: warning: shell level (", STDERR_FILENO);
 		ft_putnbr_fd(temp, STDERR_FILENO);
-		ft_putstr_fd(") too high, resetting to 1\n", STDERR_FILENO);
+		ft_putstr_fd(") too high/low, resetting to 1\n", STDERR_FILENO);
 		temp = 1;
 	}
 	shlvl = ft_itoa(temp);

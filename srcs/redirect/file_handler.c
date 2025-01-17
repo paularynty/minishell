@@ -16,7 +16,6 @@ int	open_infile(t_mini *shell, char *infile)
 		}
 		if (access(infile, R_OK) == -1)
 		{
-			ft_putstr_fd(infile, 2);
 			error_file(shell, infile, "Permission denied", 126);
 			return (-2);
 		}
