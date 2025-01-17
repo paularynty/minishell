@@ -50,9 +50,11 @@ SRCS			= $(SRCDIR)/main.c \
 				$(SRCDIR)/errors/errors.c \
 				$(SRCDIR)/lexer/add_missing_spaces.c \
 				$(SRCDIR)/lexer/expand.c \
+				$(SRCDIR)/lexer/handle_quotes.c \
 				$(SRCDIR)/lexer/lexer.c \
 				$(SRCDIR)/lexer/lexer_utils.c \
 				$(SRCDIR)/lexer/valid_input.c \
+				$(SRCDIR)/lexer/whitespace_or_exitcode.c \
 				$(SRCDIR)/parser/parser_utils.c \
 				$(SRCDIR)/parser/create_command.c \
 				$(SRCDIR)/parser/create_command_args.c \

@@ -126,6 +126,11 @@ char		*create_quoted_arg(char *str, int *i, int len);
 char		**split_by_pipes(const char *input);
 
 //parser/parser.c
+/*********************************************************
+ * Splits input by pipes into command chunks.
+ * Adds cmd chunks to a linked list, each argument of a 
+ * command is tokenized.
+**********************************************************/
 t_cmd		*tokenizer(t_mini *shell, char *input);
 
 #endif
