@@ -23,8 +23,8 @@ char	*double_quotes_expand(t_mini *shell, char *input, int i)
 		}
 		else
 			i++;
+		i++;
 	}
-	i++;
 	return (input);
 }
 
