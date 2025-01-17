@@ -57,7 +57,7 @@ int	wait_for_children(t_mini *shell)
 static void	exec_forked_builtin(t_mini *shell, t_cmd *cmd,
 	t_cmd *head, int is_builtin)
 {
-	if (handle_builtin(is_builtin, shell, cmd) > 0)
+	if (handle_builtin(is_builtin, shell, head, cmd->cmds) > 0)
 		cleanup_failure_child(shell, head, shell->exit_code);
 	cleanup_success(shell, head);
 	exit(EXIT_SUCCESS);

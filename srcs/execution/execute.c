@@ -25,7 +25,7 @@ static int	exec_parent(t_mini *shell, t_cmd *cmd, int is_builtin)
 	if (!redirect_fd(cmd->input_fd, STDIN_FILENO)
 		|| !redirect_fd(cmd->output_fd, STDOUT_FILENO))
 		return (FALSE);
-	if (handle_builtin(is_builtin, shell, cmd) > 0)
+	if (handle_builtin(is_builtin, shell, cmd, cmd->cmds) > 0)
 	{
 		reset_std(shell, cmd);
 		clean_commands(cmd);
@@ -73,7 +73,7 @@ int	execute(t_mini *shell, t_cmd *cmd)
 	else
 	{
 		if (!exec_child(shell, cmd))
-			cleanup_failure(shell, cmd, shell->exit_code);
+			cleanup_failure(shell, cmd);
 	}
 	return (shell->exit_code);
 }

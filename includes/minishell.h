@@ -18,7 +18,7 @@
 # include "../libft/libft.h"
 
 //builtins/builtins.c
-int		handle_builtin(int id, t_mini *shell, t_cmd *cmd);
+int		handle_builtin(int id, t_mini *shell, t_cmd *head, char **args);
 int		builtins(char *line);
 
 //builtins/cd.c
@@ -136,7 +136,7 @@ void	sig_reset(void);
 void	sig_init(void *func);
 
 //utils/cleanup.c
-void	cleanup_failure(t_mini *shell, t_cmd *cmd, int ex);
+void	cleanup_failure(t_mini *shell, t_cmd *cmd);
 void	cleanup_failure_child(t_mini *shell, t_cmd *cmd, int exit_status);
 void	cleanup_success(t_mini *shell, t_cmd *cmd);
 void	cleanup_success_exit(t_mini *shell, t_cmd *cmd);

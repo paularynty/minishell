@@ -1,25 +1,49 @@
 #include "minishell.h"
 
-int	handle_builtin(int id, t_mini *shell, t_cmd *cmd)
+// int	handle_builtin(int id, t_mini *shell, t_cmd *head, t_cmd *cmd)
+// {
+// 	int	code;
+
+// 	sig_reset();
+// 	code = 0;
+// 	if (id == BUILTIN_CD)
+// 		code = builtin_cd(shell, cmd->cmds);
+// 	if (id == BUILTIN_ECHO)
+// 		code = builtin_echo(cmd->cmds);
+// 	else if (id == BUILTIN_ENV)
+// 		code = builtin_env(shell);
+// 	else if (id == BUILTIN_EXIT)
+// 		code = builtin_exit(shell, head, cmd->cmds);
+// 	else if (id == BUILTIN_EXPORT)
+// 		code = builtin_export(shell, cmd->cmds);
+// 	else if (id == BUILTIN_PWD)
+// 		code = builtin_pwd(shell);
+// 	else if (id == BUILTIN_UNSET)
+// 		code = builtin_unset(shell, cmd->cmds);
+// 	shell->exit_code = code;
+// 	return (code);
+// }
+
+int	handle_builtin(int id, t_mini *shell, t_cmd *head, char **args)
 {
 	int	code;
 
 	sig_reset();
 	code = 0;
 	if (id == BUILTIN_CD)
-		code = builtin_cd(shell, cmd->cmds);
+		code = builtin_cd(shell, args);
 	if (id == BUILTIN_ECHO)
-		code = builtin_echo(cmd->cmds);
+		code = builtin_echo(args);
 	else if (id == BUILTIN_ENV)
 		code = builtin_env(shell);
 	else if (id == BUILTIN_EXIT)
-		code = builtin_exit(shell, cmd, cmd->cmds);
+		code = builtin_exit(shell, head, args);
 	else if (id == BUILTIN_EXPORT)
-		code = builtin_export(shell, cmd->cmds);
+		code = builtin_export(shell, args);
 	else if (id == BUILTIN_PWD)
 		code = builtin_pwd(shell);
 	else if (id == BUILTIN_UNSET)
-		code = builtin_unset(shell, cmd->cmds);
+		code = builtin_unset(shell, args);
 	shell->exit_code = code;
 	return (code);
 }

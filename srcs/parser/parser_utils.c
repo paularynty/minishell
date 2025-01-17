@@ -62,4 +62,3 @@ int	count_pipes(const char *input)
 	}
 	return (pipes);
 }
-

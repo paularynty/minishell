@@ -18,7 +18,12 @@ int	update_pwd(t_mini *shell)
 
 	dir = getcwd(NULL, 0);
 	if (!dir)
+	{	
+		error_builtin(CD, NULL, "getcwd: cannot access parent directories:\
+		No such file or directory");
+		chdir("..");
 		return (FALSE);
+	}
 	free(shell->cwd);
 	shell->cwd = dir;
 	if (!env_set_variable(shell, "PWD", shell->cwd))
@@ -112,6 +117,30 @@ static int	cd_home(t_mini *shell)
 	return (change_dir(home));
 }
 
+int	builtin_cd(t_mini *shell, char **args)
+{
+	if (count_array_elements(args) > 2)
+	{
+		error_builtin(CD, NULL, "too many arguments");
+		return (1);
+	}
+	if (!args[1])
+	{
+		if (!cd_home(shell))
+			return (1);
+	}
+	else if (ft_strncmp(args[1], "-\0", 2) == 0)
+	{
+		if (!cd_oldpwd(shell))
+			return (1);
+	}
+	else if (!change_dir(args[1]))
+		return (1);
+	if (!update_pwd(shell))
+		return (1);
+	return (0);
+}
+
 // static int	cd_choices(t_mini *shell, char *cwd, char **args)
 // {
 // 	if (!args[1])
@@ -198,27 +227,3 @@ static int	cd_home(t_mini *shell)
 // 		return (FALSE);
 // 	return (0);
 // }
-
-int	builtin_cd(t_mini *shell, char **args)
-{
-	if (count_array_elements(args) > 2)
-	{
-		error_builtin(CD, NULL, "too many arguments");
-		return (1);
-	}
-	if (!args[1])
-	{
-		if (!cd_home(shell))
-			return (1);
-	}
-	else if (ft_strncmp(args[1], "-\0", 2) == 0)
-	{
-		if (!cd_oldpwd(shell))
-			return (1);
-	}
-	else if (!change_dir(args[1]))
-		return (1);
-	if (!update_pwd(shell))
-		return (1);
-	return (0);
-}
