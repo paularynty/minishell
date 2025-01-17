@@ -39,12 +39,13 @@ SRCS			= $(SRCDIR)/main.c \
 				$(SRCDIR)/builtins/unset.c \
 				$(SRCDIR)/environment/env_utils.c \
 				$(SRCDIR)/environment/env.c \
-				$(SRCDIR)/execution/execute.c \
+				$(SRCDIR)/execution/access.c \
+				$(SRCDIR)/execution/close_fds_pipes.c \
+				$(SRCDIR)/execution/dup.c \
 				$(SRCDIR)/execution/exec_child.c \
-				$(SRCDIR)/execution/dup_close.c \
 				$(SRCDIR)/execution/exec_path.c \
 				$(SRCDIR)/execution/exec_std.c \
-				$(SRCDIR)/execution/exec_utils.c \
+				$(SRCDIR)/execution/execute.c \
 				$(SRCDIR)/execution/pipes.c \
 				$(SRCDIR)/errors/errors_syntax.c \
 				$(SRCDIR)/errors/errors.c \
@@ -62,9 +63,10 @@ SRCS			= $(SRCDIR)/main.c \
 				$(SRCDIR)/parser/create_tokens.c \
 				$(SRCDIR)/parser/parser.c \
 				$(SRCDIR)/parser/split_by_pipes.c \
+				$(SRCDIR)/redirect/child/redirect_child.c \
+				$(SRCDIR)/redirect/parent/redirect_parent.c \
 				$(SRCDIR)/redirect/file_handler.c \
 				$(SRCDIR)/redirect/heredoc.c \
-				$(SRCDIR)/redirect/redirect.c \
 				$(SRCDIR)/signals/signal_handlers.c \
 				$(SRCDIR)/signals/signals.c \
 				$(SRCDIR)/setup/setup.c \

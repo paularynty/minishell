@@ -71,6 +71,9 @@ int	execute(t_mini *shell, t_cmd *cmd)
 		return (shell->exit_code);
 	}
 	else
-		exec_child(shell, cmd); // what if it fails?
+	{
+		if (!exec_child(shell, cmd))
+			cleanup_failure(shell, cmd, shell->exit_code);
+	}
 	return (shell->exit_code);
 }

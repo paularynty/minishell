@@ -1,63 +1,6 @@
 #include "minishell.h"
 
 /**
- * close_fds_and_pipes - Closes file descriptors and pipes for a command.
- *
- * @shell: Pointer to the shell structure containing pipe array.
- * @i: The index of the current command in the pipeline.
- *
- * Closes write ends of the pipe for the first command, read and write ends
- * for middle commands, and read ends for the last command.
- */
-void	close_fds_and_pipes(t_mini *shell, int i)
-{
-	if (shell->cmd_count > 1)
-	{
-		if (i == 0)
-			close(shell->pipes[i][1]);
-		else if (i < shell->cmd_count - 1)
-		{
-			close(shell->pipes[i - 1][0]);
-			close(shell->pipes[i][1]);
-		}
-		else if (i == shell->cmd_count - 1)
-			close(shell->pipes[i - 1][0]);
-	}
-}
-
-/**
- * close_unused_fds - Closes unused file descriptors during pipeline execution.
- *
- * @shell: Pointer to the shell structure.
- * @i: Index of the current command in the pipeline.
- *
- * Ensures that unused pipe file descriptors are closed to avoid resource leaks. 
- * For a given command, closes the read end of the pipe for the current 
- * process and any remaining pipes beyond the current process in the pipeline.
- *
- * - Closes the read end of the pipe for the current process if applicable.
- * - Iterates over all remaining pipes in the pipeline and closes both their 
- *   read and write ends.
- */
-void	close_unused_fds(t_mini *shell, int i)
-{
-	int	j;
-
-	j = i + 1;
-	if (shell->cmd_count >= 2 && i < shell->cmd_count - 1)
-		close(shell->pipes[i][0]);
-	while (j < shell->cmd_count - 1)
-	{
-		if (shell->pipes[j])
-		{
-			close(shell->pipes[j][0]);
-			close(shell->pipes[j][1]);
-		}
-		j++;
-	}
-}
-
-/**
  * create_pipes - Creates all pipes required for a pipeline.
  *
  * @shell: Pointer to the shell structure.
@@ -176,11 +119,7 @@ int	init_pipeline(t_mini *shell)
 		if (!allocate_pipes(shell))
 			return (FALSE);
 		if (!create_pipes(shell))
-		{
-			free(shell->pids);
-			// close all open fds, free everything, and determine exit code
 			return (FALSE);
-		}
 	}
 	return (TRUE);
 }

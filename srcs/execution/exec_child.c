@@ -1,6 +1,48 @@
 #include "minishell.h"
 
 /**
+ * wait_for_children - Waits for all child processes to terminate.
+ *
+ * @shell: Pointer to the shell structure.
+ *
+ * Loops over all child process IDs stored in `shell->pids` and waits for 
+ * each process to terminate using `waitpid()`. Updates the shell's 
+ * `exit_code` based on the exit status or termination signal of each 
+ * process:
+ * - If a child exits normally, the exit status is assigned to 
+ *   `shell->exit_code`.
+ * - If a child is terminated by a signal, assigns a signal-based 
+ *   exit code (e.g., `130` for SIGINT).
+ *
+ * On `waitpid()` failure, assigns `errno` to `shell->exit_code` and prints 
+ * an error message.
+ *
+ * Returns the final `shell->exit_code` after waiting for all children.
+ */
+int	wait_for_children(t_mini *shell)
+{
+	int		i;
+	int		status;
+
+	i = 0;
+	status = 0;
+	while (i < shell->cmd_count)
+	{
+		waitpid(shell->pids[i], &status, 0);
+		if (WIFEXITED(status))
+			shell->exit_code = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+		{
+			g_mrworldwide = WTERMSIG(status);
+			if (g_mrworldwide == SIGINT)
+				shell->exit_code = 130;
+		}
+		i++;
+	}
+	return (shell->exit_code);
+}
+
+/**
  * Executes a builtin command in a child process.
  *
  * @shell: Pointer to the shell structure.
@@ -12,12 +54,12 @@
  * function; these actions must be managed externally. Exits the process with 
  * `EXIT_SUCCESS` after the built-in command execution.
  */
-static void	exec_forked_builtin(t_mini *shell, t_cmd *cmd, t_cmd *head, int is_builtin)
+static void	exec_forked_builtin(t_mini *shell, t_cmd *cmd,
+	t_cmd *head, int is_builtin)
 {
-	// handle_builtin(is_builtin, shell, cmd);
 	if (handle_builtin(is_builtin, shell, cmd) > 0)
-		cleanup_failure(shell, head, shell->exit_code); // modified cmd -> head
-	cleanup_success(shell, head); // modified cmd -> head
+		cleanup_failure_child(shell, head, shell->exit_code);
+	cleanup_success(shell, head);
 	exit(EXIT_SUCCESS);
 }
 
@@ -31,26 +73,24 @@ static void	exec_forked_builtin(t_mini *shell, t_cmd *cmd, t_cmd *head, int is_b
  * its accessibility. If the command path is valid, resets signal handlers 
  * and attempts to execute the command using `execve`. 
  * On failure, handles errors, cleans up resources, and exits with an 
- * appropriate error code. If `execve` succeeds, the process exits with `EXIT_SUCCESS`.
+ * appropriate error code.
  */
-static void	exec_forked_cmd(t_mini *shell, t_cmd *cmd, t_cmd *head) // added head for potential cleanup
+static void	exec_forked_cmd(t_mini *shell, t_cmd *cmd, t_cmd *head)
 {
 	char	*cmd_path;
 
 	if (!cmd->cmds || !cmd->cmds[0])
-		cleanup_failure(shell, head, 0);
-	// printf("cmd: %s\n", cmd->cmds[0]);
+		cleanup_failure_child(shell, head, 0);
 	cmd_path = get_cmd_path(shell, cmd, cmd->cmds[0]);
-	// printf("cmd path: %s\n", cmd_path);
 	if (!cmd_path)
-		check_access(shell, head, cmd->cmds[0]); // modified cmd -> head for potential cleanup
+		check_access(shell, head, cmd->cmds[0]);
 	else
-		check_access(shell, head, cmd_path); // modified cmd -> head for potential cleanup
-	signal_reset();
+		check_access(shell, head, cmd_path);
+	sig_reset();
 	if (execve(cmd_path, cmd->cmds, shell->env) == -1)
 	{
 		free(cmd_path);
-		error_cmd(shell, head, cmd->cmds[0], strerror(errno), errno);
+		error_cmd(shell, head, cmd->cmds[0], strerror(errno));
 	}
 }
 
@@ -72,12 +112,12 @@ static void	exec_forked_cmd(t_mini *shell, t_cmd *cmd, t_cmd *head) // added hea
  *
  * Returns TRUE on success or -1 on fork failure.
  */
-int	fork_and_execute(t_mini *shell, t_cmd *cmd, t_cmd *head) // added head (for potential cleanup)
+int	fork_and_execute(t_mini *shell, t_cmd *cmd, t_cmd *head)
 {
 	int	is_builtin;
 
+	sig_reset();
 	is_builtin = builtins(cmd->cmds[0]);
-	signal_reset();
 	shell->pids[cmd->cmd_i] = fork();
 	if (shell->pids[cmd->cmd_i] == -1)
 	{
@@ -86,48 +126,17 @@ int	fork_and_execute(t_mini *shell, t_cmd *cmd, t_cmd *head) // added head (for 
 	}
 	else if (shell->pids[cmd->cmd_i] == 0)
 	{
-		signal_child();
 		close_unused_fds(shell, cmd->cmd_i);
 		if (!configure_fds_child(shell, cmd))
-		{
-			cleanup_failure(shell, head, shell->exit_code); // modified cmd -> head
-			return (FALSE);
-		}
+			cleanup_failure_child(shell, head, shell->exit_code);
 		if (!dup_input(shell, cmd, cmd->cmd_i))
-			cleanup_failure(shell, head, shell->exit_code); // modified cmd -> head
+			cleanup_failure_child(shell, head, shell->exit_code);
 		if (!dup_output(shell, cmd, cmd->cmd_i))
-			cleanup_failure(shell, head, shell->exit_code); // modified cmd -> head
+			cleanup_failure_child(shell, head, shell->exit_code);
 		if (builtins(cmd->cmds[0]))
-			exec_forked_builtin(shell, cmd, head, is_builtin); // added head to the function call
+			exec_forked_builtin(shell, cmd, head, is_builtin);
 		else
-			exec_forked_cmd(shell, cmd, head); // added head to the function call
-	}
-	return (TRUE);
-}
-
-static int	resolve_heredoc(t_mini *shell, t_cmd *cmd)
-{
-	t_token	*token;
-	int		i;
-
-	token = cmd->tokens;
-	i = 0;
-	while (token)
-	{
-		if (token->type == HEREDOC)
-		{
-			if (cmd->input_fd != -1)
-			{
-				close(cmd->input_fd);
-				cmd->input_fd = -1;
-			}
-			cmd->input_fd = handle_heredoc(shell, token->next->value);
-			if (cmd->input_fd == -1)
-				return (FALSE); // pipe_error
-			cmd->heredoc_i = i;
-		}
-		token = token->next;
-		i++;
+			exec_forked_cmd(shell, cmd, head);
 	}
 	return (TRUE);
 }
@@ -160,15 +169,15 @@ int	exec_child(t_mini *shell, t_cmd *cmd)
 	while (curr)
 	{
 		if (!resolve_heredoc(shell, curr))
-			return (FALSE); // cleanup && return
+			return (FALSE);
 		if (fork_and_execute(shell, curr, cmd) == -1)
-			return (FALSE); // cleanup && return
+			return (FALSE);
+		sig_child(&sig_handler_child);
 		close_extra_fd(curr->input_fd);
 		close_fds_and_pipes(shell, curr->cmd_i);
 		curr = curr->next;
 	}
 	shell->exit_code = wait_for_children(shell);
 	cleanup_success(shell, cmd);
-	signal_init();
 	return (TRUE);
 }

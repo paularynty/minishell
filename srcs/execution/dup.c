@@ -1,7 +1,7 @@
 #include "minishell.h"
 
 /**
- * configure_fds - Resolves file descriptors for input and output redirection in the parent process.
+ * Resolves file descriptors for input/output redirection in parent process.
  *
  * @shell: Pointer to the shell structure.
  * @cmd: Pointer to the command structure.
@@ -25,7 +25,7 @@ int	configure_fds(t_mini *shell, t_cmd *cmd)
 }
 
 /**
- * configure_fds_child - Resolves file descriptors for input and output redirection in the child process.
+ * Resolves file descriptors for input/output redirection in child process.
  *
  * @shell: Pointer to the shell structure.
  * @cmd: Pointer to the command structure.
@@ -39,16 +39,12 @@ int	configure_fds(t_mini *shell, t_cmd *cmd)
  * */
 int	configure_fds_child(t_mini *shell, t_cmd *cmd)
 {
-	// printf("input_fd: %d\n", cmd->input_fd);
-	// printf("output_fd: %d\n", cmd->output_fd);
 	if (!handle_redirection_child(shell, cmd))
 		return (FALSE);
 	if (cmd->input_fd == -1)
 		cmd->input_fd = STDIN_FILENO;
 	if (cmd->output_fd == -1)
 		cmd->output_fd = STDOUT_FILENO;
-	// printf("input_fd after: %d\n", cmd->input_fd);
-	// printf("output_fd after: %d\n", cmd->output_fd);
 	return (TRUE);
 }
 
