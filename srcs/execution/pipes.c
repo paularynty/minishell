@@ -23,7 +23,7 @@ int	create_pipes(t_mini *shell)
 	{
 		if (pipe(shell->pipes[i]) == -1)
 		{
-			perror("pipe failed");
+			perror("minishell: pipe failed");
 			return (FALSE);
 		}
 		i++;

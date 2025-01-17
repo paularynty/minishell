@@ -66,32 +66,6 @@ static void	minishell(t_mini *shell)
 	}
 }
 
-// static void	minishell(t_mini *shell)
-// {
-// 	char	*input;
-// 	t_cmd	*cmds;
-
-// 	while (TRUE)
-// 	{
-// 		//reset_signals();
-// 		input = setup_input(shell);
-// 		if (input == NULL)
-// 			break ;
-// 		if (*input)
-// 		{
-// 			if (lexer(shell, input))
-// 			{
-// 				cmds = tokenizer(shell, shell->input);
-// 				if (cmds)
-// 					execute(shell, cmds);
-// 			}
-// 			else if (input && *input)
-// 				free(input);
-// 		}
-// 		shell->cmd_count = 0;
-// 	}
-// }
-
 int	main(int argc, char **argv, char **env)
 {
 	t_mini		shell;

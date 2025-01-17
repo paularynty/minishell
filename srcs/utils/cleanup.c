@@ -21,14 +21,17 @@ void	cleanup_failure(t_mini *shell, t_cmd *cmd)
 		close_all_pipes(shell);
 		free_pipes(shell, i);
 	}
-	free(shell->pids);
+	if (shell->pids)
+	{
+		free(shell->pids);
+		shell->pids = NULL;
+	}
 	if (cmd->output_fd > 2)
 		close(cmd->output_fd);
 	if (cmd->input_fd > 2)
 		close(cmd->input_fd);
 	if (cmd)
 		clean_commands(cmd);
-	free_null(&shell->cwd);
 }
 
 /**
