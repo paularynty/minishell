@@ -18,7 +18,6 @@ int	update_pwd(t_mini *shell)
 	char	*fallback;
 
 	dir = getcwd(NULL, 0);
-	printf("%s\n", dir);
 	if (!dir)
 	{
 		fallback = env_get_variable(shell->env, "HOME");

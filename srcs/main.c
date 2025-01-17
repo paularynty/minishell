@@ -4,26 +4,6 @@ volatile sig_atomic_t	g_mrworldwide = 0;
 
 //THIS IS FOR LARGE MINISHELL TESTER, REPLACE THIS SETUP_INPUT 
 //WITH THE ONE BELOW BEFORE RUNNING THE TESTER
-static char	*setup_input(t_mini *shell)
-{
-	char	*input;
-	char	prompt[1024];
-
-	input = NULL;
-	get_prompt(shell, prompt, sizeof(prompt));
-	if (isatty(fileno(stdin)))
-		input = readline(prompt);
-	else
-	{
-		char	*line;
-		line = get_next_line(fileno(stdin));
-		input = ft_strtrim(line, "\n");
-		free(line);
-	}
-	add_history(input);
-	return (input);
-}
-
 // static char	*setup_input(t_mini *shell)
 // {
 // 	char	*input;
@@ -31,11 +11,31 @@ static char	*setup_input(t_mini *shell)
 
 // 	input = NULL;
 // 	get_prompt(shell, prompt, sizeof(prompt));
-// 	input = readline(prompt);
-// 	if (input && *input)
-// 		add_history(input);
+// 	if (isatty(fileno(stdin)))
+// 		input = readline(prompt);
+// 	else
+// 	{
+// 		char	*line;
+// 		line = get_next_line(fileno(stdin));
+// 		input = ft_strtrim(line, "\n");
+// 		free(line);
+// 	}
+// 	add_history(input);
 // 	return (input);
 // }
+
+static char	*setup_input(t_mini *shell)
+{
+	char	*input;
+	char	prompt[1024];
+
+	input = NULL;
+	get_prompt(shell, prompt, sizeof(prompt));
+	input = readline(prompt);
+	if (input && *input)
+		add_history(input);
+	return (input);
+}
 
 static void	minishell(t_mini *shell)
 {
