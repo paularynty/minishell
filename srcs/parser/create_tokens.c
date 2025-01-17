@@ -39,7 +39,7 @@ static t_token	*create_token(char *arg, char *prev)
 	if (!token->value)
 	{
 		free(token);
-		perror("malloc\n");
+		ft_putstr_fd("minishell: memory allocation failed\n", 2);
 		return (NULL);
 	}
 	if (prev && *prev && (ft_strcmp(prev, ">") == 0

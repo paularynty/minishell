@@ -49,7 +49,7 @@ void	close_unused_fds(t_mini *shell, int i)
 }
 
 /**
- * close_fds_and_pipes - Closes all pipes.
+ * Closes all pipes.
  *
  * @shell: Pointer to the shell structure containing pipe array.
  *

@@ -40,7 +40,7 @@ static int	exit_extra_args(void)
 	return (1);
 }
 
-int	builtin_exit(t_mini *shell, t_cmd *cmd, char **args)
+int	builtin_exit(t_mini *shell, t_cmd *head, char **args)
 {
 	int	code;
 
@@ -50,7 +50,7 @@ int	builtin_exit(t_mini *shell, t_cmd *cmd, char **args)
 	if (args[1] == NULL)
 	{
 		rl_clear_history();
-		cleanup_success(shell, cmd);
+		cleanup_success_exit(shell, head);
 		exit(shell->exit_code);
 	}
 	if (!is_numeric(args[1]))
@@ -60,6 +60,6 @@ int	builtin_exit(t_mini *shell, t_cmd *cmd, char **args)
 	if (args[1])
 		code = ft_atoi(args[1]);
 	rl_clear_history();
-	cleanup_success_exit(shell, cmd);
+	cleanup_success_exit(shell, head);
 	exit(code);
 }

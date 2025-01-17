@@ -22,7 +22,6 @@ int	setup(t_mini *shell, char **env)
 	shell->pipes = NULL;
 	shell->pids = NULL;
 	shell->exit_code = 0;
-	shell->abort = 0;
 	if (!env_update_shlvl(shell))
 		return (FALSE);
 	return (TRUE);

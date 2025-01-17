@@ -10,12 +10,11 @@
  * Generates and prints a warning message to `STDERR_FILENO` indicating that
  * a here-document was terminated by an unexpected EOF instead of the
  * specified lim. The message includes the line number and the expected
- * lim. If memory allocation fails, sets `shell->abort` to 1 and returns
- * FALSE.
+ * lim. If memory allocation fails, returns FALSE.
  *
  * Returns TRUE on success or FALSE if memory allocation fails.
  */
-static int	heredoc_eof(t_mini *shell, int line, char *lim)
+static int	heredoc_eof(int line, char *lim)
 {
 	char	*line_str;
 	char	buffer[1024];
@@ -23,8 +22,7 @@ static int	heredoc_eof(t_mini *shell, int line, char *lim)
 	line_str = ft_itoa(line);
 	if (!line_str)
 	{
-		perror("malloc");
-		shell->abort = 1;
+		ft_putstr_fd("minishell: memory allocation failed\n", 2);
 		return (FALSE);
 	}
 	ft_strlcpy(buffer, "minishell: warning: here-document at line ",
@@ -39,7 +37,7 @@ static int	heredoc_eof(t_mini *shell, int line, char *lim)
 	return (TRUE);
 }
 
-int	resolve_heredoc(t_mini *shell, t_cmd *cmd)
+int	resolve_heredoc(t_cmd *cmd)
 {
 	t_token	*token;
 	int		i;
@@ -55,7 +53,7 @@ int	resolve_heredoc(t_mini *shell, t_cmd *cmd)
 				close(cmd->input_fd);
 				cmd->input_fd = -1;
 			}
-			cmd->input_fd = handle_heredoc(shell, token->next->value);
+			cmd->input_fd = handle_heredoc(token->next->value);
 			if (cmd->input_fd == -1)
 				return (FALSE);
 			cmd->heredoc_i = i;
@@ -97,7 +95,7 @@ int	resolve_heredoc(t_mini *shell, t_cmd *cmd)
 // 		free(line);
 // 	}
 // }
-static void	heredoc_loop(t_mini *shell, char *line, char *lim, int *pipe_fd)
+static void	heredoc_loop(char *line, char *delimiter, int *pipe_fd)
 {
 	write(STDOUT_FILENO, "> ", 2);
 	while (TRUE)
@@ -106,11 +104,11 @@ static void	heredoc_loop(t_mini *shell, char *line, char *lim, int *pipe_fd)
 		line = get_next_line(STDIN_FILENO);
 		if (line == NULL)
 		{
-			heredoc_eof(shell, __LINE__, lim);
+			heredoc_eof(__LINE__, delimiter);
 			break ;
 		}
-		if (ft_strncmp(line, lim, ft_strlen(lim)) == 0
-			&& line[ft_strlen(lim)] == '\n')
+		if (ft_strncmp(line, delimiter, ft_strlen(delimiter)) == 0
+			&& line[ft_strlen(delimiter)] == '\n')
 		{
 			free(line);
 			break ;
@@ -125,7 +123,7 @@ static void	heredoc_loop(t_mini *shell, char *line, char *lim, int *pipe_fd)
  * Writes input from STDIN into a pipe until a delimiter is encountered.
  *
  * @shell: Pointer to the shell structure.
- * @lim: String marking the end of the heredoc input.
+ * @delimiter: String marking the end of the heredoc input.
  *
  * If heredoc (<<) symbol is encountered at call site, creates a pipe 
  * and prompts the user for input, writing each line into the pipe until
@@ -134,7 +132,7 @@ static void	heredoc_loop(t_mini *shell, char *line, char *lim, int *pipe_fd)
  * 
  * Returns pipe read end on success, -2 on failure.
  **/
-int	handle_heredoc(t_mini *shell, char *lim)
+int	handle_heredoc(char *delimiter)
 {
 	int		pipe_fd[2];
 	char	*line;
@@ -146,7 +144,7 @@ int	handle_heredoc(t_mini *shell, char *lim)
 		return (FALSE);
 	}
 	sig_heredoc(&sig_handler_heredoc);
-	heredoc_loop(shell, line, lim, pipe_fd);
+	heredoc_loop(line, delimiter, pipe_fd);
 	sig_reset();
 	sig_init(&sig_handler_sigint);
 	close(pipe_fd[1]);

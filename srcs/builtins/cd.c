@@ -15,14 +15,22 @@
 int	update_pwd(t_mini *shell)
 {
 	char	*dir;
+	char	*fallback;
 
 	dir = getcwd(NULL, 0);
 	if (!dir)
+	{
+		fallback = env_get_variable(shell->env, "HOME");
+		printf("%s\n", fallback);
+		error_builtin(CD, NULL, "getcwd: cannot access parent directories: No such file or directory");
+		if (chdir(fallback) == -1)
+			printf("I am doomed\n");
+		free(shell->cwd);
+		shell->cwd = fallback;
 		return (FALSE);
+	}
 	free(shell->cwd);
 	shell->cwd = dir;
-	if (!env_set_variable(shell, "PWD", shell->cwd))
-		return (FALSE);
 	return (TRUE);
 }
 
@@ -37,13 +45,25 @@ int	update_pwd(t_mini *shell)
  *
  * Returns TRUE on success or FALSE if `chdir()` fails.
  */
-static int	change_dir(char *dir)
+static int	change_dir(t_mini *shell, char *new_pwd)
 {
-	if (chdir(dir) == -1)
+	char	*old_pwd;
+
+	old_pwd = shell->cwd;
+	if (!old_pwd)
 	{
-		error_builtin(CD, dir, NULL);
+		error_builtin(CD, NULL, "OLDPWD not set");
 		return (FALSE);
 	}
+	if (chdir(new_pwd) == -1)
+	{
+		error_builtin(CD, new_pwd, NULL);
+		return (FALSE);
+	}
+	if (!env_set_variable(shell, "OLDPWD", old_pwd))
+		return (FALSE);
+	if (!env_set_variable(shell, "PWD", new_pwd))
+		return (FALSE);
 	return (TRUE);
 }
 
@@ -65,17 +85,16 @@ static int	cd_oldpwd(t_mini *shell)
 {
 	char	*old_pwd;
 	char	*new_pwd;
-	char	cwd[4096];
 
-	old_pwd = getcwd(shell->cwd, sizeof(cwd));
-	new_pwd = env_get_variable(shell->env, "OLDPWD");
+	old_pwd = shell->cwd;
 	if (!old_pwd)
 	{
 		error_builtin(CD, NULL, "OLDPWD not set");
 		return (FALSE);
 	}
+	new_pwd = env_get_variable(shell->env, "OLDPWD");
 	printf("%s\n", new_pwd);
-	if (!change_dir(new_pwd))
+	if (!change_dir(shell, new_pwd))
 		return (FALSE);
 	if (!env_set_variable(shell, "OLDPWD", old_pwd))
 		return (FALSE);
@@ -109,7 +128,36 @@ static int	cd_home(t_mini *shell)
 	old_pwd = getcwd(shell->cwd, sizeof(cwd));
 	if (!old_pwd)
 		return (FALSE);
-	return (change_dir(home));
+	if (!change_dir(shell, home))
+		return (FALSE);
+	return (TRUE);
+}
+
+int	builtin_cd(t_mini *shell, char **args)
+{
+	if (count_array_elements(args) > 2)
+	{
+		error_builtin(CD, NULL, "too many arguments");
+		return (1);
+	}
+	if (!args[1])
+	{
+		if (!cd_home(shell))
+			return (1);
+	}
+	else if (ft_strncmp(args[1], "-\0", 2) == 0)
+	{
+		if (!cd_oldpwd(shell))
+			return (1);
+	}
+	else
+	{
+		if (!change_dir(shell, args[1]))
+			return (1);
+	}
+	// if (!update_pwd(shell))
+	// 	return (1);
+	return (0);
 }
 
 // static int	cd_choices(t_mini *shell, char *cwd, char **args)
@@ -198,27 +246,3 @@ static int	cd_home(t_mini *shell)
 // 		return (FALSE);
 // 	return (0);
 // }
-
-int	builtin_cd(t_mini *shell, char **args)
-{
-	if (count_array_elements(args) > 2)
-	{
-		error_builtin(CD, NULL, "too many arguments");
-		return (1);
-	}
-	if (!args[1])
-	{
-		if (!cd_home(shell))
-			return (1);
-	}
-	else if (ft_strncmp(args[1], "-\0", 2) == 0)
-	{
-		if (!cd_oldpwd(shell))
-			return (1);
-	}
-	else if (!change_dir(args[1]))
-		return (1);
-	if (!update_pwd(shell))
-		return (1);
-	return (0);
-}

@@ -18,7 +18,7 @@
 # include "../libft/libft.h"
 
 //builtins/builtins.c
-int		handle_builtin(int id, t_mini *shell, t_cmd *cmd);
+int		handle_builtin(int id, t_mini *shell, t_cmd *head, char **args);
 int		builtins(char *line);
 
 //builtins/cd.c
@@ -117,8 +117,8 @@ int		open_outfile(t_mini *shell, char *outfile);
 int		open_append_file(t_mini *shell, char *outfile);
 
 //redirect/heredoc.c
-int		resolve_heredoc(t_mini *shell, t_cmd *cmd);
-int		handle_heredoc(t_mini *shell, char *delimiter);
+int		resolve_heredoc(t_cmd *cmd);
+int		handle_heredoc(char *delimiter);
 
 //setup/setup.c
 int		setup(t_mini *shell, char **env);
@@ -136,9 +136,10 @@ void	sig_reset(void);
 void	sig_init(void *func);
 
 //utils/cleanup.c
-void	cleanup_failure(t_mini *shell, t_cmd *cmd, int ex);
+void	cleanup_failure(t_mini *shell, t_cmd *cmd);
 void	cleanup_failure_child(t_mini *shell, t_cmd *cmd, int exit_status);
 void	cleanup_success(t_mini *shell, t_cmd *cmd);
+void	cleanup_success_child(t_mini *shell, t_cmd *cmd);
 void	cleanup_success_exit(t_mini *shell, t_cmd *cmd);
 
 //utils/cleanup_utils.c
