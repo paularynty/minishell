@@ -75,10 +75,7 @@ char	*add_missing_spaces(char *input)
 		while (input[i] && !char_is_whitespace(input[i]))
 		{
 			if (char_is_quote(input[i]))
-			{
 				i += offset_or_increment(input, i);
-				// continue ;
-			}
 			if (i > 0 && (ft_strchr("><", input[i])
 					|| ft_strchr("><", input[i - 1])))
 			{
