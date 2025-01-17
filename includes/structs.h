@@ -20,7 +20,6 @@ extern volatile sig_atomic_t	g_mrworldwide;
  * @pipes: A 2D array representing pipe file descriptors.
  * @pids: An array of PIDs for child processes in the pipeline.
  * @exit_code: The exit code of the last executed command.
- * @abort: A flag indicating if the shell should abort.
  * 
  */
 typedef struct s_mini
@@ -32,7 +31,6 @@ typedef struct s_mini
 	int		**pipes;
 	int		*pids;
 	int		exit_code;
-	int		abort;
 }	t_mini;
 
 /**

@@ -24,5 +24,7 @@ int	setup(t_mini *shell, char **env)
 	shell->exit_code = 0;
 	if (!env_update_shlvl(shell))
 		return (FALSE);
+	if (!env_set_cwd(shell))
+		return (FALSE);
 	return (TRUE);
 }

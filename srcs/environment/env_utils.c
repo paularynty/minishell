@@ -10,6 +10,22 @@ void	remove_eq(t_mini *shell, char *arg)
 	*(ptr - 1) = '\0';
 }
 
+int	env_set_cwd(t_mini *shell)
+{
+	char	*dir;
+
+	dir = getcwd(NULL, 0);
+	if (!dir)
+		return (FALSE);
+	if (!env_set_variable(shell, "PWD", dir))
+	{
+		free(dir);
+		return (FALSE);
+	}
+	shell->cwd = dir;
+	return (TRUE);
+}
+
 int	env_find_index(char **env, char *key)
 {
 	int		i;

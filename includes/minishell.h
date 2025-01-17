@@ -22,7 +22,6 @@ int		handle_builtin(int id, t_mini *shell, t_cmd *head, char **args);
 int		builtins(char *line);
 
 //builtins/cd.c
-int		update_pwd(t_mini *shell);
 int		builtin_cd(t_mini *shell, char **args);
 
 //builtins/echo.c
@@ -44,6 +43,7 @@ int		builtin_unset(t_mini *shell, char **args);
 
 //environment/env_utils.c
 void	remove_eq(t_mini *shell, char *arg);
+int		env_set_cwd(t_mini *shell);
 char	*env_get_variable(char **env, char *key);
 int		env_update_shlvl(t_mini *shell);
 char	**clone_env(char **env);

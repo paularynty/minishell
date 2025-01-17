@@ -42,6 +42,8 @@ int	env_set_variable(t_mini *shell, char *key, char *value)
 	size_t	new_len;
 	int		index;
 
+	if (!key || !value)
+		return (FALSE);
 	new_len = ft_strlen(key) + ft_strlen(value) + 2;
 	new = ft_calloc(1, new_len);
 	if (!new)
@@ -53,10 +55,7 @@ int	env_set_variable(t_mini *shell, char *key, char *value)
 	if (index == -1)
 	{
 		if (!env_add_variable(shell, new))
-		{
-			free(new);
-			return (FALSE);
-		}
+			return (free(new), FALSE);
 		return (TRUE);
 	}
 	free(shell->env[index]);

@@ -86,7 +86,6 @@ void	cleanup_success(t_mini *shell, t_cmd *cmd)
 		free_pipes(shell, i);
 	if (cmd)
 		clean_commands(cmd);
-	// free_null(&shell->cwd);
 	shell->cmd_count = 0;
 }
 

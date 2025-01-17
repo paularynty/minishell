@@ -42,7 +42,8 @@ void	clean_commands(t_cmd *cmd)
 		temp = cmd->next;
 		clean_tokens(cmd->tokens);
 		cmd->tokens = NULL;
-		ft_free_array(&cmd->cmds);
+		if (cmd->cmds)
+			ft_free_array(&cmd->cmds);
 		free(cmd);
 		cmd = temp;
 	}
