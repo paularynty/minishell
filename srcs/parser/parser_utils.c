@@ -30,13 +30,6 @@ int	count_token_type(t_token *tokens, enum e_token_type type)
 	return (count);
 }
 
-/********************************
- * 
- * The insides of the quotes are their own argument, so we count how long this
- * argument is (including quotes). 
- * We already have quotes opened, so offset is initialized to 1.
- * 
- ******************************/
 int	quote_offset(const char *input, char quote)
 {
 	int	offset;
@@ -48,11 +41,6 @@ int	quote_offset(const char *input, char quote)
 	return (offset);
 }
 
-/********************************
- * 
- * we count how many pipes occur. index is moved until quotes are closed.
- * 
- ******************************/
 int	count_pipes(const char *input)
 {
 	int	pipes;

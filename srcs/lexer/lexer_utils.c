@@ -1,5 +1,20 @@
 #include "minishell.h"
 
+int	char_is_quote(char c)
+{
+	if (c == '\'' || c == '"')
+		return (TRUE);
+	else
+		return (FALSE);
+}
+
+int	char_is_whitespace(char c)
+{
+	if (c != 32 && (c < 9 || c > 13))
+		return (FALSE);
+	return (TRUE);
+}
+
 void	error_pipes(t_mini *shell, int pipes)
 {
 	if (pipes >= 2 && pipes <= 3)

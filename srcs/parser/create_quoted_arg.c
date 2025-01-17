@@ -1,12 +1,10 @@
 #include "minishell.h"
 
-char	*create_quoted_arg(char *str, int *i, int len)
+char	*create_quoted_arg(char *str, int *i, int len, int k)
 {
 	char	*arg;
 	int		j;
-	int		k;
 
-	k = 0;
 	arg = (char *)malloc(sizeof(char) * len + 1);
 	if (!arg)
 		return (NULL);

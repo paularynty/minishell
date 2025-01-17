@@ -33,7 +33,6 @@ static char	**allocate_cmd_array(t_cmd *cmd)
 	return (cmd_array);
 }
 
-/*Extracts tokens of CMD token type into cmd->cmds 2D array. */
 static char	**extract_cmd(t_cmd *cmd)
 {
 	t_token	*token;

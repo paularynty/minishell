@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-static void	add_command(t_cmd **head, t_cmd *new_cmd)
+static void	add_command(t_cmd **head, t_cmd *new_cmd, t_mini *shell)
 {
 	t_cmd	*temp;
 
@@ -14,10 +14,9 @@ static void	add_command(t_cmd **head, t_cmd *new_cmd)
 			temp = temp->next;
 		temp->next = new_cmd;
 	}
+	shell->cmd_count++;
 }
 
-/*Splits input by pipes into command chunks.
-Adds cmd chunks to linked list.*/
 t_cmd	*tokenizer(t_mini *shell, char *input)
 {
 	char	**cmd_array;
@@ -40,8 +39,7 @@ t_cmd	*tokenizer(t_mini *shell, char *input)
 			clean_commands(cmd);
 			return (NULL);
 		}
-		add_command(&cmd, current_cmd);
-		shell->cmd_count++;
+		add_command(&cmd, current_cmd, shell);
 		i++;
 	}
 	ft_free_array(&cmd_array);
