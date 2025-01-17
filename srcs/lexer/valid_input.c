@@ -7,11 +7,12 @@ int	backslash(t_mini *shell, const char *input)
 	i = 0;
 	while (input && input[i])
 	{
-		if (input[i] == '\'' || input[i] == '"')
+		if (input[i] && char_is_quote(input[i]))
 			i += quote_offset(input + i, input[i]);
-		if (input[i] == '\\')
+		else if (input[i] && input[i] == '\\')
 			return (error_syntax(shell, "\\"), TRUE);
-		i++;
+		else
+			i++;
 	}
 	return (FALSE);
 }
@@ -46,9 +47,9 @@ int	valid_redirection(t_mini *shell, const char *input)
 	i = 0;
 	while (input[i])
 	{
-		if (input[i] == '"' || input[i] == '\'')
+		if (input[i] && char_is_quote(input[i]))
 			i += quote_offset(input + i, input[i]);
-		if (input[i] == '>' || input[i] == '<')
+		else if (input[i] && (input[i] == '>' || input[i] == '<'))
 		{
 			redir = input[i];
 			i++;
@@ -60,7 +61,8 @@ int	valid_redirection(t_mini *shell, const char *input)
 			if (!input[i] || input[i] == '\n' || ft_strchr("|><", input[i]))
 				return (error_syntax(shell, "newline"), FALSE);
 		}
-		i++;
+		else
+			i++;
 	}
 	return (TRUE);
 }
@@ -73,8 +75,11 @@ int	valid_pipes(t_mini *shell, const char *input)
 	i = 0;
 	while (input[i])
 	{
-		if (input[i] == '\'' || input[i] == '"')
+		if (input[i] && char_is_quote(input[i]))
+		{
 			i += quote_offset(input + i, input[i]);
+			continue ;
+		}
 		pipes = 0;
 		while (input[i] && input[i] == '|')
 		{
@@ -83,7 +88,8 @@ int	valid_pipes(t_mini *shell, const char *input)
 		}
 		if (pipes >= 2)
 			return (error_pipes(shell, pipes), FALSE);
-		i++;
+		if (input[i] && !char_is_quote(input[i]))
+			i++;
 	}
 	return (TRUE);
 }
@@ -101,9 +107,12 @@ int	closed_pipes(t_mini *shell, const char *input)
 		return (error_syntax(shell, "|"), FALSE);
 	while (input[i])
 	{
-		if (input[i] == '\'' || input[i] == '"')
+		if (input[i] && char_is_quote(input[i]))
+		{
 			i += quote_offset(input + i, input[i]);
-		if (input[i] == '|')
+			continue ;
+		}
+		else if (input[i] && input[i] == '|')
 		{
 			if (str_is_whitespace(input + i + 1))
 				return (error_syntax(shell, "|"), FALSE);
