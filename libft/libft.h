@@ -6,7 +6,7 @@
 /*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 12:24:42 by prynty            #+#    #+#             */
-/*   Updated: 2024/12/22 13:40:25 by prynty           ###   ########.fr       */
+/*   Updated: 2025/01/16 21:11:09 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len);
 
 //type converter functions
 int		ft_atoi(const char *str);
+long	ft_atol(char *str);
 char	*ft_itoa(int n);
 
 //file descriptor functions

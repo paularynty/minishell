@@ -10,12 +10,12 @@ static int	env_add_variable(t_mini *shell, char *variable)
 		i++;
 	new = ft_calloc(1, (i + 2) * sizeof(char *));
 	if (!new)
-		return (0);
+		return (FALSE);
 	ft_memcpy(new, shell->env, i * sizeof(char *));
 	new[i] = variable;
 	free(shell->env);
 	shell->env = new;
-	return (1);
+	return (TRUE);
 }
 
 char	*env_get_variable(char **env, char *key)
@@ -64,19 +64,11 @@ int	env_set_variable(t_mini *shell, char *key, char *value)
 	return (TRUE);
 }
 
-// env takes in no args, only prints the env list
-// when running env -i ./minishell and env as command
-// env list should only be PWD, SHLVL and _=/usr/bin/env
 int	builtin_env(t_mini *shell)
 {
 	int	i;
 
 	i = 0;
-	if (!env_get_variable(shell->env, "PATH"))
-	{
-		error_builtin(ENV, NULL, "No such file or directory");
-		return (127);
-	}
 	while (shell->env && shell->env[i])
 	{
 		if (ft_strchr(shell->env[i], '='))

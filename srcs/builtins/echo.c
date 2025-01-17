@@ -14,12 +14,12 @@ int	builtin_echo(char **cmd)
 	}
 	while (cmd[i])
 	{
-		printf("%s", cmd[i]);
+		ft_putstr_fd(cmd[i], 1);
 		if (cmd[i + 1] != NULL)
-			printf(" ");
+			write(1, " ", 1);
 		i++;
 	}
 	if (newline)
-		printf("\n");
+		write(1, "\n", 1);
 	return (0);
 }

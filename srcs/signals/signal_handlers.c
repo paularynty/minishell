@@ -1,16 +1,18 @@
 #include "minishell.h"
 
-void	signal_handler_heredoc(int signal)
+void	sig_handler_child(int signal)
 {
-	close(STDIN_FILENO);
-	g_mrworldwide = signal;
+	if (signal == SIGINT)
+		printf("\n");
+	if (signal == SIGQUIT)
+		ft_putstr_fd("Quit (core dumped)\n", 2);
 }
 
-void	signal_handler_sigint(int signal)
+void	sig_handler_sigint(int signal)
 {
 	if (signal == SIGINT)
 	{
-		g_mrworldwide = 130;
+		g_mrworldwide = signal;
 		printf("\n");
 		rl_replace_line("", 0);
 		rl_on_new_line();
@@ -18,10 +20,12 @@ void	signal_handler_sigint(int signal)
 	}
 }
 
-void	signal_handler_child(int signal)
+void	sig_handler_heredoc(int signal)
 {
 	if (signal == SIGINT)
+	{
+		g_mrworldwide = signal;
 		printf("\n");
-	if (signal == SIGQUIT)
-		ft_putstr_fd("Quit (core dumped)\n", 2);
+		return ;
+	}
 }

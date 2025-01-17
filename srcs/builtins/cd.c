@@ -21,6 +21,8 @@ int	update_pwd(t_mini *shell)
 		return (FALSE);
 	free(shell->cwd);
 	shell->cwd = dir;
+	if (!env_set_variable(shell, "PWD", shell->cwd))
+		return (FALSE);
 	return (TRUE);
 }
 
@@ -106,12 +108,52 @@ static int	cd_home(t_mini *shell)
 	}
 	old_pwd = getcwd(shell->cwd, sizeof(cwd));
 	if (!old_pwd)
-	{
-		ft_putstr_fd("Getcwd for oldpwd failed\n", 2);
 		return (FALSE);
-	}
 	return (change_dir(home));
 }
+
+// static int	cd_choices(t_mini *shell, char *cwd, char **args)
+// {
+// 	if (!args[1])
+// 	{
+// 		if (!cd_home(shell))
+// 			return (FALSE);
+// 		return (TRUE);
+// 	}
+// 	else if (ft_strncmp(args[1], "-\0", 2) == 0)
+// 	{
+// 		if (!cd_oldpwd(shell))
+// 			return (FALSE);
+// 		return (TRUE);
+// 	}
+// 	else if (!change_dir(args[1]))
+// 		return (FALSE);
+// 	shell->cwd = cwd;
+// 	return (TRUE);
+// }
+
+// static int	no_cwd(t_mini *shell, char **cwd)
+// {
+// 	char	*pwd;
+
+// 	pwd = env_get_variable(shell->env, "PWD");
+// 	if (!pwd)
+// 	{
+// 		*cwd = ft_strdup(pwd);
+// 		if (!(*cwd))
+// 		{
+// 			perror("malloc");
+// 			return (FALSE);
+// 		}
+// 	}
+// 	else
+// 	{
+// 	error_builtin(CD, NULL, "getcwd: cannot access parent directories:
+//No such file or directory");
+// 		return (FALSE);
+// 	}
+// 	return (TRUE);
+// }
 
 /**
  * builtin_cd - Built-in `cd` command for the shell.
@@ -131,24 +173,50 @@ static int	cd_home(t_mini *shell)
  *
  * Returns 0 on success or 1 on failure.
  */
-int	builtin_cd(t_mini *shell, t_cmd *cmd)
+// int	builtin_cd(t_mini *shell, char **args)
+// {
+// 	char	*cwd;
+
+// 	if (count_array_elements(args) > 2)
+// 	{
+// 		error_builtin(CD, NULL, "too many arguments");
+// 		return (1);
+// 	}
+// 	cwd = getcwd(NULL, 0);
+// 	if (!cwd)
+// 	{
+// 		if (!no_cwd(shell, &cwd))
+// 			return (1);
+// 	}
+// 	if (!cd_choices(shell, cwd, args))
+// 	{
+// 		free(cwd);
+// 		return (1);
+// 	}
+// 	printf("%s\n", cwd);
+// 	if (!env_set_variable(shell, "PWD", cwd))
+// 		return (FALSE);
+// 	return (0);
+// }
+
+int	builtin_cd(t_mini *shell, char **args)
 {
-	if (cmd->cmds[2])
+	if (count_array_elements(args) > 2)
 	{
 		error_builtin(CD, NULL, "too many arguments");
 		return (1);
 	}
-	if (!cmd->cmds[1])
+	if (!args[1])
 	{
 		if (!cd_home(shell))
 			return (1);
 	}
-	else if (ft_strncmp(cmd->cmds[1], "-\0", 2) == 0)
+	else if (ft_strncmp(args[1], "-\0", 2) == 0)
 	{
 		if (!cd_oldpwd(shell))
 			return (1);
 	}
-	else if (!change_dir(cmd->cmds[1]))
+	else if (!change_dir(args[1]))
 		return (1);
 	if (!update_pwd(shell))
 		return (1);

@@ -1,12 +1,12 @@
 #include "minishell.h"
 
 /**
- * get_env_path - Retrieves the `PATH` environment variable as an array of paths.
+ * get_env_path - Retrieves the `PATH` environment variable.
  *
  * @env: Array of environment variables.
  *
  * Searches through the environment variable list to find the `PATH` variable. 
- * If found, splits its value into an array of directory paths using `ft_split()` 
+ * If found, splits its value into an array of directory paths using `ft_split()`
  * and returns the array. If `PATH` is not found or memory allocation fails, 
  * returns `NULL` and sets `errno` to `ENOENT`.
  *
@@ -19,10 +19,7 @@ char	**get_env_path(char **env)
 	while (*env && !ft_strnstr(*env, "PATH=", 5))
 		env++;
 	if (!*env)
-	{
-		errno = ENOENT;
 		return (NULL);
-	}
 	env_path = ft_split(*env + 5, ':');
 	if (!env_path)
 		return (NULL);
@@ -91,7 +88,10 @@ char	*get_cmd_path(t_mini *shell, t_cmd *cmds, char *cmd)
 		if (access(cmd, F_OK) == 0)
 			return (cmd);
 		else
-			error_cmd(shell, cmds, cmd, "No such file or directory", 127);
+		{	
+			shell->exit_code = 127;
+			error_cmd(shell, cmds, cmd, "No such file or directory");
+		}
 	}
 	env_path = get_env_path(shell->env);
 	if (!env_path)

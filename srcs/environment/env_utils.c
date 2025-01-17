@@ -36,7 +36,9 @@ int	env_update_shlvl(t_mini *shell)
 	int		temp;
 
 	shlvl = env_get_variable(shell->env, "SHLVL");
-	temp = ft_atoi(shlvl) + 1;
+	if (!shlvl)
+		return (FALSE);
+	temp = ft_atol(shlvl) + 1;
 	if (temp >= 1000)
 	{
 		ft_putstr_fd("minishell: warning: shell level (", STDERR_FILENO);

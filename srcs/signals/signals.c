@@ -1,25 +1,76 @@
 #include "minishell.h"
 
-void	signal_heredoc(void)
+void	sig_heredoc(void *func)
 {
-	signal(SIGINT, signal_handler_heredoc);
-	signal(SIGQUIT, signal_handler_heredoc);
+	struct sigaction	sigint;
+	struct sigaction	sigquit;
+
+	sigint.sa_handler = func;
+	sigint.sa_flags = SA_SIGINFO;
+	sigemptyset(&sigint.sa_mask);
+	sigaction(SIGINT, &sigint, NULL);
+	sigquit.sa_handler = SIG_IGN;
+	sigquit.sa_flags = SA_SIGINFO;
+	sigemptyset(&sigquit.sa_mask);
+	sigaction(SIGQUIT, &sigquit, NULL);
 }
 
-void	signal_child(void)
+void	sig_ignore(void)
 {
-	signal(SIGINT, signal_handler_child);
-	signal(SIGQUIT, signal_handler_child);
+	struct sigaction	sigint;
+	struct sigaction	sigquit;
+
+	sigint.sa_handler = SIG_IGN;
+	sigint.sa_flags = SA_SIGINFO;
+	sigemptyset(&sigint.sa_mask);
+	sigaction(SIGINT, &sigint, NULL);
+	sigquit.sa_handler = SIG_IGN;
+	sigquit.sa_flags = SA_SIGINFO;
+	sigemptyset(&sigquit.sa_mask);
+	sigaction(SIGQUIT, &sigquit, NULL);
 }
 
-void	signal_reset(void)
+void	sig_child(void *func)
 {
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
+	struct sigaction	sigint;
+	struct sigaction	sigquit;
+
+	sigint.sa_handler = func;
+	sigint.sa_flags = SA_SIGINFO;
+	sigemptyset(&sigint.sa_mask);
+	sigaction(SIGINT, &sigint, NULL);
+	sigquit.sa_handler = func;
+	sigquit.sa_flags = SA_SIGINFO;
+	sigemptyset(&sigquit.sa_mask);
+	sigaction(SIGQUIT, &sigquit, NULL);
 }
 
-void	signal_init(void)
+void	sig_reset(void)
 {
-	signal(SIGINT, signal_handler_sigint);
-	signal(SIGQUIT, SIG_IGN);
+	struct sigaction	sigint;
+	struct sigaction	sigquit;
+
+	sigint.sa_handler = SIG_DFL;
+	sigint.sa_flags = SA_SIGINFO;
+	sigemptyset(&sigint.sa_mask);
+	sigaction(SIGINT, &sigint, NULL);
+	sigquit.sa_handler = SIG_DFL;
+	sigquit.sa_flags = SA_SIGINFO;
+	sigemptyset(&sigquit.sa_mask);
+	sigaction(SIGQUIT, &sigquit, NULL);
+}
+
+void	sig_init(void *func)
+{
+	struct sigaction	sigint;
+	struct sigaction	sigquit;
+
+	sigint.sa_handler = func;
+	sigint.sa_flags = SA_SIGINFO;
+	sigemptyset(&sigint.sa_mask);
+	sigaction(SIGINT, &sigint, NULL);
+	sigquit.sa_handler = SIG_IGN;
+	sigquit.sa_flags = SA_SIGINFO;
+	sigemptyset(&sigquit.sa_mask);
+	sigaction(SIGQUIT, &sigquit, NULL);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sniemela <sniemela@student.42.fr>          +#+  +:+       +#+        */
+/*   By: prynty <prynty@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 16:32:13 by sniemela          #+#    #+#             */
-/*   Updated: 2024/08/06 09:52:30 by sniemela         ###   ########.fr       */
+/*   Updated: 2025/01/16 21:24:59 by prynty           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static char	*ft_put_nbr(int nb, char *str, int *i)
 	return (str);
 }
 
-static char	*allocatememory(int len)
+static char	*allocate_memory(int len)
 {
 	char	*str;
 
@@ -37,7 +37,7 @@ static char	*allocatememory(int len)
 	return (str);
 }
 
-static int	countlength(int nbr)
+static int	count_len(int nbr)
 {
 	int	len;
 
@@ -59,8 +59,8 @@ char	*ft_itoa(int nbr)
 	int		i;
 
 	i = 0;
-	len = countlength(nbr);
-	str = allocatememory(len);
+	len = count_len(nbr);
+	str = allocate_memory(len);
 	if (!str)
 		return (NULL);
 	if (nbr == -2147483648)
