@@ -65,7 +65,7 @@ int		tokenize_args(t_cmd *cmd, char **args);
 char	**split_cmd_args(char *cmd_str);
 
 //parser/create_quoted_arg.c
-char	*create_quoted_arg(char *str, int *i, int len);
+char	*create_quoted_arg(char *str, int *i, int len, int k);
 
 //parser/split_by_pipes.c
 char	**split_by_pipes(const char *input);

@@ -64,11 +64,13 @@ static char	*extract_arg(char *cmd_str, int *i)
 	char	*arg;
 	int		len;
 	bool	quotes;
+	int		k;
 
+	k = 0;
 	quotes = false;
 	len = count_arg_length(cmd_str, *i, &quotes);
 	if (quotes)
-		arg = create_quoted_arg(cmd_str, i, len);
+		arg = create_quoted_arg(cmd_str, i, len, k);
 	else
 		arg = ft_substr(cmd_str, *i, len);
 	if (!arg)
