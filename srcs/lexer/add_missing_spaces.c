@@ -58,10 +58,10 @@ char	*spaces_to_input(char *input, int *i)
 
 static int		offset_or_increment(char *input, int i)
 {
-	if ( i == 0 || (i > 0 && !ft_strchr("><", input[i - 1])))
+	if (i == 0 || (i > 0 && !ft_strchr("><", input[i - 1])))
 		return (quote_offset(input + i, input[i]));
 	else
-		return (1);
+		return (0);
 }
 
 char	*add_missing_spaces(char *input)
@@ -77,9 +77,9 @@ char	*add_missing_spaces(char *input)
 			if (char_is_quote(input[i]))
 			{
 				i += offset_or_increment(input, i);
-				continue ;
+				// continue ;
 			}
-			else if (i > 0 && (ft_strchr("><", input[i])
+			if (i > 0 && (ft_strchr("><", input[i])
 					|| ft_strchr("><", input[i - 1])))
 			{
 				input = spaces_to_input(input, &i);
