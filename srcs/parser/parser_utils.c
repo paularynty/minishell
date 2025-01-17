@@ -63,9 +63,3 @@ int	count_pipes(const char *input)
 	return (pipes);
 }
 
-int	char_is_whitespace(char c)
-{
-	if (c != 32 && (c < 9 || c > 13))
-		return (FALSE);
-	return (TRUE);
-}
