@@ -9,13 +9,15 @@ int	resolve_input_child(t_mini *shell, t_cmd *cmd, t_token *token, int redir_i)
 		fd = open_infile(shell, token->next->value);
 	if (fd == -2)
 	{
-		close(cmd->input_fd);
+		if (cmd->input_fd > -1)
+			close(cmd->input_fd);
 		cmd->input_fd = -1;
 		return (FALSE);
 	}
 	else if (redir_i >= cmd->heredoc_i)
 	{
-		close(cmd->input_fd);
+		if (cmd->input_fd > -1)
+			close(cmd->input_fd);
 		cmd->input_fd = -1;
 		cmd->input_fd = fd;
 	}
